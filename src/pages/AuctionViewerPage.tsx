@@ -1,0 +1,118 @@
+import React, { useState, useEffect } from 'react';
+import { useAuction } from '../context/AuctionContext';
+import { Auction } from '../types';
+import AuctionCard from '../components/AuctionCard';
+import FilterBar from '../components/FilterBar';
+import { Search } from 'lucide-react';
+
+const AuctionViewerPage: React.FC = () => {
+  const { auctions } = useAuction();
+  const [filteredAuctions, setFilteredAuctions] = useState<Auction[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeFilters, setActiveFilters] = useState({
+    size: '',
+    brand: '',
+    category: '',
+    price: ''
+  });
+
+  // Initialize with all active auctions
+  useEffect(() => {
+    setFilteredAuctions(auctions.filter(auction => auction.status === 'active'));
+  }, [auctions]);
+
+  // Apply filters and search
+  useEffect(() => {
+    let filtered = auctions.filter(auction => auction.status === 'active');
+    
+    // Apply search term
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(auction => 
+        auction.title.toLowerCase().includes(term) || 
+        auction.description.toLowerCase().includes(term) || 
+        auction.brand.toLowerCase().includes(term)
+      );
+    }
+    
+    // Apply size filter
+    if (activeFilters.size) {
+      filtered = filtered.filter(auction => auction.size === activeFilters.size);
+    }
+    
+    // Apply brand filter
+    if (activeFilters.brand) {
+      filtered = filtered.filter(auction => auction.brand === activeFilters.brand);
+    }
+    
+    // Apply category filter
+    if (activeFilters.category) {
+      filtered = filtered.filter(auction => auction.category === activeFilters.category);
+    }
+    
+    // Apply price filter
+    if (activeFilters.price) {
+      const [min, max] = activeFilters.price.split('-').map(Number);
+      if (max) {
+        filtered = filtered.filter(auction => auction.currentBid >= min && auction.currentBid <= max);
+      } else {
+        filtered = filtered.filter(auction => auction.currentBid >= min);
+      }
+    }
+    
+    setFilteredAuctions(filtered);
+  }, [auctions, searchTerm, activeFilters]);
+
+  const handleFilterChange = (filters: Record<string, string>) => {
+    setActiveFilters(filters);
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">Find Unique Fashion Pieces</h1>
+        <p className="text-gray-600">
+          Browse through our curated selection of vintage and designer clothing items up for auction.
+        </p>
+      </div>
+      
+      <div className="mb-6 relative">
+        <div className="relative">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={handleSearch}
+            placeholder="Search for clothing items..."
+            className="w-full p-4 pl-12 border border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500"
+          />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-gray-400" />
+          </div>
+        </div>
+      </div>
+      
+      <FilterBar onFilterChange={handleFilterChange} />
+      
+      {filteredAuctions.length === 0 ? (
+        <div className="bg-white p-8 text-center rounded-lg shadow-sm border border-gray-200">
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">No auctions found</h3>
+          <p className="text-gray-500">
+            Try adjusting your filters or search term to find what you're looking for.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredAuctions.map(auction => (
+            <AuctionCard key={auction.id} auction={auction} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AuctionViewerPage;
