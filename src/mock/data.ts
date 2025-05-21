@@ -13,13 +13,14 @@ const getRandomPastDate = (days: number) => {
 
 // Mock user data
 export const currentUser: User = {
-  id: 'user1',
-  name: 'Maria Silva',
-  email: 'maria@example.com',
+  id: '1',
+  name: 'Denis Charles Ferreira do Carmo Junior',
+  email: 'denis@example.com',
   address: 'Rua das Flores, 123 - São Paulo, SP',
+  number: '91989359625',
+  instagram: 'denis_charl',
   preferences: {
-    sizes: ['M', 'L'],
-    brands: ['Zara', 'H&M', 'Nike'],
+    sizes: ['M', 'G'],
     categories: ['Dresses', 'Shirts', 'Shoes']
   },
   createdAuctions: ['auction1', 'auction2'],
@@ -38,7 +39,7 @@ export const auctions: Auction[] = [
     ],
     size: 'M',
     brand: 'Levi\'s',
-    category: 'Jackets',
+    category: 'Jaquetas',
     startingPrice: 150,
     currentBid: 180,
     startDate: getRandomPastDate(2),
@@ -70,9 +71,9 @@ export const auctions: Auction[] = [
       'https://images.pexels.com/photos/336372/pexels-photo-336372.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
       'https://images.pexels.com/photos/985635/pexels-photo-985635.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
     ],
-    size: 'S',
+    size: 'P',
     brand: 'Gucci',
-    category: 'Dresses',
+    category: 'Vestidos',
     startingPrice: 300,
     currentBid: 350,
     startDate: getRandomPastDate(3),
@@ -106,7 +107,7 @@ export const auctions: Auction[] = [
     ],
     size: '42',
     brand: 'Nike',
-    category: 'Shoes',
+    category: 'Sapatos',
     startingPrice: 250,
     currentBid: 320,
     startDate: getRandomPastDate(5),
@@ -138,7 +139,7 @@ export const auctions: Auction[] = [
       'https://images.pexels.com/photos/45982/pexels-photo-45982.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
       'https://images.pexels.com/photos/6311392/pexels-photo-6311392.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
     ],
-    size: 'L',
+    size: 'G',
     brand: 'H&M',
     category: 'Sweaters',
     startingPrice: 120,
@@ -174,7 +175,7 @@ export const auctions: Auction[] = [
     ],
     size: 'M',
     brand: 'Levi\'s',
-    category: 'Jackets',
+    category: 'Jaquetas',
     startingPrice: 90,
     currentBid: 110,
     startDate: getRandomPastDate(1),
@@ -209,7 +210,7 @@ export const auctionHistory = [
     finalPrice: 420,
     date: getRandomPastDate(30),
     role: 'seller',
-    status: 'sold'
+    status: 'vendido'
   },
   {
     id: 'past2',
@@ -218,7 +219,7 @@ export const auctionHistory = [
     finalPrice: 85,
     date: getRandomPastDate(45),
     role: 'buyer',
-    status: 'won'
+    status: 'ganhou'
   },
   {
     id: 'past3',
@@ -227,6 +228,6 @@ export const auctionHistory = [
     finalPrice: 1200,
     date: getRandomPastDate(60),
     role: 'buyer',
-    status: 'lost'
+    status: 'perdeu'
   }
 ];

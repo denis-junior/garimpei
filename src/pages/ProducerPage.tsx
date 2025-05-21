@@ -38,9 +38,9 @@ const ProducerPage: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Seller Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Dashboard do Vendedor</h1>
           <p className="text-gray-600">
-            Create and manage your clothing auctions
+            Crie e gerencie seus leilões.
           </p>
         </div>
         
@@ -51,12 +51,12 @@ const ProducerPage: React.FC = () => {
           {showCreateForm ? (
             <>
               <X className="w-5 h-5 mr-2" />
-              Cancel
+              Cancelar
             </>
           ) : (
             <>
               <Plus className="w-5 h-5 mr-2" />
-              Create New Auction
+              Criar Novo Leilão
             </>
           )}
         </button>
@@ -64,7 +64,7 @@ const ProducerPage: React.FC = () => {
       
       {showCreateForm && (
         <div className="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Create New Auction</h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Criar Novo Leilão</h2>
           <AuctionForm onSubmitSuccess={handleCreateSuccess} />
         </div>
       )}
@@ -76,16 +76,16 @@ const ProducerPage: React.FC = () => {
         
         {userAuctions.length === 0 ? (
           <div className="bg-white p-8 text-center rounded-lg shadow-sm border border-gray-200">
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">No auctions yet</h3>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">Nenhum leilão ainda</h3>
             <p className="text-gray-500 mb-4">
-              You haven't created any auctions yet. Click the button above to get started.
+              Você ainda não criou nenhum leilão. Clique no botão acima para começar.
             </p>
             <button
               onClick={toggleCreateForm}
               className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Create Your First Auction
+              Crie seu primeiro leilão
             </button>
           </div>
         ) : (

@@ -1,6 +1,6 @@
-import React from 'react';
-import { ShoppingBag, Heart, Instagram, Twitter, Facebook } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { ShoppingBag, Heart, Instagram, Twitter, Facebook } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
   return (
@@ -10,102 +10,142 @@ const Footer: React.FC = () => {
           <div className="mb-8 md:mb-0">
             <Link to="/" className="flex items-center mb-4">
               <ShoppingBag className="h-8 w-8 text-teal-400" />
-              <span className="ml-2 text-xl font-bold text-white">Garimpei</span>
+              <span className="ml-2 text-xl font-bold text-white">
+                Garimpei
+              </span>
             </Link>
             <p className="text-gray-300 mb-4">
-              Discover unique fashion pieces and bid on your favorite items. Find vintage treasures and designer gems.
+              Descubra peças de moda exclusivas e dê lances nos seus itens
+              favoritos. Encontre tesouros vintage entre outros.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors">
+              <a
+                href="#"
+                className="text-gray-300 hover:text-teal-400 transition-colors"
+              >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors">
+              <a
+                href="#"
+                className="text-gray-300 hover:text-teal-400 transition-colors"
+              >
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors">
+              <a
+                href="#"
+                className="text-gray-300 hover:text-teal-400 transition-colors"
+              >
                 <Facebook className="h-5 w-5" />
               </a>
             </div>
           </div>
-          
+
           <div>
             <h3 className="text-lg font-semibold mb-4">Explore</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors">
-                  Auctions
+                <Link
+                  to="/"
+                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                >
+                  Leilões
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors">
-                  Categories
+                <Link
+                  to="/"
+                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                >
+                  Categorias
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors">
-                  Brands
-                </Link>
-              </li>
-              <li>
-                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors">
+                <Link
+                  to="/"
+                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                >
                   Trending
                 </Link>
               </li>
             </ul>
           </div>
-          
+
           <div>
-            <h3 className="text-lg font-semibold mb-4">Sell</h3>
+            <h3 className="text-lg font-semibold mb-4">Venda</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/producer" className="text-gray-300 hover:text-teal-400 transition-colors">
-                  Create Auction
+                <Link
+                  to="/producer"
+                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                >
+                  Criar Leilão
                 </Link>
               </li>
               <li>
-                <Link to="/producer" className="text-gray-300 hover:text-teal-400 transition-colors">
-                  Seller Dashboard
+                <Link
+                  to="/producer"
+                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                >
+                  Dashboard do Vendedor
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors">
-                  Tips for Sellers
+                <Link
+                  to="/"
+                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                >
+                  Dicas para Vendedores
                 </Link>
               </li>
             </ul>
           </div>
-          
+
           <div>
-            <h3 className="text-lg font-semibold mb-4">Help</h3>
+            <h3 className="text-lg font-semibold mb-4">Ajuda</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors">
+                <Link
+                  to="/"
+                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                >
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors">
-                  Contact Us
+                <Link
+                  to="/"
+                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                >
+                  Entre em Contato
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors">
-                  Terms & Conditions
+                <Link
+                  to="/"
+                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                >
+                  Termos e Condições
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-gray-300 hover:text-teal-400 transition-colors">
-                  Privacy Policy
+                <Link
+                  to="/"
+                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                >
+                  Política de Privacidade
                 </Link>
               </li>
             </ul>
           </div>
         </div>
-        
+
         <div className="pt-8 mt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
-          <p>© {new Date().getFullYear()} Garimpei Auction App. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Garimpei App. Todos os Direitos Reservados.
+          </p>
           <p className="mt-2 flex items-center justify-center">
-            Made with <Heart className="h-4 w-4 mx-1 text-red-500" /> for fashion lovers
+            Feito com <Heart className="h-4 w-4 mx-1 text-red-500" /> for
+            IDK
           </p>
         </div>
       </div>

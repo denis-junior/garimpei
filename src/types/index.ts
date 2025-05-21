@@ -3,9 +3,10 @@ export interface User {
   name: string;
   email: string;
   address: string;
+  instagram: string;
+  number: string;
   preferences: {
     sizes: string[];
-    brands: string[];
     categories: string[];
   };
   createdAuctions: string[];
@@ -18,7 +19,6 @@ export interface Auction {
   description: string;
   images: string[];
   size: string;
-  brand: string;
   category: string;
   startingPrice: number;
   currentBid: number;

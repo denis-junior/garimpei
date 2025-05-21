@@ -39,7 +39,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
   return (
     <div className="bg-white shadow-sm mb-6 rounded-lg overflow-hidden">
       <div className="flex items-center p-4 justify-between">
-        <h2 className="text-lg font-medium text-gray-800">Filter Auctions</h2>
+        <h2 className="text-lg font-medium text-gray-800">Filtros</h2>
         <button 
           onClick={toggleFilters}
           className="p-2 text-gray-500 hover:text-teal-600 hover:bg-gray-100 rounded-md transition-colors"
@@ -52,7 +52,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
         <div className="p-4 border-t border-gray-100">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label htmlFor="size" className="block text-sm font-medium text-gray-700 mb-1">Size</label>
+              <label htmlFor="size" className="block text-sm font-medium text-gray-700 mb-1">Tamanho</label>
               <select
                 id="size"
                 name="size"
@@ -60,36 +60,19 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
                 onChange={handleFilterChange}
                 className="w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500"
               >
-                <option value="">All Sizes</option>
+                <option value="">Todos os tamanhos</option>
                 <option value="XS">XS</option>
-                <option value="S">S</option>
+                <option value="P">P</option>
                 <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
               </select>
             </div>
             
-            <div>
-              <label htmlFor="brand" className="block text-sm font-medium text-gray-700 mb-1">Brand</label>
-              <select
-                id="brand"
-                name="brand"
-                value={filters.brand}
-                onChange={handleFilterChange}
-                className="w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500"
-              >
-                <option value="">All Brands</option>
-                <option value="Nike">Nike</option>
-                <option value="Adidas">Adidas</option>
-                <option value="Zara">Zara</option>
-                <option value="H&M">H&M</option>
-                <option value="Levi's">Levi's</option>
-                <option value="Gucci">Gucci</option>
-              </select>
-            </div>
+           
             
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Categorias</label>
               <select
                 id="category"
                 name="category"
@@ -97,19 +80,19 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
                 onChange={handleFilterChange}
                 className="w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500"
               >
-                <option value="">All Categories</option>
-                <option value="Dresses">Dresses</option>
+                <option value="">Todas as categorias</option>
+                <option value="Dresses">Vestidos</option>
                 <option value="Tops">Tops</option>
-                <option value="Jackets">Jackets</option>
-                <option value="Pants">Pants</option>
-                <option value="Skirts">Skirts</option>
-                <option value="Shoes">Shoes</option>
-                <option value="Accessories">Accessories</option>
+                <option value="Jackets">Jaquetas</option>
+                <option value="Pants">Calças</option>
+                <option value="Skirts">Saias</option>
+                <option value="Shoes">Sapatos</option>
+                <option value="Accessories">Acessórios</option>
               </select>
             </div>
             
             <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
+              <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Faixa de Preço</label>
               <select
                 id="price"
                 name="price"
@@ -117,11 +100,11 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
                 onChange={handleFilterChange}
                 className="w-full border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500"
               >
-                <option value="">Any Price</option>
-                <option value="0-100">Under $100</option>
-                <option value="100-250">$100 - $250</option>
-                <option value="250-500">$250 - $500</option>
-                <option value="500">$500+</option>
+                <option value="">Qualquer Preço</option>
+                <option value="0-100">Abaixo de R$100</option>
+                <option value="100-250">R$100 - R$250</option>
+                <option value="250-500">R$250 - R$500</option>
+                <option value="500">R$500+</option>
               </select>
             </div>
           </div>
@@ -131,7 +114,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
               onClick={clearFilters}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
             >
-              Clear Filters
+              Limpar Filtros
             </button>
           </div>
         </div>

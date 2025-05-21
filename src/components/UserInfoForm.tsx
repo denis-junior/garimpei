@@ -12,7 +12,8 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ user, onClose }) => {
   const [formData, setFormData] = useState({
     name: user.name,
     email: user.email,
-    address: user.address,
+    number: user.number,
+    instagram: user.instagram,
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [success, setSuccess] = useState(false);
@@ -20,10 +21,11 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ user, onClose }) => {
   const validateForm = () => {
     const errors: Record<string, string> = {};
     
-    if (!formData.name.trim()) errors.name = 'Name is required';
-    if (!formData.email.trim()) errors.email = 'Email is required';
-    if (!formData.email.includes('@')) errors.email = 'Invalid email format';
-    if (!formData.address.trim()) errors.address = 'Address is required';
+    if (!formData.name.trim()) errors.name = 'Nome obrigatório';
+    if (!formData.email.trim()) errors.email = 'Email obrigatório';
+    if (!formData.email.includes('@')) errors.email = 'Format de email inválido';
+    if (!formData.number.trim()) errors.number = 'Número obrigatório';
+    if (!formData.instagram.trim()) errors.instagram = 'Instagram obrigatório';
     
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -52,7 +54,8 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ user, onClose }) => {
       ...user,
       name: formData.name,
       email: formData.email,
-      address: formData.address,
+      number: formData.number,
+      instagram: formData.instagram,
     });
     
     setSuccess(true);
@@ -67,7 +70,7 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ user, onClose }) => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-          Full Name
+          Nome Completo
         </label>
         <input
           type="text"
@@ -104,21 +107,41 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ user, onClose }) => {
       </div>
       
       <div>
-        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-          Address
+        <label htmlFor="number" className="block text-sm font-medium text-gray-700 mb-1">
+          Número
         </label>
-        <textarea
-          id="address"
-          name="address"
-          rows={3}
-          value={formData.address}
+        <input
+          type="text"
+          id="number"
+          name="number"
+          placeholder='(XX) XXXXX-XXXX'
+          value={formData.number}
           onChange={handleChange}
           className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
-            formErrors.address ? 'border-red-500' : 'border-gray-300'
+            formErrors.number ? 'border-red-500' : 'border-gray-300'
           }`}
         />
-        {formErrors.address && (
-          <p className="mt-1 text-sm text-red-600">{formErrors.address}</p>
+        {formErrors.number && (
+          <p className="mt-1 text-sm text-red-600">{formErrors.number}</p>
+        )}
+      </div>
+      <div>
+        <label htmlFor="instagram" className="block text-sm font-medium text-gray-700 mb-1">
+          Instagram
+        </label>
+        <input
+          type="text"
+          id="instagram"
+          name="instagram"
+          placeholder='meu_usuario'
+          value={formData.instagram}
+          onChange={handleChange}
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+            formErrors.instagram ? 'border-red-500' : 'border-gray-300'
+          }`}
+        />
+        {formErrors.instagram && (
+          <p className="mt-1 text-sm text-red-600">{formErrors.instagram}</p>
         )}
       </div>
       

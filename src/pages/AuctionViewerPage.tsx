@@ -11,7 +11,6 @@ const AuctionViewerPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilters, setActiveFilters] = useState({
     size: '',
-    brand: '',
     category: '',
     price: ''
   });
@@ -30,8 +29,7 @@ const AuctionViewerPage: React.FC = () => {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(auction => 
         auction.title.toLowerCase().includes(term) || 
-        auction.description.toLowerCase().includes(term) || 
-        auction.brand.toLowerCase().includes(term)
+        auction.description.toLowerCase().includes(term)
       );
     }
     
@@ -39,12 +37,7 @@ const AuctionViewerPage: React.FC = () => {
     if (activeFilters.size) {
       filtered = filtered.filter(auction => auction.size === activeFilters.size);
     }
-    
-    // Apply brand filter
-    if (activeFilters.brand) {
-      filtered = filtered.filter(auction => auction.brand === activeFilters.brand);
-    }
-    
+
     // Apply category filter
     if (activeFilters.category) {
       filtered = filtered.filter(auction => auction.category === activeFilters.category);
@@ -64,7 +57,11 @@ const AuctionViewerPage: React.FC = () => {
   }, [auctions, searchTerm, activeFilters]);
 
   const handleFilterChange = (filters: Record<string, string>) => {
-    setActiveFilters(filters);
+    setActiveFilters({
+      size: filters.size ?? '',
+      category: filters.category ?? '',
+      price: filters.price ?? ''
+    });
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,9 +71,9 @@ const AuctionViewerPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">Find Unique Fashion Pieces</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">Encontre peças de moda exclusivas</h1>
         <p className="text-gray-600">
-          Browse through our curated selection of vintage and designer clothing items up for auction.
+          Navegue pela nossa seleção criteriosa seleção de roupas vintage e de grife disponíveis para leilão.
         </p>
       </div>
       
@@ -86,7 +83,7 @@ const AuctionViewerPage: React.FC = () => {
             type="text"
             value={searchTerm}
             onChange={handleSearch}
-            placeholder="Search for clothing items..."
+            placeholder="Pesquisar por itens de vestuário..."
             className="w-full p-4 pl-12 border border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500"
           />
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -99,9 +96,9 @@ const AuctionViewerPage: React.FC = () => {
       
       {filteredAuctions.length === 0 ? (
         <div className="bg-white p-8 text-center rounded-lg shadow-sm border border-gray-200">
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">No auctions found</h3>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">Nenhum Leilão Encontrado</h3>
           <p className="text-gray-500">
-            Try adjusting your filters or search term to find what you're looking for.
+            Tente ajustar seus filtros ou termos de pesquisa para encontrar o que você está procurando.
           </p>
         </div>
       ) : (

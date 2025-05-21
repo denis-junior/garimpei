@@ -18,8 +18,8 @@ const Header: React.FC = () => {
 
   const navigationItems = [
     { name: 'Explore', path: '/', icon: <ShoppingBag className="w-5 h-5" /> },
-    { name: 'Create Auction', path: '/producer', icon: <Tag className="w-5 h-5" /> },
-    { name: 'Profile', path: '/profile', icon: <User className="w-5 h-5" /> },
+    { name: 'Criar Leilão', path: '/producer', icon: <Tag className="w-5 h-5" /> },
+    { name: 'Perfil', path: '/profile', icon: <User className="w-5 h-5" /> },
   ];
 
   return (
