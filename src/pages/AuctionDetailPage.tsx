@@ -72,7 +72,7 @@ const AuctionDetailPage: React.FC = () => {
   // Helper function to get bidder display name
   const getBidderName = (userId: string) => {
     if (userId === currentUser.id) {
-      return "You";
+      return "Você";
     }
     // Format: first letter + asterisks + last 2 digits of ID
     return `${currentUser.name.charAt(0)}******${userId.slice(-2)}`;
@@ -85,7 +85,7 @@ const AuctionDetailPage: React.FC = () => {
         className="flex items-center text-gray-600 hover:text-teal-600 mb-6 transition-colors"
       >
         <ChevronLeft className="w-5 h-5 mr-1" />
-        Back to Auctions
+        Voltar para Leilões
       </button>
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -136,7 +136,7 @@ const AuctionDetailPage: React.FC = () => {
 
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                Size: {size}
+                Tamanho: {size}
               </span>
 
               <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
@@ -147,41 +147,41 @@ const AuctionDetailPage: React.FC = () => {
             <div className="border-t border-b border-gray-200 py-4 mb-4">
               <div className="flex justify-between items-center mb-2">
                 <div className="text-sm text-gray-500">Preço Inicial</div>
-                <div className="font-medium">${startingPrice}</div>
+                <div className="font-medium">R${startingPrice}</div>
               </div>
 
               <div className="flex justify-between items-center">
                 <div className="text-sm font-medium text-gray-800">
-                  Current bid
+                  Lance atual
                 </div>
                 <div className="text-2xl font-bold text-teal-600">
-                  ${currentBid}
+                  R${currentBid}
                 </div>
               </div>
             </div>
 
             <div className="mb-6">
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                Description
+                Descrição
               </h2>
               <p className="text-gray-600">{description}</p>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg mb-6">
               <h2 className="text-lg font-semibold text-gray-800 mb-4">
-                Place Your Bid
+                Faça seu lance
               </h2>
               <BidForm auctionId={auction.id} currentBid={currentBid} />
             </div>
 
             <div>
               <h2 className="text-lg font-semibold text-gray-800 mb-3">
-                Bid History
+                Histórico de Lances
               </h2>
 
               {bids.length === 0 ? (
                 <p className="text-gray-500">
-                  No bids yet. Be the first to bid!
+                  Nenhum lance ainda, seja o primeiro!
                 </p>
               ) : (
                 <div className="bg-white border border-gray-200 rounded-lg">

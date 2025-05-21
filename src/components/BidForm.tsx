@@ -28,12 +28,12 @@ const BidForm: React.FC<BidFormProps> = ({ auctionId, currentBid, onBidPlaced })
     const amount = Number(bidAmount);
     
     if (isNaN(amount)) {
-      setError('Please enter a valid number');
+      setError('Por favor entre com um valor válido');
       return;
     }
     
     if (amount <= currentBid) {
-      setError(`Bid must be higher than the current bid of $${currentBid}`);
+      setError(`Lance deve ser maior que o atual lance de R$${currentBid}`);
       return;
     }
     
@@ -65,18 +65,18 @@ const BidForm: React.FC<BidFormProps> = ({ auctionId, currentBid, onBidPlaced })
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="bidAmount" className="block text-sm font-medium text-gray-700 mb-1">
-          Your Bid (USD)
+          Seu Lance (R$)
         </label>
         <div className="relative mt-1 rounded-md shadow-sm">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <span className="text-gray-500 sm:text-sm">$</span>
+            <span className="text-gray-500 sm:text-sm">R$</span>
           </div>
           <input
             type="number"
             name="bidAmount"
             id="bidAmount"
             step="0.01"
-            min={minBid}
+            // min={minBid}
             value={bidAmount}
             onChange={handleBidChange}
             className={`block w-full rounded-md pl-7 pr-12 focus:border-teal-500 focus:ring-teal-500 sm:text-sm ${
@@ -87,13 +87,13 @@ const BidForm: React.FC<BidFormProps> = ({ auctionId, currentBid, onBidPlaced })
           />
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
             <span className="text-gray-500 sm:text-sm" id="price-currency">
-              USD
+              BRL
             </span>
           </div>
         </div>
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
         <p className="mt-2 text-sm text-gray-500">
-          Minimum bid: ${minBid}
+          Lance mínimo: R${minBid}
         </p>
       </div>
       
@@ -106,12 +106,12 @@ const BidForm: React.FC<BidFormProps> = ({ auctionId, currentBid, onBidPlaced })
             : 'bg-teal-600 hover:bg-teal-700 focus:ring-teal-500'
         }`}
       >
-        {isSubmitting ? 'Placing Bid...' : 'Place Bid'}
+        {isSubmitting ? 'Fazendo Lance...' : 'Fazer Lance'}
       </button>
       
       {success && (
         <div className="p-3 rounded-md bg-green-50 text-green-700 text-sm">
-          Your bid has been placed successfully!
+          Seu Lance foi feito com sucesso!
         </div>
       )}
     </form>

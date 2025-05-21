@@ -10,7 +10,7 @@ interface AuctionCardProps {
 }
 
 const AuctionCard: React.FC<AuctionCardProps> = ({ auction, compact = false }) => {
-  const { id, title, brand, images, currentBid, size, endDate } = auction;
+  const { id, title, images, currentBid, size, endDate } = auction;
 
   return (
     <Link 
@@ -42,12 +42,10 @@ const AuctionCard: React.FC<AuctionCardProps> = ({ auction, compact = false }) =
         <h3 className="text-lg font-semibold text-gray-800 group-hover:text-teal-600 transition-colors">
           {title}
         </h3>
-        
-        <p className="text-sm text-gray-500 mb-2">{brand}</p>
-        
+                
         <div className="flex justify-between items-center">
           <div>
-            <p className="text-sm text-gray-500">Current bid</p>
+            <p className="text-sm text-gray-500">Lance atual</p>
             <p className="text-lg font-bold text-teal-600">${currentBid}</p>
           </div>
           

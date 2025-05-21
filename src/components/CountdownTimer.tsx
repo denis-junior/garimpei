@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { formatDistance } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 interface CountdownTimerProps {
   endDate: string;
@@ -17,14 +18,13 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ endDate, onEnd }) => {
       
       // If the auction has ended
       if (end <= now) {
-        setTimeLeft('Ended');
+        setTimeLeft('Finalizado');
         setIsEnded(true);
         if (onEnd) onEnd();
         return;
       }
       
-      // Update the countdown text
-      setTimeLeft(formatDistance(end, now, { addSuffix: false }));
+      setTimeLeft(formatDistance(end, now, { addSuffix: false, locale: ptBR }));
     };
     
     // Initial update
@@ -40,9 +40,9 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ endDate, onEnd }) => {
   return (
     <div className={`font-medium ${isEnded ? 'text-red-500' : 'text-teal-600'}`}>
       {isEnded ? (
-        <span>Auction ended</span>
+        <span>Leilão Finalizado</span>
       ) : (
-        <span>Ends in {timeLeft}</span>
+        <span>Termina em {timeLeft}</span>
       )}
     </div>
   );
