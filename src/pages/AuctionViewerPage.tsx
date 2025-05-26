@@ -4,8 +4,6 @@ import { Auction } from "../types";
 import AuctionCard from "../components/AuctionCard";
 import FilterBar from "../components/FilterBar";
 import { Search } from "lucide-react";
-import axios from "axios";
-import CountdownTimer from "../components/CountdownTimer";
 
 const AuctionViewerPage: React.FC = () => {
   const { auctions } = useAuction();
@@ -16,11 +14,6 @@ const AuctionViewerPage: React.FC = () => {
     category: "",
     price: "",
   });
-  const [endDateTest, setEndDateTest] = useState<{
-    end_date: string;
-    isActive: boolean;
-    timeRemaining: number;
-  }>();
 
   // Initialize with all active auctions
   useEffect(() => {
@@ -33,16 +26,6 @@ const AuctionViewerPage: React.FC = () => {
   useEffect(() => {
     let filtered = auctions.filter((auction) => auction.status === "active");
 
-    const getDate = async () => {
-      const result = await axios.get(
-        "http://localhost:3000/clothing/2/time-remaining"
-      );
-      console.log(result.data);
-      setEndDateTest(result.data);
-    };
-
-    getDate();
-
     // get auctions from API
     // const getAuctions = async () => {
     //   const result = await axios.get("http://localhost:3000/clothing");
@@ -50,7 +33,6 @@ const AuctionViewerPage: React.FC = () => {
     //   setFilteredAuctions(result.data);
     // };
     // getAuctions();
-
 
     // Apply search term
     if (searchTerm) {
@@ -114,7 +96,6 @@ const AuctionViewerPage: React.FC = () => {
           grife disponíveis para leilão.
         </p>
       </div>
-      <CountdownTimer endDate={endDateTest?.end_date ?? ""} />
       <div className="mb-6 relative">
         <div className="relative">
           <input
