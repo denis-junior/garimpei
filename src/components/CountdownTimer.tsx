@@ -1,49 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { formatDistance } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import React, { useState, useEffect } from "react";
 
 interface CountdownTimerProps {
-  endDate: string;
+  endDate?: string;
+  timeRemaining?: number; // em milissegundos
   onEnd?: () => void;
 }
 
-const CountdownTimer: React.FC<CountdownTimerProps> = ({ endDate, onEnd }) => {
-  const [timeLeft, setTimeLeft] = useState<string>('');
-  const [isEnded, setIsEnded] = useState<boolean>(false);
+const CountdownTimer: React.FC<CountdownTimerProps> = ({
+  endDate,
+  timeRemaining,
+  onEnd,
+}) => {
+  const getInitialTime = () => {
+    if (typeof timeRemaining === "number") {
+      return timeRemaining;
+    }
+    if (endDate) {
+      const end = new Date(endDate).getTime();
+      const now = Date.now();
+      return Math.max(end - now, 0);
+    }
+    return 0;
+  };
+
+  const [msLeft, setMsLeft] = useState(getInitialTime());
+  const [isEnded, setIsEnded] = useState(msLeft <= 0);
 
   useEffect(() => {
-    const updateCountdown = () => {
-      const now = new Date();
-      const end = new Date(endDate);
-      
-      // If the auction has ended
-      if (end <= now) {
-        setTimeLeft('Finalizado');
-        setIsEnded(true);
-        if (onEnd) onEnd();
-        return;
-      }
-      
-      setTimeLeft(formatDistance(end, now, { addSuffix: false, locale: ptBR }));
-    };
-    
-    // Initial update
-    updateCountdown();
-    
-    // Update every second
-    const interval = setInterval(updateCountdown, 1000);
-    
-    // Clean up
+    setMsLeft(getInitialTime());
+    setIsEnded(getInitialTime() <= 0);
+  }, [endDate, timeRemaining]);
+
+  useEffect(() => {
+    if (msLeft <= 0) {
+      setIsEnded(true);
+      if (onEnd) onEnd();
+      return;
+    }
+    const interval = setInterval(() => {
+      setMsLeft((prev) => {
+        if (prev <= 1000) {
+          clearInterval(interval);
+          setIsEnded(true);
+          if (onEnd) onEnd();
+          return 0;
+        }
+        return prev - 1000;
+      });
+    }, 1000);
     return () => clearInterval(interval);
-  }, [endDate, onEnd]);
+    // eslint-disable-next-line
+  }, [msLeft]);
+
+  if (isEnded) {
+    return <div className="font-medium text-red-500">Leilão Finalizado</div>;
+  }
+
+  const totalSeconds = Math.floor(msLeft / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  let timeString = "";
+  if (days > 0) timeString += `${days}d `;
+  if (days > 0 || hours > 0) timeString += `${hours}h `;
+  if (days > 0 || hours > 0 || minutes > 0) timeString += `${minutes}m `;
+  timeString += `${seconds}s`;
 
   return (
-    <div className={`font-medium ${isEnded ? 'text-red-500' : 'text-teal-600'}`}>
-      {isEnded ? (
-        <span>Leilão Finalizado</span>
-      ) : (
-        <span>Termina em {timeLeft}</span>
-      )}
+    <div className="font-medium text-teal-600">
+      Termina em {timeString.trim()}
     </div>
   );
 };
