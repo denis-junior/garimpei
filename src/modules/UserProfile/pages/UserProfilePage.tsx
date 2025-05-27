@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useAuction } from "../context/AuctionContext";
+import { useAuction } from "../../../context/AuctionContext";
 import { Edit, ClipboardList, Clock } from "lucide-react";
-import UserInfoForm from "../components/UserInfoForm";
-import { auctionHistory } from "../mock/data";
-import { formatPhoneNumber } from "../utils";
+import UserInfoForm from "../../../components/UserInfoForm";
+import { auctionHistory } from "../../../mock/data";
+import { formatPhoneNumber } from "../../../utils";
 
 const UserProfilePage: React.FC = () => {
   const { currentUser } = useAuction();

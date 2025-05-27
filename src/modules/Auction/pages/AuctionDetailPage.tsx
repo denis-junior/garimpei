@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAuction } from "../context/AuctionContext";
-import CountdownTimer from "../components/CountdownTimer";
-import BidForm from "../components/BidForm";
+import { useAuction } from "../../../context/AuctionContext";
+import CountdownTimer from "../../../components/CountdownTimer";
+import BidForm from "../../../components/BidForm";
 import {
   ChevronLeft,
   Clock,

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useAuction } from "../context/AuctionContext";
-import { Auction } from "../types";
-import AuctionCard from "../components/AuctionCard";
-import FilterBar from "../components/FilterBar";
+import { useAuction } from "../../../context/AuctionContext";
+import { Auction } from "../../../types";
+import AuctionCard from "../../../components/AuctionCard";
+import FilterBar from "../../../components/FilterBar";
 import { Search } from "lucide-react";
 
 const AuctionViewerPage: React.FC = () => {
