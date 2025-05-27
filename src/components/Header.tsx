@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ShoppingBag, User, Tag } from 'lucide-react';
-import { useAuction } from '../context/AuctionContext';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, ShoppingBag, User, Tag } from "lucide-react";
+import { useAuction } from "../context/AuctionContext";
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,9 +17,13 @@ const Header: React.FC = () => {
   };
 
   const navigationItems = [
-    { name: 'Explore', path: '/', icon: <ShoppingBag className="w-5 h-5" /> },
-    { name: 'Criar Leilão', path: '/producer', icon: <Tag className="w-5 h-5" /> },
-    { name: 'Perfil', path: '/profile', icon: <User className="w-5 h-5" /> },
+    { name: "Explore", path: "/", icon: <ShoppingBag className="w-5 h-5" /> },
+    {
+      name: "Minhas Lojas",
+      path: "/producer",
+      icon: <Tag className="w-5 h-5" />,
+    },
+    { name: "Perfil", path: "/profile", icon: <User className="w-5 h-5" /> },
   ];
 
   return (
@@ -29,7 +33,9 @@ const Header: React.FC = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <ShoppingBag className="h-8 w-8 text-teal-500" />
-              <span className="ml-2 text-xl font-bold text-gray-800">Garimpei</span>
+              <span className="ml-2 text-xl font-bold text-gray-800">
+                Garimpei
+              </span>
             </Link>
           </div>
 
@@ -41,8 +47,8 @@ const Header: React.FC = () => {
                 to={item.path}
                 className={`inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200 ${
                   location.pathname === item.path
-                    ? 'text-teal-600 border-b-2 border-teal-500'
-                    : 'text-gray-600 hover:text-teal-500'
+                    ? "text-teal-600 border-b-2 border-teal-500"
+                    : "text-gray-600 hover:text-teal-500"
                 }`}
               >
                 {item.icon}
@@ -61,7 +67,7 @@ const Header: React.FC = () => {
                 </div>
               </div>
               <div className="hidden md:block text-sm font-medium text-gray-700">
-                {currentUser.name.split(' ')[0]}
+                {currentUser.name.split(" ")[0]}
               </div>
             </div>
           </div>
@@ -84,7 +90,11 @@ const Header: React.FC = () => {
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen' : 'max-h-0 overflow-hidden'}`}>
+      <div
+        className={`md:hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-screen" : "max-h-0 overflow-hidden"
+        }`}
+      >
         <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg">
           {navigationItems.map((item) => (
             <Link
@@ -93,8 +103,8 @@ const Header: React.FC = () => {
               onClick={closeMenu}
               className={`flex items-center px-3 py-2 rounded-md text-base font-medium ${
                 location.pathname === item.path
-                  ? 'bg-teal-50 text-teal-600'
-                  : 'text-gray-700 hover:bg-gray-50 hover:text-teal-500'
+                  ? "bg-teal-50 text-teal-600"
+                  : "text-gray-700 hover:bg-gray-50 hover:text-teal-500"
               }`}
             >
               {item.icon}
@@ -111,8 +121,12 @@ const Header: React.FC = () => {
                 </div>
               </div>
               <div className="ml-3">
-                <div className="text-base font-medium text-gray-800">{currentUser.name}</div>
-                <div className="text-sm font-medium text-gray-500">{currentUser.email}</div>
+                <div className="text-base font-medium text-gray-800">
+                  {currentUser.name}
+                </div>
+                <div className="text-sm font-medium text-gray-500">
+                  {currentUser.email}
+                </div>
               </div>
             </div>
           </div>

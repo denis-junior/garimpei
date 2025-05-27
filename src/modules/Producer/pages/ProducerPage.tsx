@@ -42,7 +42,7 @@ const ProducerPage: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Dashboard do Vendedor
+            Dashboard de lojas
           </h1>
           <p className="text-gray-600">Crie e gerencie seus leilões.</p>
         </div>
