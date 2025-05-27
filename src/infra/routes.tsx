@@ -6,6 +6,7 @@ import AuctionViewerPage from "../modules/Auction/pages/AuctionViewerPage";
 import { NotFound } from "../shared/NotFound";
 import { ProducerRoutes } from "../modules/Producer/routes";
 import { UserProfileRoutes } from "../modules/UserProfile/routes";
+import { AuthRoutes } from "../modules/Auth/routes";
 
 const AppRoutes = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const AppRoutes = createBrowserRouter([
         children: AuctionRoutes,
       },
     ],
+  },
+  {
+    path: "/auth",
+    children: AuthRoutes,
   },
   {
     path: "*",
