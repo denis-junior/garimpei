@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-// import { useAuction } from '../context/AuctionContext';
-import { useAuction } from "../../../context/AuctionContext";
-import AuctionForm from "../../../components/AuctionForm";
-import AuctionCard from "../../../components/AuctionCard";
 import { Plus, X, Edit, Trash2 } from "lucide-react";
+import StoreForm from "../components/StoreForm";
+import { useGetAllStores, useDeleteStore } from "../services/CRUD-stores";
+import StoresCard from "../components/StoreCard";
+import { IStore } from "../types/store";
 
-const ProducerPage: React.FC = () => {
-  const { getUserAuctions, deleteAuction } = useAuction();
+const StoresPage: React.FC = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [deletingAuctionId, setDeletingAuctionId] = useState<string | null>(
-    null
-  );
+  const [itemDelete, setItemDelete] = useState<IStore>();
+  const { data: listStores } = useGetAllStores();
+  const { mutate } = useDeleteStore();
 
-  const userAuctions = getUserAuctions();
+  console.log("listStores", listStores);
 
   const toggleCreateForm = () => {
     setShowCreateForm(!showCreateForm);
@@ -22,19 +21,23 @@ const ProducerPage: React.FC = () => {
     setShowCreateForm(false);
   };
 
-  const confirmDelete = (auctionId: string) => {
-    setDeletingAuctionId(auctionId);
+  const confirmDelete = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    store: IStore
+  ) => {
+    e.stopPropagation();
+    setItemDelete(store);
   };
 
   const handleDelete = () => {
-    if (deletingAuctionId) {
-      deleteAuction(deletingAuctionId);
-      setDeletingAuctionId(null);
+    if (itemDelete) {
+      mutate(itemDelete.id);
+      cancelDelete();
     }
   };
 
   const cancelDelete = () => {
-    setDeletingAuctionId(null);
+    setItemDelete(undefined);
   };
 
   return (
@@ -44,7 +47,7 @@ const ProducerPage: React.FC = () => {
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
             Dashboard de lojas
           </h1>
-          <p className="text-gray-600">Crie e gerencie seus leilões.</p>
+          <p className="text-gray-600">Crie e gerencie suas lojas.</p>
         </div>
 
         <button
@@ -59,7 +62,7 @@ const ProducerPage: React.FC = () => {
           ) : (
             <>
               <Plus className="w-5 h-5 mr-2" />
-              Criar Novo Leilão
+              Criar Nova loja
             </>
           )}
         </button>
@@ -68,24 +71,24 @@ const ProducerPage: React.FC = () => {
       {showCreateForm && (
         <div className="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Criar Novo Leilão
+            Criar Nova Loja
           </h2>
-          <AuctionForm onSubmitSuccess={handleCreateSuccess} />
+          <StoreForm onSubmitSuccess={handleCreateSuccess} />
         </div>
       )}
 
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Your Auctions ({userAuctions.length})
+          Suas lojas ({listStores?.length || 0})
         </h2>
 
-        {userAuctions.length === 0 ? (
+        {!listStores?.length ? (
           <div className="bg-white p-8 text-center rounded-lg shadow-sm border border-gray-200">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">
-              Nenhum leilão ainda
+              Nenhuma loja encontrada
             </h3>
             <p className="text-gray-500 mb-4">
-              Você ainda não criou nenhum leilão. Clique no botão acima para
+              Você ainda não criou nenhuma loja. Clique no botão acima para
               começar.
             </p>
             <button
@@ -93,31 +96,31 @@ const ProducerPage: React.FC = () => {
               className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
             >
               <Plus className="w-4 h-4 mr-2" />
-              Crie seu primeiro leilão
+              Crie sua primeira loja
             </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {userAuctions.map((auction) => (
-              <div key={auction.id} className="relative">
-                <AuctionCard auction={auction} compact={true} />
+            {listStores?.map((store) => (
+              <div key={store.id} className="relative">
+                <StoresCard store={store}>
+                  <div className=" flex ">
+                    <button
+                      className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-teal-600 hover:bg-opacity-100 transition-colors"
+                      title="Edit auction"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
 
-                <div className="absolute top-2 right-2 flex space-x-1">
-                  <button
-                    className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-teal-600 hover:bg-opacity-100 transition-colors"
-                    title="Edit auction"
-                  >
-                    <Edit className="w-4 h-4" />
-                  </button>
-
-                  <button
-                    onClick={() => confirmDelete(auction.id)}
-                    className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-red-600 hover:bg-opacity-100 transition-colors"
-                    title="Delete auction"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
+                    <button
+                      onClick={(e) => confirmDelete(e, store)}
+                      className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-red-600 hover:bg-opacity-100 transition-colors"
+                      title="Delete auction"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </StoresCard>
               </div>
             ))}
           </div>
@@ -125,7 +128,7 @@ const ProducerPage: React.FC = () => {
       </div>
 
       {/* Delete confirmation modal */}
-      {deletingAuctionId && (
+      {itemDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg max-w-lg w-full p-6">
             <h3 className="text-xl font-semibold text-gray-800 mb-4">
@@ -158,4 +161,4 @@ const ProducerPage: React.FC = () => {
   );
 };
 
-export default ProducerPage;
+export default StoresPage;

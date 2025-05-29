@@ -20,7 +20,7 @@ const Header: React.FC = () => {
     { name: "Explore", path: "/", icon: <ShoppingBag className="w-5 h-5" /> },
     {
       name: "Minhas Lojas",
-      path: "/producer",
+      path: "/store",
       icon: <Tag className="w-5 h-5" />,
     },
     { name: "Perfil", path: "/profile", icon: <User className="w-5 h-5" /> },

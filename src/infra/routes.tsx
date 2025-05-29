@@ -4,7 +4,7 @@ import { MainLayout } from "./main.layout";
 import { AuctionRoutes } from "../modules/Auction/routes";
 import AuctionViewerPage from "../modules/Auction/pages/AuctionViewerPage";
 import { NotFound } from "../shared/NotFound";
-import { ProducerRoutes } from "../modules/Producer/routes";
+import { ProducerRoutes } from "../modules/Store/routes";
 import { UserProfileRoutes } from "../modules/UserProfile/routes";
 import { AuthRoutes } from "../modules/Auth/routes";
 
@@ -17,7 +17,7 @@ const AppRoutes = createBrowserRouter([
         element: <AuctionViewerPage />,
       },
       {
-        path: "/producer",
+        path: "/store",
         children: ProducerRoutes,
       },
       {

@@ -10,4 +10,12 @@ export const AuthRoutes = [
     path: "register",
     element: <Register />,
   },
+  {
+    path: "*",
+    element: <LoginPage />,
+  },
+  {
+    path: "",
+    element: <LoginPage />,
+  },
 ];
