@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { isValidCPF } from "../../../utils/validateCPF";
 
-export const RegiserSchema = yup.object({
+export const RegisterSchema = yup.object({
   name: yup.string().required("Nome é obrigatório"),
   cpf: yup
     .string()
@@ -29,6 +29,7 @@ export const RegiserSchema = yup.object({
     .string()
     .required("Confirmação de senha é obrigatória")
     .oneOf([yup.ref("password")], "As senhas não coincidem"),
+  seller: yup.boolean().default(false),
 });
 
-export type FormDataRegister = yup.InferType<typeof RegiserSchema>;
+export type FormDataRegister = yup.InferType<typeof RegisterSchema>;

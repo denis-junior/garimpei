@@ -2,16 +2,18 @@ import React from "react";
 import InputMask from "react-input-mask";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { RegiserSchema, FormDataRegister } from "../schema/Register.schema";
+import { FormDataRegister, RegisterSchema } from "../schema/Register.schema";
 import { useRegister } from "../hooks/useRegister";
+import { SubmitHandler } from "react-hook-form";
 
 const RegisterPage: React.FC = () => {
   const {
     handleSubmit,
     control,
+    register,
     formState: { errors },
   } = useForm<FormDataRegister>({
-    resolver: yupResolver(RegiserSchema),
+    resolver: yupResolver(RegisterSchema),
     defaultValues: {
       name: "",
       cpf: "",
@@ -19,11 +21,12 @@ const RegisterPage: React.FC = () => {
       instagram: "@",
       password: "",
       confirmPassword: "",
+      seller: false,
     },
   });
   const { mutate } = useRegister();
 
-  const onSubmit = (data: FormDataRegister) => {
+  const onSubmit: SubmitHandler<FormDataRegister> = (data) => {
     mutate(data);
   };
 
@@ -164,6 +167,15 @@ const RegisterPage: React.FC = () => {
               </p>
             )}
           </div>
+
+          <label className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              {...register("seller")}
+              className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
+            />
+            <span>Sou vendedor</span>
+          </label>
 
           <button
             type="submit"
