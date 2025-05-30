@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 interface CountdownTimerProps {
-  endDate?: string;
+  endDate?: Date | string; // Data final do leilão
   timeRemaining?: number; // em milissegundos
   onEnd?: () => void;
 }
