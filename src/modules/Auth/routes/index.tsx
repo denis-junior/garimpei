@@ -1,5 +1,6 @@
 import LoginPage from "../pages/Login";
-import Register from "../pages/Register";
+import RegisterBuyerPage from "../pages/RegisterBuyer";
+import RegisterSellerPage from "../pages/RegisterSeller";
 
 export const AuthRoutes = [
   {
@@ -7,8 +8,12 @@ export const AuthRoutes = [
     element: <LoginPage />,
   },
   {
-    path: "register",
-    element: <Register />,
+    path: "register/buyer",
+    element: <RegisterBuyerPage />,
+  },
+  {
+    path: "register/seller",
+    element: <RegisterSellerPage />,
   },
   {
     path: "*",

@@ -7,13 +7,14 @@ export const RegisterSchema = yup.object({
     .string()
     .required("CPF é obrigatório")
     .test("is-valid-cpf", "CPF inválido", (value) => isValidCPF(value || "")),
-  phone: yup
+  contact: yup
     .string()
     .required("Telefone é obrigatório")
     .test("is-valid-phone", "Telefone inválido", (value) => {
       const digits = value?.replace(/\D/g, "") || "";
       return digits.length === 11;
     }),
+  email: yup.string().email("Email inválido").required("Email é obrigatório"),
   instagram: yup
     .string()
     .required("Instagram é obrigatório")
@@ -29,7 +30,6 @@ export const RegisterSchema = yup.object({
     .string()
     .required("Confirmação de senha é obrigatória")
     .oneOf([yup.ref("password")], "As senhas não coincidem"),
-  seller: yup.boolean().default(false),
 });
 
 export type FormDataRegister = yup.InferType<typeof RegisterSchema>;

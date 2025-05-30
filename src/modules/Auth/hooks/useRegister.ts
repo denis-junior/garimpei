@@ -1,9 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
 import { FormDataRegister } from "../schema/Register.schema";
-import { registerUser } from "../service/Register.service";
+import {
+  registerUserBuyer,
+  registerUserSeller,
+} from "../service/Register.service";
 
-export const useRegister = () => {
+export const useRegisterBuyer = () => {
   return useMutation({
-    mutationFn: (data: FormDataRegister) => registerUser(data),
+    mutationFn: (data: FormDataRegister) => registerUserBuyer(data),
+  });
+};
+
+export const useRegisterSeller = () => {
+  return useMutation({
+    mutationFn: (data: FormDataRegister) => registerUserSeller({ ...data }),
   });
 };

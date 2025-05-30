@@ -3,28 +3,27 @@ import InputMask from "react-input-mask";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormDataRegister, RegisterSchema } from "../schema/Register.schema";
-import { useRegister } from "../hooks/useRegister";
+import { useRegisterBuyer } from "../hooks/useRegister";
 import { SubmitHandler } from "react-hook-form";
 
-const RegisterPage: React.FC = () => {
+const RegisterBuyerPage: React.FC = () => {
   const {
     handleSubmit,
     control,
-    register,
     formState: { errors },
   } = useForm<FormDataRegister>({
     resolver: yupResolver(RegisterSchema),
     defaultValues: {
       name: "",
       cpf: "",
-      phone: "",
+      contact: "",
       instagram: "@",
       password: "",
       confirmPassword: "",
-      seller: false,
+      email: "",
     },
   });
-  const { mutate } = useRegister();
+  const { mutate } = useRegisterBuyer();
 
   const onSubmit: SubmitHandler<FormDataRegister> = (data) => {
     mutate(data);
@@ -48,6 +47,24 @@ const RegisterPage: React.FC = () => {
                   {...field}
                   className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                   placeholder="Seu nome"
+                />
+              )}
+            />
+            {errors.name && (
+              <p className="text-red-600 text-xs">{errors.name.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-gray-700 text-sm mb-1">email</label>
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  placeholder="Email"
                 />
               )}
             />
@@ -81,7 +98,7 @@ const RegisterPage: React.FC = () => {
           <div>
             <label className="block text-gray-700 text-sm mb-1">Telefone</label>
             <Controller
-              name="phone"
+              name="contact"
               control={control}
               render={({ field }) => (
                 <InputMask mask="(99) 99999-9999" {...field}>
@@ -95,8 +112,8 @@ const RegisterPage: React.FC = () => {
                 </InputMask>
               )}
             />
-            {errors.phone && (
-              <p className="text-red-600 text-xs">{errors.phone.message}</p>
+            {errors.contact && (
+              <p className="text-red-600 text-xs">{errors.contact.message}</p>
             )}
           </div>
 
@@ -168,15 +185,6 @@ const RegisterPage: React.FC = () => {
             )}
           </div>
 
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              {...register("seller")}
-              className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
-            />
-            <span>Sou vendedor</span>
-          </label>
-
           <button
             type="submit"
             className="w-full py-2 px-4 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors text-sm"
@@ -196,4 +204,4 @@ const RegisterPage: React.FC = () => {
   );
 };
 
-export default RegisterPage;
+export default RegisterBuyerPage;
