@@ -4,6 +4,9 @@ import StoreForm from "../components/StoreForm";
 import { useGetAllStores, useDeleteStore } from "../services/CRUD-stores";
 import StoresCard from "../components/StoreCard";
 import { IStore } from "../types/store";
+import ConfirmationModal from "../../../components/ConfirmationModal";
+import PrimaryButton from "../../../components/PrimaryButton";
+import PageHeader from "../../../components/PageHeader";
 
 const StoresPage: React.FC = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -42,31 +45,25 @@ const StoresPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Dashboard de lojas
-          </h1>
-          <p className="text-gray-600">Crie e gerencie suas lojas.</p>
-        </div>
-
-        <button
-          onClick={toggleCreateForm}
-          className="mt-4 md:mt-0 flex items-center px-4 py-3 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
-        >
-          {showCreateForm ? (
-            <>
-              <X className="w-5 h-5 mr-2" />
-              Cancelar
-            </>
-          ) : (
-            <>
-              <Plus className="w-5 h-5 mr-2" />
-              Criar Nova loja
-            </>
-          )}
-        </button>
-      </div>
+      <PageHeader
+        title="Dashboard de lojas"
+        subtitle="Crie e gerencie suas lojas."
+        action={
+          <PrimaryButton onClick={toggleCreateForm}>
+            {showCreateForm ? (
+              <>
+                <X className="w-5 h-5 mr-2" />
+                Cancelar
+              </>
+            ) : (
+              <>
+                <Plus className="w-5 h-5 mr-2" />
+                Criar Nova Loja
+              </>
+            )}
+          </PrimaryButton>
+        }
+      />
 
       {showCreateForm && (
         <div className="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200">
@@ -129,33 +126,14 @@ const StoresPage: React.FC = () => {
 
       {/* Delete confirmation modal */}
       {itemDelete && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-lg w-full p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">
-              Delete Auction
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete this auction? This action cannot
-              be undone.
-            </p>
-
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={cancelDelete}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
+        <ConfirmationModal
+          title="Excluir Loja"
+          message="Tem certeza que deseja excluir esta loja? Esta ação não pode ser desfeita."
+          onCancel={cancelDelete}
+          onConfirm={handleDelete}
+          confirmText="Excluir"
+          cancelText="Cancelar"
+        />
       )}
     </div>
   );
