@@ -13,7 +13,7 @@ const createStore = async (store: StoreFormData) => {
   return response.data;
 };
 
-const getStore = async (storeId: string) => {
+const getStore = async (storeId: number) => {
   const response = await api.get<IStore>(`/stores/${storeId}`);
   return response.data;
 };
@@ -49,7 +49,7 @@ export const usePostStore = ({
   });
 };
 
-export const useGetStore = (storeId: string) => {
+export const useGetStore = (storeId: number) => {
   return useQuery({
     queryKey: [EEndPoints.GETSTOREBYID, storeId],
     queryFn: async () => getStore(storeId),

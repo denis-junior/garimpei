@@ -2,25 +2,46 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ProductFormData, schema } from "../schema/product.schema";
-import { usePostProduct } from "../services/CRUD-product";
-
+import { usePostProductWithImage } from "../services/CRUD-product";
 interface IProductFormProps {
   onSubmitSuccess?: () => void;
+  idStore?: number;
 }
 
-const ProductForm: React.FC<IProductFormProps> = ({ onSubmitSuccess }) => {
+const ProductForm: React.FC<IProductFormProps> = ({
+  onSubmitSuccess,
+  idStore,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<ProductFormData>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      store: idStore,
+    },
   });
 
-  const { mutate, isPending } = usePostProduct({ onSubmitSuccess });
+  const { mutate, isPending } = usePostProductWithImage({ onSubmitSuccess });
 
   const onSubmit = (data: ProductFormData) => {
-    mutate(data);
+    const formData = new FormData();
+
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("initial_bid", String(data.initial_bid));
+    formData.append("initial_date", data.initial_date);
+    formData.append("end_date", data.end_date);
+    formData.append("size", data.size);
+    formData.append("store", String(data.store));
+    if (data.image && data.image.length > 0) {
+      Array.from(data.image).forEach((file) => {
+        formData.append("images", file);
+      });
+    }
+    mutate(formData, { onSuccess: () => reset() });
   };
 
   return (
@@ -156,6 +177,30 @@ const ProductForm: React.FC<IProductFormProps> = ({ onSubmitSuccess }) => {
         />
         {errors.size && (
           <p className="mt-1 text-sm text-red-600">{errors.size.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label
+          htmlFor="image"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Imagens do produto
+        </label>
+        <input
+          id="image"
+          type="file"
+          multiple
+          accept="image/*"
+          {...register("image")}
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+            errors.image ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        {errors.image && (
+          <p className="mt-1 text-sm text-red-600">
+            {errors.image.message as string}
+          </p>
         )}
       </div>
 

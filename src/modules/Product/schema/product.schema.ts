@@ -1,12 +1,23 @@
 import * as yup from "yup";
 
 export const schema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  description: yup.string().required("Description is required"),
-  initial_bid: yup.number().required("numero é obrigatório"),
-  initial_date: yup.date().required("Initial date is required"),
-  end_date: yup.date().required("End date is required"),
-  size: yup.string().required("Size is required"),
+  store: yup.number().required("Loja é obrigatória"),
+  name: yup.string().required("Nome é obrigatório"),
+  description: yup.string().required("Descrição é obrigatória"),
+  initial_bid: yup
+    .number()
+    .typeError("Lance inicial deve ser um número")
+    .required("Lance inicial é obrigatório"),
+  initial_date: yup.string().required("Data de início é obrigatória"),
+  end_date: yup.string().required("Data de encerramento é obrigatória"),
+  size: yup.string().required("Tamanho é obrigatório"),
+  image: yup
+    .mixed<FileList>()
+    .test("fileSize", "Cada arquivo deve ter menos de 5MB", (value) => {
+      if (!value) return true;
+      return Array.from(value).every((file) => file.size <= 5 * 1024 * 1024);
+    })
+    .required(),
 });
 
 export type ProductFormData = yup.InferType<typeof schema>;

@@ -27,7 +27,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="relative">
           <img
             src={
-              images[0]?.url ||
+              (images?.length && images?.length > 0 && images[0]?.url) ||
               "https://th.bing.com/th/id/OIP.rm4o2LZV2iOu83ECOsG-pwHaEm?rs=1&pid=ImgDetMain"
             }
             alt={name}

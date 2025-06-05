@@ -9,7 +9,7 @@ import PageHeader from "../../../components/PageHeader";
 
 const StoreDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: store } = useGetStore(id || "");
+  const { data: store } = useGetStore(Number(id));
   const [showCreateForm, setShowCreateForm] = useState(false);
 
   const toggleCreateForm = () => {
@@ -47,11 +47,14 @@ const StoreDetailPage: React.FC = () => {
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Criar Nova Loja
           </h2>
-          <ProductForm onSubmitSuccess={handleCreateSuccess} />
+          <ProductForm
+            onSubmitSuccess={handleCreateSuccess}
+            idStore={Number(id)}
+          />
         </div>
       )}
 
-      <CardGeneralProduct />
+      <CardGeneralProduct idStore={Number(id)} />
     </div>
   );
 };

@@ -1,3 +1,5 @@
+import { IProduct } from "../../Product/types/product";
+
 export interface IStore {
   name: string;
   description: string;
@@ -5,4 +7,5 @@ export interface IStore {
   instagram: string;
   address: string;
   id: number;
+  clothings: IProduct[];
 }

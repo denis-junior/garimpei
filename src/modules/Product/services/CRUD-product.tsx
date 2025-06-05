@@ -2,16 +2,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../../../infra/axiosconfig";
 import { IProduct } from "../types/product";
 import { ProductFormData } from "../schema/product.schema";
+import { EEndPoints } from "../../Store/services/CRUD-stores";
 
-export enum EEndPoints {
-  GETSTORES = "GETSTORES",
-  GETSTOREBYID = "GETSTOREBYID",
+export enum EEndPointsProduct {
+  GETPRODUCT = "GETPRODUCT",
+  GETPRODUCTBYID = "GETPRODUCTBYID",
 }
-
-const createProduct = async (product: ProductFormData) => {
-  const response = await api.post<IProduct>("clothing", product);
-  return response.data;
-};
 
 const getProduct = async (productId: string) => {
   const response = await api.get<IProduct>(`clothing/${productId}`);
@@ -33,7 +29,20 @@ const getAllProduct = async () => {
   return response.data;
 };
 
-export const usePostProduct = ({
+const postProductImage = async (product: FormData) => {
+  const response = await api.post<IProduct>(
+    "clothing/create-with-images",
+    product,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const usePostProductWithImage = ({
   onSubmitSuccess,
 }: {
   onSubmitSuccess?: () => void;
@@ -41,10 +50,14 @@ export const usePostProduct = ({
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: ProductFormData) => createProduct(data),
+    mutationFn: (data: FormData) => postProductImage(data),
     onSuccess: () => {
       if (onSubmitSuccess) onSubmitSuccess();
       queryClient.invalidateQueries({ queryKey: [EEndPoints.GETSTORES] });
+      queryClient.invalidateQueries({ queryKey: [EEndPoints.GETSTOREBYID] });
+      queryClient.invalidateQueries({
+        queryKey: [EEndPointsProduct.GETPRODUCT],
+      });
     },
   });
 };
@@ -59,7 +72,7 @@ export const useGetProduct = (storeId: string) => {
 
 export const useGetAllProduct = () => {
   return useQuery({
-    queryKey: [EEndPoints.GETSTORES],
+    queryKey: [EEndPointsProduct.GETPRODUCT],
     queryFn: getAllProduct,
   });
 };

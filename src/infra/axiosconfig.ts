@@ -1,4 +1,7 @@
 import axios from "axios";
+import { io } from "socket.io-client";
+
+export const socket = io("wss://echo.websocket.events");
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
