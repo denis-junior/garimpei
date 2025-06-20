@@ -4,20 +4,25 @@ import { Auction } from "../../../types";
 import AuctionCard from "../../../components/AuctionCard";
 import FilterBar from "../../../components/FilterBar";
 import { Search } from "lucide-react";
-import useWebSocket from "../../../hooks/useWebSocket";
+import { useSSE } from "../../../hooks/useSSE";
 
 const AuctionViewerPage: React.FC = () => {
   const { auctions } = useAuction();
   const [filteredAuctions, setFilteredAuctions] = useState<Auction[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const { messages, isConnected, error } = useWebSocket<string>(
-    "wss://echo.websocket.events"
+  const { connected, messages } = useSSE<{ text: string; id: number }>(
+    "http://localhost:3000/bid/stream",
+    {
+      onMessage: (data) => console.log("Recebido:", data),
+      events: {
+        "custom-event": (data) => console.log("Custom Event:", data),
+      },
+      autoReconnect: true,
+      reconnectInterval: 5000,
+      parse: true,
+    }
   );
-
-  console.log("WebSocket Messages:", messages);
-  console.log("WebSocket Connected:", isConnected);
-  console.log("WebSocket Error:", error);
-
+  console.log(connected, messages);
   const [activeFilters, setActiveFilters] = useState({
     size: "",
     category: "",
