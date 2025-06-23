@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { useAuction } from "../../../context/AuctionContext";
 import { Edit, ClipboardList, Clock } from "lucide-react";
-import UserInfoForm from "../../../components/UserInfoForm";
+import UserInfoForm from "../components/BuyerUserInfoForm";
 import { auctionHistory } from "../../../mock/data";
 import { formatPhoneNumber } from "../../../utils";
+import { useUser } from "../../../hooks/useUser";
+import { useGetSeller } from "../service/CRUD-user";
 
-const UserProfilePage: React.FC = () => {
-  const { currentUser } = useAuction();
+const SellerUserProfilePage: React.FC = () => {
+  const { user: dataUser } = useUser();
+  const { data: user } = useGetSeller(dataUser?.id || 0);
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("info");
 
@@ -67,17 +69,15 @@ const UserProfilePage: React.FC = () => {
 
             <div className="py-6">
               {activeTab === "info" &&
-                (isEditing ? (
-                  <UserInfoForm user={currentUser} onClose={toggleEdit} />
+                (isEditing && user ? (
+                  <UserInfoForm user={user} onClose={toggleEdit} />
                 ) : (
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-sm font-medium text-gray-500">
                         Nome Completo
                       </h3>
-                      <p className="mt-1 text-lg text-gray-800">
-                        {currentUser.name}
-                      </p>
+                      <p className="mt-1 text-lg text-gray-800">{user?.name}</p>
                     </div>
 
                     <div>
@@ -85,7 +85,7 @@ const UserProfilePage: React.FC = () => {
                         Email
                       </h3>
                       <p className="mt-1 text-lg text-gray-800">
-                        {currentUser.email}
+                        {user?.email}
                       </p>
                     </div>
 
@@ -94,7 +94,7 @@ const UserProfilePage: React.FC = () => {
                         Número
                       </h3>
                       <p className="mt-1 text-lg text-gray-800">
-                        {formatPhoneNumber(currentUser.number)}
+                        {formatPhoneNumber(user?.contact || "")}
                       </p>
                     </div>
                     <div>
@@ -102,7 +102,7 @@ const UserProfilePage: React.FC = () => {
                         Instagram
                       </h3>
                       <p className="mt-1 text-lg text-gray-800">
-                        {currentUser.instagram}
+                        {user?.instagram}
                       </p>
                     </div>
 
@@ -118,7 +118,7 @@ const UserProfilePage: React.FC = () => {
                               Leilões Criados
                             </p>
                             <p className="text-2xl font-bold text-purple-600">
-                              {currentUser.createdAuctions.length}
+                              {0}
                             </p>
                           </div>
                         </div>
@@ -130,7 +130,7 @@ const UserProfilePage: React.FC = () => {
                               Lances Dados
                             </p>
                             <p className="text-2xl font-bold text-teal-600">
-                              {currentUser.participatedAuctions.length}
+                              {0}
                             </p>
                           </div>
                         </div>
@@ -226,7 +226,7 @@ const UserProfilePage: React.FC = () => {
                       <h3 className="font-medium text-gray-700 mb-3">
                         Tamanhos Prediletos
                       </h3>
-                      <div className="flex flex-wrap gap-2">
+                      {/* <div className="flex flex-wrap gap-2">
                         {currentUser.preferences.sizes.map((size) => (
                           <span
                             key={size}
@@ -235,14 +235,14 @@ const UserProfilePage: React.FC = () => {
                             {size}
                           </span>
                         ))}
-                      </div>
+                      </div> */}
                     </div>
 
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h3 className="font-medium text-gray-700 mb-3">
                         Categorias
                       </h3>
-                      <div className="flex flex-wrap gap-2">
+                      {/* <div className="flex flex-wrap gap-2">
                         {currentUser.preferences.categories.map((category) => (
                           <span
                             key={category}
@@ -251,7 +251,7 @@ const UserProfilePage: React.FC = () => {
                             {category}
                           </span>
                         ))}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
 
@@ -272,4 +272,4 @@ const UserProfilePage: React.FC = () => {
   );
 };
 
-export default UserProfilePage;
+export default SellerUserProfilePage;

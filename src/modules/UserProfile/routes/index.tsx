@@ -1,8 +1,13 @@
-import UserProfilePage from "../pages/UserProfilePage";
+import BuyerUserProfilePage from "../pages/BuyerUserProfilePage";
+import SellerUserProfilePage from "../pages/SellerUserProfilePage";
 
 export const UserProfileRoutes = [
   {
-    path: "",
-    element: <UserProfilePage />,
+    path: "buyer",
+    element: <BuyerUserProfilePage />,
+  },
+  {
+    path: "seller",
+    element: <SellerUserProfilePage />,
   },
 ];

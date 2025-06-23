@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingBag, User, Tag } from "lucide-react";
-import { useAuction } from "../context/AuctionContext";
+import { useUser } from "../hooks/useUser";
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { currentUser } = useAuction();
+  const { user } = useUser();
   const location = useLocation();
 
   const toggleMenu = () => {
@@ -23,7 +23,11 @@ const Header: React.FC = () => {
       path: "/store",
       icon: <Tag className="w-5 h-5" />,
     },
-    { name: "Perfil", path: "/profile", icon: <User className="w-5 h-5" /> },
+    {
+      name: "Perfil",
+      path: `/profile/${user?.seller ? "seller" : "buyer"}`,
+      icon: <User className="w-5 h-5" />,
+    },
   ];
 
   return (
@@ -62,12 +66,12 @@ const Header: React.FC = () => {
               <div className="flex-shrink-0">
                 <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
                   <span className="text-sm font-medium text-teal-800">
-                    {currentUser.name.charAt(0)}
+                    {user?.name.charAt(0)}
                   </span>
                 </div>
               </div>
               <div className="hidden md:block text-sm font-medium text-gray-700">
-                {currentUser.name.split(" ")[0]}
+                {user?.name.split(" ")[0]}
               </div>
             </div>
           </div>
@@ -116,16 +120,16 @@ const Header: React.FC = () => {
               <div className="flex-shrink-0">
                 <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
                   <span className="text-sm font-medium text-teal-800">
-                    {currentUser.name.charAt(0)}
+                    {user?.name.charAt(0)}
                   </span>
                 </div>
               </div>
               <div className="ml-3">
                 <div className="text-base font-medium text-gray-800">
-                  {currentUser.name}
+                  {user?.name}
                 </div>
                 <div className="text-sm font-medium text-gray-500">
-                  {currentUser.email}
+                  {user?.email}
                 </div>
               </div>
             </div>
