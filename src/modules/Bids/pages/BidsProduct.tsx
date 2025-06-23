@@ -1,32 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAuction } from "../../../context/AuctionContext";
 import CountdownTimer from "../../../components/CountdownTimer";
-import BidForm from "../../../components/BidForm";
-import {
-  ChevronLeft,
-  Clock,
-  DollarSign,
-  User,
-  AlertCircle,
-} from "lucide-react";
+import BidForm from "../components/BidForm";
+import { ChevronLeft, Clock, User, AlertCircle } from "lucide-react";
+import { useGetProduct } from "../../Product/services/CRUD-product";
+import { formatCurrencyBR } from "../../../utils/formatCurrencyBr";
+import { concatDateTimeToDate } from "../../../utils/formatDate";
 
-const AuctionDetailPage: React.FC = () => {
+const BidProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { getAuction, currentUser } = useAuction();
+  const { data: product } = useGetProduct(id || "");
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(0);
+  const userString = localStorage.getItem("user");
+  const currentUser = userString ? JSON.parse(userString) : null;
 
-  const auction = getAuction(id || "");
-
-  // Redirect if auction not found
-  useEffect(() => {
-    if (!auction) {
-      navigate("/");
-    }
-  }, [auction, navigate]);
-
-  if (!auction) {
+  if (!product) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <div className="bg-yellow-50 p-6 rounded-lg">
@@ -48,18 +37,6 @@ const AuctionDetailPage: React.FC = () => {
       </div>
     );
   }
-
-  const {
-    title,
-    description,
-    images,
-    size,
-    category,
-    startingPrice,
-    currentBid,
-    endDate,
-    bids,
-  } = auction;
 
   const handleImageClick = (index: number) => {
     setSelectedImage(index);
@@ -94,22 +71,22 @@ const AuctionDetailPage: React.FC = () => {
           <div>
             <div className="relative aspect-w-1 aspect-h-1 mb-3">
               <img
-                src={images[selectedImage]}
-                alt={title}
+                src={product.images[selectedImage].url}
+                alt={product.images[selectedImage].url || "product Item"}
                 className="w-full h-96 object-cover object-center rounded-lg"
               />
 
               <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-3 py-2 m-4 rounded-md">
                 <div className="flex items-center space-x-1">
                   <Clock className="h-4 w-4" />
-                  <CountdownTimer endDate={endDate} />
+                  <CountdownTimer endDate={product.end_date} />
                 </div>
               </div>
             </div>
 
-            {images.length > 1 && (
+            {product.images.length > 1 && (
               <div className="flex space-x-2 overflow-x-auto">
-                {images.map((image, index) => (
+                {product.images.map((image, index) => (
                   <div
                     key={index}
                     onClick={() => handleImageClick(index)}
@@ -120,8 +97,8 @@ const AuctionDetailPage: React.FC = () => {
                     }`}
                   >
                     <img
-                      src={image}
-                      alt={`${title} - view ${index + 1}`}
+                      src={image.url}
+                      alt={`${image.url} - view ${index + 1}`}
                       className="w-full h-full object-cover object-center"
                     />
                   </div>
@@ -132,22 +109,20 @@ const AuctionDetailPage: React.FC = () => {
 
           {/* Auction details */}
           <div>
-            <h1 className="text-2xl font-bold text-gray-800 mb-2">{title}</h1>
+            <h1 className="text-2xl font-bold text-gray-800 mb-2">
+              {product.name}
+            </h1>
 
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                Tamanho: {size}
-              </span>
-
-              <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                {category}
+                Tamanho: {product.size}
               </span>
             </div>
 
             <div className="border-t border-b border-gray-200 py-4 mb-4">
               <div className="flex justify-between items-center mb-2">
                 <div className="text-sm text-gray-500">Preço Inicial</div>
-                <div className="font-medium">R${startingPrice}</div>
+                <div className="font-medium">R${product.initial_bid}</div>
               </div>
 
               <div className="flex justify-between items-center">
@@ -155,7 +130,8 @@ const AuctionDetailPage: React.FC = () => {
                   Lance atual
                 </div>
                 <div className="text-2xl font-bold text-teal-600">
-                  R${currentBid}
+                  R$
+                  {product.bids?.[0]?.bid || product.initial_bid}
                 </div>
               </div>
             </div>
@@ -164,14 +140,17 @@ const AuctionDetailPage: React.FC = () => {
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
                 Descrição
               </h2>
-              <p className="text-gray-600">{description}</p>
+              <p className="text-gray-600">{product.description}</p>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg mb-6">
               <h2 className="text-lg font-semibold text-gray-800 mb-4">
                 Faça seu lance
               </h2>
-              <BidForm auctionId={auction.id} currentBid={currentBid} />
+              <BidForm
+                productId={product.id}
+                currentBid={product.bids?.[0]?.bid || product.initial_bid}
+              />
             </div>
 
             <div>
@@ -179,30 +158,32 @@ const AuctionDetailPage: React.FC = () => {
                 Histórico de Lances
               </h2>
 
-              {bids.length === 0 ? (
+              {product.bids.length === 0 ? (
                 <p className="text-gray-500">
                   Nenhum lance ainda, seja o primeiro!
                 </p>
               ) : (
                 <div className="bg-white border border-gray-200 rounded-lg">
                   <ul className="divide-y divide-gray-200">
-                    {[...bids].reverse().map((bid) => (
+                    {[...product.bids].map((bid) => (
                       <li key={bid.id} className="p-3 hover:bg-gray-50">
                         <div className="flex justify-between items-center">
                           <div className="flex items-center">
                             <User className="h-4 w-4 text-gray-500 mr-2" />
                             <span className="text-gray-800 font-medium">
-                              {getBidderName(bid.userId)}
+                              {getBidderName(bid.buyer.name)}
                             </span>
                           </div>
 
                           <div className="flex items-center">
                             <span className="font-semibold text-teal-600 mr-3">
-                              <DollarSign className="h-4 w-4 inline" />{" "}
-                              {bid.amount}
+                              {formatCurrencyBR(Number(bid.bid))}
                             </span>
                             <span className="text-xs text-gray-500">
-                              {new Date(bid.timestamp).toLocaleString()}
+                              {concatDateTimeToDate(
+                                String(bid.date),
+                                String(bid.time)
+                              ).toLocaleString()}
                             </span>
                           </div>
                         </div>
@@ -219,4 +200,4 @@ const AuctionDetailPage: React.FC = () => {
   );
 };
 
-export default AuctionDetailPage;
+export default BidProductPage;

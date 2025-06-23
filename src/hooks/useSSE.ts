@@ -18,11 +18,20 @@ export function useSSE<T = unknown>(url: string, options?: SSEOptions<T>) {
 
   useEffect(() => {
     let isCancelled = false;
+    const token = localStorage.getItem("token");
 
     const connect = () => {
       if (eventSourceRef.current) return;
 
-      const es = new EventSource(url, {
+      // Append token as a query parameter since EventSource does not support headers
+      const urlWithToken =
+        token != null
+          ? url +
+            (url.includes("?") ? "&" : "?") +
+            `token=${encodeURIComponent(token)}`
+          : url;
+
+      const es = new EventSource(urlWithToken, {
         withCredentials: options?.withCredentials ?? false,
       });
 

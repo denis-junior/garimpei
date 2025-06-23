@@ -19,7 +19,7 @@ const Header: React.FC = () => {
   const navigationItems = [
     { name: "Explore", path: "/", icon: <ShoppingBag className="w-5 h-5" /> },
     {
-      name: "Minhas Lojas",
+      name: "Lojas",
       path: "/store",
       icon: <Tag className="w-5 h-5" />,
     },

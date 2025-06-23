@@ -7,14 +7,13 @@ import { IStore } from "../types/store";
 import ConfirmationModal from "../../../components/ConfirmationModal";
 import PrimaryButton from "../../../components/PrimaryButton";
 import PageHeader from "../../../components/PageHeader";
+import { checkSeller } from "../../../utils/checkoSeller";
 
 const StoresPage: React.FC = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [itemDelete, setItemDelete] = useState<IStore>();
   const { data: listStores } = useGetAllStores();
   const { mutate } = useDeleteStore();
-
-  console.log("listStores", listStores);
 
   const toggleCreateForm = () => {
     setShowCreateForm(!showCreateForm);
@@ -45,27 +44,29 @@ const StoresPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <PageHeader
-        title="Dashboard de lojas"
-        subtitle="Crie e gerencie suas lojas."
-        action={
-          <PrimaryButton onClick={toggleCreateForm}>
-            {showCreateForm ? (
-              <>
-                <X className="w-5 h-5 mr-2" />
-                Cancelar
-              </>
-            ) : (
-              <>
-                <Plus className="w-5 h-5 mr-2" />
-                Criar Nova Loja
-              </>
-            )}
-          </PrimaryButton>
-        }
-      />
+      {checkSeller() && (
+        <PageHeader
+          title="Dashboard de lojas"
+          subtitle="Crie e gerencie suas lojas."
+          action={
+            <PrimaryButton onClick={toggleCreateForm}>
+              {showCreateForm ? (
+                <>
+                  <X className="w-5 h-5 mr-2" />
+                  Cancelar
+                </>
+              ) : (
+                <>
+                  <Plus className="w-5 h-5 mr-2" />
+                  Criar Nova Loja
+                </>
+              )}
+            </PrimaryButton>
+          }
+        />
+      )}
 
-      {showCreateForm && (
+      {showCreateForm && checkSeller() && (
         <div className="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Criar Nova Loja
@@ -76,7 +77,7 @@ const StoresPage: React.FC = () => {
 
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Suas lojas ({listStores?.length || 0})
+          lojas ({listStores?.length || 0})
         </h2>
 
         {!listStores?.length ? (
@@ -101,22 +102,24 @@ const StoresPage: React.FC = () => {
             {listStores?.map((store) => (
               <div key={store.id} className="relative">
                 <StoresCard store={store}>
-                  <div className=" flex ">
-                    <button
-                      className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-teal-600 hover:bg-opacity-100 transition-colors"
-                      title="Edit auction"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </button>
+                  {checkSeller() && (
+                    <div className=" flex ">
+                      <button
+                        className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-teal-600 hover:bg-opacity-100 transition-colors"
+                        title="Edit auction"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
 
-                    <button
-                      onClick={(e) => confirmDelete(e, store)}
-                      className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-red-600 hover:bg-opacity-100 transition-colors"
-                      title="Delete auction"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
+                      <button
+                        onClick={(e) => confirmDelete(e, store)}
+                        className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-red-600 hover:bg-opacity-100 transition-colors"
+                        title="Delete auction"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
                 </StoresCard>
               </div>
             ))}

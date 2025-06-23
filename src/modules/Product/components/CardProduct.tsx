@@ -3,6 +3,7 @@ import { IProduct } from "../types/product";
 import { Clock, Tag } from "lucide-react";
 import CountdownTimer from "../../../components/CountdownTimer";
 import { useNavigate } from "react-router-dom";
+import { checkSeller } from "../../../utils/checkoSeller";
 
 interface ProductCardProps {
   product: IProduct;
@@ -19,7 +20,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const navigate = useNavigate();
 
   const navigateToDetails = () => {
-    navigate(`/product/${product.id}`, { state: { product } });
+    if (checkSeller()) {
+      return navigate(`/product/${product.id}`, { state: { product } });
+    }
+    return navigate(`/bids/${product.id}`);
   };
   return (
     <>

@@ -18,6 +18,8 @@ export const schema = yup.object().shape({
       return Array.from(value).every((file) => file.size <= 5 * 1024 * 1024);
     })
     .required(),
+  initial_time: yup.string().required("Hora de início é obrigatória"),
+  end_time: yup.string().required("Hora de encerramento é obrigatória"),
 });
 
 export type ProductFormData = yup.InferType<typeof schema>;

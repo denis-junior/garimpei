@@ -35,6 +35,8 @@ const ProductForm: React.FC<IProductFormProps> = ({
     formData.append("initial_date", data.initial_date);
     formData.append("end_date", data.end_date);
     formData.append("size", data.size);
+    formData.append("initial_time", data.initial_time);
+    formData.append("end_time", data.end_time);
     formData.append("store", String(data.store));
     if (data.image && data.image.length > 0) {
       Array.from(data.image).forEach((file) => {
@@ -141,6 +143,28 @@ const ProductForm: React.FC<IProductFormProps> = ({
 
       <div>
         <label
+          htmlFor="initial_date"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Hora de início
+        </label>
+        <input
+          id="initial_time"
+          type="time"
+          {...register("initial_time")}
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+            errors.initial_time ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        {errors.initial_time && (
+          <p className="mt-1 text-sm text-red-600">
+            {errors.initial_time.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <label
           htmlFor="end_date"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
@@ -156,6 +180,25 @@ const ProductForm: React.FC<IProductFormProps> = ({
         />
         {errors.end_date && (
           <p className="mt-1 text-sm text-red-600">{errors.end_date.message}</p>
+        )}
+      </div>
+      <div>
+        <label
+          htmlFor="initial_date"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Hora de encerramento
+        </label>
+        <input
+          id="end_time"
+          type="time"
+          {...register("end_time")}
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+            errors.end_time ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        {errors.end_time && (
+          <p className="mt-1 text-sm text-red-600">{errors.end_time.message}</p>
         )}
       </div>
 

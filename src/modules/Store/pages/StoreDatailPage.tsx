@@ -6,6 +6,7 @@ import ProductForm from "../../Product/components/FormProduct";
 import CardGeneralProduct from "../../Product/components/CardGeneralProduct";
 import PrimaryButton from "../../../components/PrimaryButton";
 import PageHeader from "../../../components/PageHeader";
+import { checkSeller } from "../../../utils/checkoSeller";
 
 const StoreDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,19 +27,23 @@ const StoreDetailPage: React.FC = () => {
         title={store?.name || "Detalhes do produto"}
         subtitle={store?.description || "Crie e gerencie seus produtos."}
         action={
-          <PrimaryButton onClick={toggleCreateForm}>
-            {showCreateForm ? (
-              <>
-                <X className="w-5 h-5 mr-2" />
-                Cancelar
-              </>
-            ) : (
-              <>
-                <Plus className="w-5 h-5 mr-2" />
-                Criar novo produto
-              </>
+          <>
+            {checkSeller() && (
+              <PrimaryButton onClick={toggleCreateForm}>
+                {showCreateForm ? (
+                  <>
+                    <X className="w-5 h-5 mr-2" />
+                    Cancelar
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-5 h-5 mr-2" />
+                    Criar novo produto
+                  </>
+                )}
+              </PrimaryButton>
             )}
-          </PrimaryButton>
+          </>
         }
       ></PageHeader>
 
