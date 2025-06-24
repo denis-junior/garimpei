@@ -221,46 +221,6 @@ const BuyerUserProfilePage: React.FC = () => {
                   <h2 className="text-xl font-semibold text-gray-800 mb-4">
                     Your Preferences
                   </h2>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-medium text-gray-700 mb-3">
-                        Tamanhos Prediletos
-                      </h3>
-                      {/* <div className="flex flex-wrap gap-2">
-                        {currentUser.preferences.sizes.map((size) => (
-                          <span
-                            key={size}
-                            className="px-3 py-1 bg-white border border-gray-300 rounded-full text-sm"
-                          >
-                            {size}
-                          </span>
-                        ))}
-                      </div> */}
-                    </div>
-
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-medium text-gray-700 mb-3">
-                        Categorias
-                      </h3>
-                      {/* <div className="flex flex-wrap gap-2">
-                        {currentUser.preferences.categories.map((category) => (
-                          <span
-                            key={category}
-                            className="px-3 py-1 bg-white border border-gray-300 rounded-full text-sm"
-                          >
-                            {category}
-                          </span>
-                        ))}
-                      </div> */}
-                    </div>
-                  </div>
-
-                  <div className="mt-6 flex justify-end">
-                    <button className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors">
-                      Editar Preferências
-                    </button>
-                  </div>
                 </div>
               ) : (
                 <></>

@@ -8,6 +8,7 @@ import { UserProfileRoutes } from "../modules/UserProfile/routes";
 import { AuthRoutes } from "../modules/Auth/routes";
 import { BidsRoutes } from "../modules/Bids/routes";
 import HomeViewerPage from "../modules/Home/page/HomeViewerPage";
+import { DashboardRoutes } from "@/modules/Dashboard/routes";
 
 const AppRoutes = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const AppRoutes = createBrowserRouter([
       {
         path: "/bids",
         children: BidsRoutes,
+      },
+      {
+        path: "/dashboard",
+        children: DashboardRoutes,
       },
     ],
   },

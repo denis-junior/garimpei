@@ -22,7 +22,7 @@ export const usePutSeller = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: UserShemaFormData }) => {
-      return api.put(`/seller/${id}`, data);
+      return api.put(`/sellers/${id}`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [EEndPoints.GETUSER] });
@@ -45,7 +45,7 @@ export const useGetSeller = (userId: number) => {
   return useQuery({
     queryKey: [EEndPoints.GETUSER, userId],
     queryFn: async () => {
-      const response = await api.get(`/seller/${userId}`);
+      const response = await api.get(`/sellers/${userId}`);
       return response.data;
     },
     enabled: !!userId,

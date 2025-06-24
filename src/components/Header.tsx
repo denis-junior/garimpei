@@ -19,18 +19,36 @@ const Header: React.FC = () => {
   const closeMenu = () => {
     setIsOpen(false);
   };
+  enum UserType {
+    BUYER = "buyer",
+    SELLER = "seller",
+    ALL = "all",
+  }
 
   const navigationItems = [
-    { name: "Explore", path: "/", icon: <ShoppingBag className="w-5 h-5" /> },
+    {
+      name: "Explore",
+      path: "/",
+      icon: <ShoppingBag className="w-5 h-5" />,
+      type: UserType.ALL,
+    },
     {
       name: "Lojas",
       path: "/store",
       icon: <Tag className="w-5 h-5" />,
+      type: UserType.ALL,
+    },
+    {
+      name: "Dashboard",
+      path: `/dashboard/${user?.seller ? "seller" : "buyer"}`,
+      icon: <Tag className="w-5 h-5" />,
+      type: UserType.ALL,
     },
     {
       name: "Perfil",
       path: `/profile/${user?.seller ? "seller" : "buyer"}`,
       icon: <User className="w-5 h-5" />,
+      type: UserType.ALL,
     },
   ];
 
@@ -49,20 +67,23 @@ const Header: React.FC = () => {
 
           {/* Desktop navigation */}
           <nav className="hidden md:flex space-x-8">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200 ${
-                  location.pathname === item.path
-                    ? "text-teal-600 border-b-2 border-teal-500"
-                    : "text-gray-600 hover:text-teal-500"
-                }`}
-              >
-                {item.icon}
-                <span className="ml-1">{item.name}</span>
-              </Link>
-            ))}
+            {navigationItems.map((item) => {
+              if (item.type === UserType.SELLER && !user?.seller) return null;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200 ${
+                    location.pathname === item.path
+                      ? "text-teal-600 border-b-2 border-teal-500"
+                      : "text-gray-600 hover:text-teal-500"
+                  }`}
+                >
+                  {item.icon}
+                  <span className="ml-1">{item.name}</span>
+                </Link>
+              );
+            })}
           </nav>
 
           <Popover>
@@ -118,21 +139,24 @@ const Header: React.FC = () => {
         }`}
       >
         <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg">
-          {navigationItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              onClick={closeMenu}
-              className={`flex items-center px-3 py-2 rounded-md text-base font-medium ${
-                location.pathname === item.path
-                  ? "bg-teal-50 text-teal-600"
-                  : "text-gray-700 hover:bg-gray-50 hover:text-teal-500"
-              }`}
-            >
-              {item.icon}
-              <span className="ml-3">{item.name}</span>
-            </Link>
-          ))}
+          {navigationItems.map((item) => {
+            if (item.type === UserType.SELLER && !user?.seller) return null;
+            return (
+              <Link
+                key={item.name}
+                to={item.path}
+                onClick={closeMenu}
+                className={`flex items-center px-3 py-2 rounded-md text-base font-medium ${
+                  location.pathname === item.path
+                    ? "bg-teal-50 text-teal-600"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-teal-500"
+                }`}
+              >
+                {item.icon}
+                <span className="ml-3">{item.name}</span>
+              </Link>
+            );
+          })}
           <div className="pt-4 pb-2 border-t border-gray-200">
             <div className="flex items-center px-4">
               <div className="flex-shrink-0">
