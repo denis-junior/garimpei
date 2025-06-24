@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingBag, User, Tag } from "lucide-react";
 import { useUser } from "../hooks/useUser";
-
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useUser();
+  const { user, logOut } = useUser();
   const location = useLocation();
 
   const toggleMenu = () => {
@@ -61,20 +65,34 @@ const Header: React.FC = () => {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center">
-            <div className="flex items-center space-x-2">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
-                  <span className="text-sm font-medium text-teal-800">
-                    {user?.name.charAt(0)}
-                  </span>
+          <Popover>
+            <PopoverTrigger asChild>
+              <div className="hidden md:flex items-center cursor-pointer">
+                <div className="flex items-center space-x-2">
+                  <div className="flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
+                      <span className="text-sm font-medium text-teal-800">
+                        {user?.name.charAt(0)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="hidden md:block text-sm font-medium text-gray-700">
+                    {user?.name.split(" ")[0]}
+                  </div>
                 </div>
               </div>
-              <div className="hidden md:block text-sm font-medium text-gray-700">
-                {user?.name.split(" ")[0]}
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
+              <div className="flexgap-2">
+                <div
+                  className=" items-center gap-4 bg-red-200 p-2 rounded-md text-center cursor-pointer"
+                  onClick={logOut}
+                >
+                  Sair
+                </div>
               </div>
-            </div>
-          </div>
+            </PopoverContent>
+          </Popover>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
