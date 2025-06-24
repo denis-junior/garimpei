@@ -9,7 +9,7 @@ import { useGetAllProduct } from "../../Product/services/CRUD-product";
 import ProductCard from "../../Home/components/cardProduct";
 
 const HomeViewerPage: React.FC = () => {
-  const { data: products, isLoading: isProductLoading } = useGetAllProduct();
+  const { data: products } = useGetAllProduct();
 
   const { connected, messages } = useSSE<{ text: string; id: number }>(
     "http://localhost:3000/bid/stream",

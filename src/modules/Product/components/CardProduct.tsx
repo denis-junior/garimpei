@@ -4,6 +4,7 @@ import { Clock, Tag } from "lucide-react";
 import CountdownTimer from "../../../components/CountdownTimer";
 import { useNavigate } from "react-router-dom";
 import { checkSeller } from "../../../utils/checkoSeller";
+import { concatDateTimeToDate } from "../../../utils/formatDate";
 
 interface ProductCardProps {
   product: IProduct;
@@ -16,7 +17,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   compact = false,
   actions = false,
 }) => {
-  const { name, images, initial_bid, size, end_date } = product;
+  const { name, images, initial_bid, size, end_date, end_time } = product;
   const navigate = useNavigate();
 
   const navigateToDetails = () => {
@@ -47,7 +48,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
           {!compact && (
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-              <CountdownTimer endDate={end_date} />
+              <CountdownTimer
+                endDate={concatDateTimeToDate(String(end_date), end_time)}
+              />
             </div>
           )}
         </div>
@@ -69,7 +72,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
               {compact && (
                 <div className="flex items-center text-sm text-gray-500">
                   <Clock className="h-4 w-4 mr-1" />
-                  <CountdownTimer endDate={end_date} />
+                  <CountdownTimer
+                    endDate={concatDateTimeToDate(String(end_date), end_time)}
+                  />
                 </div>
               )}
             </div>

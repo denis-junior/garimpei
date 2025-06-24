@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Clock, Tag } from "lucide-react";
 import CountdownTimer from "../../../components/CountdownTimer";
 import { IProduct } from "../../Product/types/product";
+import { concatDateTimeToDate } from "../../../utils/formatDate";
 
 interface ProductCardProps {
   product: IProduct;
@@ -37,7 +38,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         {!compact && (
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-            <CountdownTimer endDate={product.end_date} />
+            <CountdownTimer
+              endDate={concatDateTimeToDate(
+                String(product.end_date),
+                product.end_time
+              )}
+            />
           </div>
         )}
       </div>
@@ -51,14 +57,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <div>
             <p className="text-sm text-gray-500">Lance atual</p>
             <p className="text-lg font-bold text-teal-600">
-              ${product?.bids?.[product?.bids?.length - 1]?.bid ?? 0}
+              $
+              {product?.bids?.[product?.bids?.length - 1]?.bid ??
+                product.initial_bid}
             </p>
           </div>
 
           {compact && (
             <div className="flex items-center text-sm text-gray-500">
               <Clock className="h-4 w-4 mr-1" />
-              <CountdownTimer endDate={product.end_date} />
+              <CountdownTimer
+                endDate={concatDateTimeToDate(
+                  String(product.end_date),
+                  product.end_time
+                )}
+              />
             </div>
           )}
         </div>

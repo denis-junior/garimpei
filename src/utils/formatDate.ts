@@ -1,4 +1,5 @@
 export function concatDateTimeToDate(date: string, time: string): Date {
+  if (!date || !time) return new Date();
   // Garante que a hora tenha segundos
   const timeWithSeconds = time.length === 5 ? `${time}:00` : time;
   // Monta string no padrão ISO

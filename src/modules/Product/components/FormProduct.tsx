@@ -1,8 +1,9 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ProductFormData, schema } from "../schema/product.schema";
 import { usePostProductWithImage } from "../services/CRUD-product";
+import MoneyInput from "../../../components/MoneyInput";
 interface IProductFormProps {
   onSubmitSuccess?: () => void;
   idStore?: number;
@@ -17,6 +18,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    control,
   } = useForm<ProductFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -96,21 +98,17 @@ const ProductForm: React.FC<IProductFormProps> = ({
       </div>
 
       <div>
-        <label
-          htmlFor="initial_bid"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          Lance inicial
-        </label>
-        <input
-          id="initial_bid"
-          type="number"
-          step="0.01"
-          {...register("initial_bid")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
-            errors.initial_bid ? "border-red-500" : "border-gray-300"
-          }`}
-          placeholder="Valor inicial"
+        <Controller
+          name="initial_bid"
+          control={control}
+          render={({ field }) => (
+            <MoneyInput
+              {...field}
+              label="Valor"
+              onChange={field.onChange}
+              value={field.value}
+            />
+          )}
         />
         {errors.initial_bid && (
           <p className="mt-1 text-sm text-red-600">

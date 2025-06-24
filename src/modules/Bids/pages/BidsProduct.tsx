@@ -79,7 +79,12 @@ const BidProductPage: React.FC = () => {
               <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-3 py-2 m-4 rounded-md">
                 <div className="flex items-center space-x-1">
                   <Clock className="h-4 w-4" />
-                  <CountdownTimer endDate={product.end_date} />
+                  <CountdownTimer
+                    endDate={concatDateTimeToDate(
+                      String(product.end_date),
+                      product.end_time
+                    )}
+                  />
                 </div>
               </div>
             </div>
