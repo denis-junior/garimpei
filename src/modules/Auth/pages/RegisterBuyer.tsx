@@ -11,6 +11,7 @@ const RegisterBuyerPage: React.FC = () => {
     handleSubmit,
     control,
     formState: { errors },
+    getValues,
   } = useForm<FormDataRegister>({
     resolver: yupResolver(RegisterSchema),
     defaultValues: {
@@ -26,6 +27,7 @@ const RegisterBuyerPage: React.FC = () => {
   const { mutate } = useRegisterBuyer();
 
   const onSubmit: SubmitHandler<FormDataRegister> = (data) => {
+    console.log("Form Data:", data);
     mutate(data);
   };
 
@@ -35,7 +37,6 @@ const RegisterBuyerPage: React.FC = () => {
         <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">
           Criar Conta
         </h2>
-
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-gray-700 text-sm mb-1">Nome</label>
@@ -187,6 +188,7 @@ const RegisterBuyerPage: React.FC = () => {
 
           <button
             type="submit"
+            onClick={() => console.log(getValues())}
             className="w-full py-2 px-4 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors text-sm"
           >
             Registrar

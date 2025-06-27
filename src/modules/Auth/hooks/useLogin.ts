@@ -4,7 +4,7 @@ import { FormDataLogin } from "../schema/Login.schema";
 import { useUser } from "../../../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 
-export const useLogin = () => {
+export const useLogin = ({ onLogin }: { onLogin?: () => void }) => {
   const { setUser } = useUser();
   const navigate = useNavigate();
 
@@ -15,6 +15,9 @@ export const useLogin = () => {
       localStorage.setItem("user", JSON.stringify(data));
       localStorage.setItem("authToken", data.token);
       setUser(data);
+      if (onLogin) {
+        return onLogin();
+      }
       navigate("/");
     },
   });

@@ -13,6 +13,8 @@ interface UserContextType {
   setUser: Dispatch<SetStateAction<IUser | null>>;
   loading: boolean;
   logOut: () => void;
+  isLoginSheet: boolean;
+  setIsLoginSheet: Dispatch<SetStateAction<boolean>>;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -22,6 +24,7 @@ export const UserContext = createContext<UserContextType | undefined>(
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<IUser | null>(null);
+  const [isLoginSheet, setIsLoginSheet] = useState(false);
 
   const logOut = () => {
     localStorage.removeItem("user");
@@ -52,6 +55,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setUser,
         loading,
         logOut,
+        isLoginSheet,
+        setIsLoginSheet,
       }}
     >
       {children}

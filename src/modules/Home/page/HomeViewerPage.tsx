@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 // import { useAuction } from "../../../context/AuctionContext";
 // import { Auction } from "../../../types";
 // import AuctionCard from "../../../components/AuctionCard";
@@ -7,22 +7,58 @@ import React from "react";
 import { useSSE } from "../../../hooks/useSSE";
 import { useGetAllProduct } from "../../Product/services/CRUD-product";
 import ProductCard from "../../Home/components/cardProduct";
+import { IProduct } from "@/modules/Product/types/product";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 const HomeViewerPage: React.FC = () => {
-  const { data: products } = useGetAllProduct();
+  const [page, setPage] = useState(1);
+  const { data: productsData } = useGetAllProduct({ page });
+  const { items: products, lastElementRef } = useInfiniteScroll<IProduct>({
+    data: productsData ?? [],
+    hasMore: true,
+    setPage,
+  });
 
-  const { connected, messages } = useSSE<{ text: string; id: number }>(
-    "http://localhost:3000/bid/stream",
-    {
-      onMessage: (data) => console.log("Recebido:", data),
-      events: {
-        "custom-event": (data) => console.log("Custom Event:", data),
-      },
-      autoReconnect: true,
-      reconnectInterval: 5000,
-      parse: true,
-    }
-  );
+  // useEffect(() => {
+  //   const loadProducts = async () => {
+  //     if (!hasMore && productsData?.length) return;
+  //     setProducts((prev) => [...prev, ...(productsData ?? [])]);
+  //     setHasMore(true);
+  //   };
+
+  //   loadProducts();
+  // }, [page, productsData]);
+
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       if (entries[0].isIntersecting && hasMore) {
+  //         console.log("Observer triggered, loading more products...");
+  //         setPage((prev) => prev + 1);
+  //       }
+  //     },
+  //     { threshold: 1 }
+  //   );
+
+  //   if (observerRef.current) observer.observe(observerRef.current);
+
+  //   return () => {
+  //     if (observerRef.current) observer.unobserve(observerRef.current);
+  //   };
+  // }, [hasMore]);
+
+  // const { connected, messages } = useSSE<{ text: string; id: number }>(
+  //   "http://localhost:3000/bid/stream",
+  //   {
+  //     onMessage: (data) => console.log("Recebido:", data),
+  //     events: {
+  //       "custom-event": (data) => console.log("Custom Event:", data),
+  //     },
+  //     autoReconnect: true,
+  //     reconnectInterval: 5000,
+  //     parse: true,
+  //   }
+  // );
   // const { auctions } = useAuction();
   // const [filteredAuctions, setFilteredAuctions] = useState<Auction[]>([]);
   // const [searchTerm, setSearchTerm] = useState("");
@@ -135,10 +171,13 @@ const HomeViewerPage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products?.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <>
+              <ProductCard key={product.id} product={product} />
+            </>
           ))}
         </div>
       )}
+      <div ref={lastElementRef} className="h-1 mt-2"></div>
     </div>
   );
 };

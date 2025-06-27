@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ShoppingBag, User, Tag } from "lucide-react";
+import { Menu, X, ShoppingBag } from "lucide-react";
 import { useUser } from "../hooks/useUser";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { navigationItems, UserType } from "@/core/navigationsItems";
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = useUser();
@@ -19,38 +20,6 @@ const Header: React.FC = () => {
   const closeMenu = () => {
     setIsOpen(false);
   };
-  enum UserType {
-    BUYER = "buyer",
-    SELLER = "seller",
-    ALL = "all",
-  }
-
-  const navigationItems = [
-    {
-      name: "Explore",
-      path: "/",
-      icon: <ShoppingBag className="w-5 h-5" />,
-      type: UserType.ALL,
-    },
-    {
-      name: "Lojas",
-      path: "/store",
-      icon: <Tag className="w-5 h-5" />,
-      type: UserType.ALL,
-    },
-    {
-      name: "Dashboard",
-      path: `/dashboard/${user?.seller ? "seller" : "buyer"}`,
-      icon: <Tag className="w-5 h-5" />,
-      type: UserType.ALL,
-    },
-    {
-      name: "Perfil",
-      path: `/profile/${user?.seller ? "seller" : "buyer"}`,
-      icon: <User className="w-5 h-5" />,
-      type: UserType.ALL,
-    },
-  ];
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
@@ -69,6 +38,7 @@ const Header: React.FC = () => {
           <nav className="hidden md:flex space-x-8">
             {navigationItems.map((item) => {
               if (item.type === UserType.SELLER && !user?.seller) return null;
+              if (!item.offToken && !user) return null;
               return (
                 <Link
                   key={item.name}

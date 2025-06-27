@@ -24,11 +24,6 @@ const deleteProduct = async (productId: number) => {
   return response.data;
 };
 
-const getAllProduct = async () => {
-  const response = await api.get<IProduct[]>("clothing");
-  return response.data;
-};
-
 const postProductImage = async (product: FormData) => {
   const response = await api.post<IProduct>(
     "clothing/create-with-images",
@@ -70,10 +65,17 @@ export const useGetProduct = (storeId: string) => {
   });
 };
 
-export const useGetAllProduct = () => {
+export const useGetAllProduct = ({ page }: { page?: number }) => {
   return useQuery({
-    queryKey: [EEndPointsProduct.GETPRODUCT],
-    queryFn: getAllProduct,
+    queryKey: [EEndPointsProduct.GETPRODUCT, page],
+    queryFn: async () => {
+      const response = await api.get<IProduct[]>("clothing", {
+        params: {
+          page: page || 1,
+        },
+      });
+      return response.data;
+    },
   });
 };
 

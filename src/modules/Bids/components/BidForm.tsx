@@ -4,6 +4,7 @@ import { usePostBid } from "../services/CRUD-bids";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { BidFormData, bidSchema } from "../schema/bid.schema";
+import { useUser } from "@/hooks/useUser";
 
 interface BidFormProps {
   productId: number;
@@ -12,7 +13,7 @@ interface BidFormProps {
 
 const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
   const { mutateAsync } = usePostBid();
-
+  const { user, setIsLoginSheet } = useUser();
   const {
     control,
     handleSubmit,
@@ -28,6 +29,7 @@ const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
   const minBid = Number(currentBid) + 1;
 
   const onSubmit = (data: BidFormData) => {
+    if (!user) setIsLoginSheet(true);
     mutateAsync({
       bid: data.bid,
       clothing: data.clothing,
