@@ -54,14 +54,12 @@ const BidProductPage: React.FC = () => {
     }
     const name = buyer.name;
     if (name.length <= 4) {
-      // Se o nome for muito curto, mostra só a primeira e última letra
       return (
         name.slice(0, 1) +
         "*".repeat(Math.max(0, name.length - 2)) +
         name.slice(-1)
       );
     }
-    // Duas primeiras letras, asteriscos, duas últimas letras
     return (
       name.slice(0, 2) +
       "*".repeat(Math.max(0, name.length - 4)) +
