@@ -6,6 +6,7 @@ import { ChevronLeft, Clock, User, AlertCircle } from "lucide-react";
 import { useGetProduct } from "../../Product/services/CRUD-product";
 import { formatCurrencyBR } from "../../../utils/formatCurrencyBr";
 import { concatDateTimeToDate } from "../../../utils/formatDate";
+import { Buyer } from "@/modules/Product/types/product";
 
 const BidProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -47,12 +48,25 @@ const BidProductPage: React.FC = () => {
   };
 
   // Helper function to get bidder display name
-  const getBidderName = (userId: string) => {
-    if (userId === currentUser.id) {
+  const getBidderName = (buyer: Buyer) => {
+    if (buyer.id === currentUser.id) {
       return "Você";
     }
-    // Format: first letter + asterisks + last 2 digits of ID
-    return `${currentUser.name.charAt(0)}******${userId.slice(-2)}`;
+    const name = buyer.name;
+    if (name.length <= 4) {
+      // Se o nome for muito curto, mostra só a primeira e última letra
+      return (
+        name.slice(0, 1) +
+        "*".repeat(Math.max(0, name.length - 2)) +
+        name.slice(-1)
+      );
+    }
+    // Duas primeiras letras, asteriscos, duas últimas letras
+    return (
+      name.slice(0, 2) +
+      "*".repeat(Math.max(0, name.length - 4)) +
+      name.slice(-2)
+    );
   };
 
   return (
@@ -170,13 +184,13 @@ const BidProductPage: React.FC = () => {
               ) : (
                 <div className="bg-white border border-gray-200 rounded-lg">
                   <ul className="divide-y divide-gray-200">
-                    {[...product.bids].map((bid) => (
+                    {product?.bids.map((bid) => (
                       <li key={bid.id} className="p-3 hover:bg-gray-50">
                         <div className="flex justify-between items-center">
                           <div className="flex items-center">
                             <User className="h-4 w-4 text-gray-500 mr-2" />
                             <span className="text-gray-800 font-medium">
-                              {getBidderName(bid.buyer.name)}
+                              {getBidderName(bid.buyer)}
                             </span>
                           </div>
 
