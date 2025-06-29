@@ -28,7 +28,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const logOut = () => {
     localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    localStorage.removeItem("authToken");
     setUser(null);
     window.location.href = "/auth/login";
   };
