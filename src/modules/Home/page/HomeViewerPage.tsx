@@ -7,6 +7,7 @@ import React from "react";
 import { useGetAllProduct } from "../../Product/services/CRUD-product";
 import ProductCard from "../../Home/components/cardProduct";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import Loader from "@/components/Loader";
 
 const HomeViewerPage: React.FC = () => {
   const {
@@ -14,8 +15,8 @@ const HomeViewerPage: React.FC = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isLoading,
   } = useGetAllProduct();
-  console.log(hasNextPage, "hasNextPage");
   const { observerRef } = useInfiniteScroll({
     hasMore: !!hasNextPage,
     isLoading: isFetchingNextPage,
@@ -184,6 +185,7 @@ const HomeViewerPage: React.FC = () => {
           ))}
         </div>
       )}
+      {isLoading && <Loader />}
       <div ref={observerRef} className="h-1 mt-10"></div>
     </div>
   );

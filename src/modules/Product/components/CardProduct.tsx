@@ -64,8 +64,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
             className="w-full h-48 sm:h-64 object-cover object-center"
           />
 
-          <div className="absolute top-0 left-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
-            {checkSeller && (
+          {checkSeller && (
+            <div className="absolute top-0 left-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
               <div className=" flex gap-2">
                 <button
                   onClick={(e) => confirmDelete(e, product)}
@@ -75,8 +75,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
             <span className="flex items-center">

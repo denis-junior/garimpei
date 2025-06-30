@@ -7,11 +7,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { navigationItems, UserType } from "@/core/navigationsItems";
+import { useNavigationsItems, UserType } from "@/core/navigationsItems";
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = useUser();
   const location = useLocation();
+  const navigationItems = useNavigationsItems();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);

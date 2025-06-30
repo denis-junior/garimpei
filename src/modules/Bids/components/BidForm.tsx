@@ -26,10 +26,8 @@ const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
     },
   });
 
-  const minBid = Number(currentBid) + 1;
-
   const onSubmit = (data: BidFormData) => {
-    if (!user) setIsLoginSheet(true);
+    if (!user) return setIsLoginSheet(true);
     mutateAsync({
       bid: data.bid,
       clothing: data.clothing,
@@ -62,7 +60,9 @@ const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
         {errors.bid && (
           <p className="mt-2 text-sm text-red-600">{errors.bid.message}</p>
         )}
-        <p className="mt-2 text-sm text-gray-500">Lance mínimo: R${minBid}</p>
+        <p className="mt-2 text-sm text-gray-500">
+          Lance mínimo: R${(Number(currentBid) + 1).toFixed(2)}
+        </p>
       </div>
 
       <button

@@ -1,19 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Clock, Tag } from "lucide-react";
+import { Clock, Tag, Store } from "lucide-react";
 import CountdownTimer from "../../../components/CountdownTimer";
 import { IProduct } from "../../Product/types/product";
 import { concatDateTimeToDate } from "../../../utils/formatDate";
 
 interface ProductCardProps {
   product: IProduct;
-  compact?: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  product,
-  compact = false,
-}) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link
       to={`/bids/${product.id}`}
@@ -29,6 +25,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
           className="w-full h-48 sm:h-64 object-cover object-center"
         />
 
+        <div className="absolute top-0 left-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
+          <span className="flex items-center">
+            <Store className="h-3 w-3 mr-1" />
+            {product.store?.name}
+          </span>
+        </div>
+
         <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
           <span className="flex items-center">
             <Tag className="h-3 w-3 mr-1" />
@@ -36,16 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </span>
         </div>
 
-        {!compact && (
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-            <CountdownTimer
-              endDate={concatDateTimeToDate(
-                String(product.end_date),
-                product.end_time
-              )}
-            />
-          </div>
-        )}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4"></div>
       </div>
 
       <div className="p-4">
@@ -53,7 +47,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {product.name}
         </h3>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-start">
           <div>
             <p className="text-sm text-gray-500">Lance atual</p>
             <p className="text-lg font-bold text-teal-600">
@@ -63,17 +57,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </p>
           </div>
 
-          {compact && (
-            <div className="flex items-center text-sm text-gray-500">
-              <Clock className="h-4 w-4 mr-1" />
-              <CountdownTimer
-                endDate={concatDateTimeToDate(
-                  String(product.end_date),
-                  product.end_time
-                )}
-              />
-            </div>
-          )}
+          <div className="flex items-center text-sm text-gray-500">
+            <Clock className="h-4 w-4 mr-1" />
+            <CountdownTimer
+              endDate={concatDateTimeToDate(
+                String(product.end_date),
+                product.end_time
+              )}
+            />
+          </div>
         </div>
       </div>
     </Link>

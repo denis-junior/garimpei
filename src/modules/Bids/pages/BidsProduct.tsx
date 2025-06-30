@@ -74,7 +74,7 @@ const BidProductPage: React.FC = () => {
         className="flex items-center text-gray-600 hover:text-teal-600 mb-6 transition-colors"
       >
         <ChevronLeft className="w-5 h-5 mr-1" />
-        Voltar para Leilões
+        Voltar
       </button>
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -126,14 +126,25 @@ const BidProductPage: React.FC = () => {
 
           {/* Auction details */}
           <div>
-            <h1 className="text-2xl font-bold text-gray-800 mb-2">
-              {product.name}
-            </h1>
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-800 mb-2">
+                  {product.name}
+                </h1>
 
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                Tamanho: {product.size}
-              </span>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                    Tamanho: {product.size}
+                  </span>
+                </div>
+              </div>
+              <div
+                className="flex items-center justify-center gap-2 cursor-pointer"
+                onClick={() => navigate(`/store/${product.store?.id}`)}
+              >
+                <h2 className="text-sm font-semibold text-gray-800 ">Loja :</h2>
+                <p className="text-gray-600">{product.store?.name}</p>
+              </div>
             </div>
 
             <div className="border-t border-b border-gray-200 py-4 mb-4">
