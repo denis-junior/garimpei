@@ -1,22 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 // import { useAuction } from "../../../context/AuctionContext";
 // import { Auction } from "../../../types";
 // import AuctionCard from "../../../components/AuctionCard";
 // import FilterBar from "../../../components/FilterBar";
 // import { Search } from "lucide-react";
-import { useSSE } from "../../../hooks/useSSE";
 import { useGetAllProduct } from "../../Product/services/CRUD-product";
 import ProductCard from "../../Home/components/cardProduct";
-import { IProduct } from "@/modules/Product/types/product";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 const HomeViewerPage: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const { data: productsData } = useGetAllProduct({ page });
-  const { items: products, lastElementRef } = useInfiniteScroll<IProduct>({
-    data: productsData ?? [],
-    hasMore: true,
-    setPage,
+  const {
+    data: productsData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetAllProduct();
+  console.log(hasNextPage, "hasNextPage");
+  const { observerRef } = useInfiniteScroll({
+    hasMore: !!hasNextPage,
+    isLoading: isFetchingNextPage,
+    onLoadMore: () => fetchNextPage(),
   });
 
   // useEffect(() => {
@@ -158,7 +161,7 @@ const HomeViewerPage: React.FC = () => {
 
       {/* <FilterBar onFilterChange={handleFilterChange} /> */}
 
-      {products?.length === 0 ? (
+      {productsData?.pages.length === 0 ? (
         <div className="bg-white p-8 text-center rounded-lg shadow-sm border border-gray-200">
           <h3 className="text-xl font-semibold text-gray-700 mb-2">
             Nenhum Leilão Encontrado
@@ -170,14 +173,18 @@ const HomeViewerPage: React.FC = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products?.map((product) => (
+          {productsData?.pages.map((product) => (
             <>
-              <ProductCard key={product.id} product={product} />
+              {product.items.map((item) => (
+                <ProductCard key={item.id} product={item} />
+              ))}
+
+              {/* <ProductCard key={product.id} product={product} /> */}
             </>
           ))}
         </div>
       )}
-      <div ref={lastElementRef} className="h-1 mt-2"></div>
+      <div ref={observerRef} className="h-1 mt-10"></div>
     </div>
   );
 };

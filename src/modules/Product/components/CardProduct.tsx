@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { IProduct } from "../types/product";
-import { Clock, Tag } from "lucide-react";
+import { Clock, Tag, Trash2 } from "lucide-react";
 import CountdownTimer from "../../../components/CountdownTimer";
 import { useNavigate } from "react-router-dom";
-import { checkSeller } from "../../../utils/checkoSeller";
+import { useCheckSeller } from "../../../utils/checkoSeller";
 import { concatDateTimeToDate } from "../../../utils/formatDate";
+import { useDeleteProduct } from "../services/CRUD-product";
+import ConfirmationModal from "@/components/ConfirmationModal";
 
 interface ProductCardProps {
   product: IProduct;
@@ -19,13 +21,36 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const { name, images, initial_bid, size, end_date, end_time } = product;
   const navigate = useNavigate();
+  const checkSeller = useCheckSeller();
+  const [itemDelete, setItemDelete] = useState<IProduct>();
+  const { mutate } = useDeleteProduct();
 
   const navigateToDetails = () => {
-    if (checkSeller()) {
+    if (checkSeller) {
       return navigate(`/product/${product.id}`, { state: { product } });
     }
     return navigate(`/bids/${product.id}`);
   };
+
+  const confirmDelete = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    store: IProduct
+  ) => {
+    e.stopPropagation();
+    setItemDelete(store);
+  };
+
+  const handleDelete = () => {
+    if (itemDelete) {
+      mutate(itemDelete.id);
+      cancelDelete();
+    }
+  };
+
+  const cancelDelete = () => {
+    setItemDelete(undefined);
+  };
+
   return (
     <>
       <div className="group block bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -38,6 +63,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
             alt={name}
             className="w-full h-48 sm:h-64 object-cover object-center"
           />
+
+          <div className="absolute top-0 left-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
+            {checkSeller && (
+              <div className=" flex gap-2">
+                <button
+                  onClick={(e) => confirmDelete(e, product)}
+                  className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-red-600 hover:bg-opacity-100 transition-colors"
+                  title="Delete auction"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
 
           <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
             <span className="flex items-center">
@@ -90,6 +129,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </button>
         )}
       </div>
+      {/* Delete confirmation modal */}
+      {itemDelete && (
+        <ConfirmationModal
+          title="Excluir Loja"
+          message="Tem certeza que deseja excluir esta loja? Esta ação não pode ser desfeita."
+          onCancel={cancelDelete}
+          onConfirm={handleDelete}
+          confirmText="Excluir"
+          cancelText="Cancelar"
+        />
+      )}
     </>
   );
 };

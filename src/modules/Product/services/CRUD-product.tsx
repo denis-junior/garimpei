@@ -1,8 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import api from "../../../infra/axiosconfig";
 import { IProduct } from "../types/product";
 import { ProductFormData } from "../schema/product.schema";
 import { EEndPoints } from "../../Store/services/CRUD-stores";
+import { IPaginationResponse } from "@/types";
 
 export enum EEndPointsProduct {
   GETPRODUCT = "GETPRODUCT",
@@ -65,16 +71,24 @@ export const useGetProduct = (storeId: string) => {
   });
 };
 
-export const useGetAllProduct = ({ page }: { page?: number }) => {
-  return useQuery({
-    queryKey: [EEndPointsProduct.GETPRODUCT, page],
-    queryFn: async () => {
-      const response = await api.get<IProduct[]>("clothing", {
-        params: {
-          page: page || 1,
-        },
-      });
+export const useGetAllProduct = () => {
+  return useInfiniteQuery({
+    queryKey: [EEndPointsProduct.GETPRODUCT],
+    initialPageParam: 1,
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await api.get<IPaginationResponse<IProduct>>(
+        "clothing",
+        {
+          params: {
+            page: pageParam,
+            limit: 20,
+          },
+        }
+      );
       return response.data;
+    },
+    getNextPageParam: (lastPage, pages) => {
+      return lastPage.lastPage ? undefined : pages.length + 1;
     },
   });
 };
@@ -94,7 +108,9 @@ export const useDeleteProduct = () => {
 
   return useMutation({
     mutationFn: (storeId: number) => deleteProduct(storeId),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [EEndPoints.GETSTORES] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [EEndPoints.GETSTORES] });
+      queryClient.invalidateQueries({ queryKey: [EEndPoints.GETSTOREBYID] });
+    },
   });
 };

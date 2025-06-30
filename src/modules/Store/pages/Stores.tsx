@@ -7,13 +7,14 @@ import { IStore } from "../types/store";
 import ConfirmationModal from "../../../components/ConfirmationModal";
 import PrimaryButton from "../../../components/PrimaryButton";
 import PageHeader from "../../../components/PageHeader";
-import { checkSeller } from "../../../utils/checkoSeller";
+import { useCheckSeller } from "../../../utils/checkoSeller";
 
 const StoresPage: React.FC = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [itemDelete, setItemDelete] = useState<IStore>();
-  const { data: listStores } = useGetAllStores();
+  const { data: listStores } = useGetAllStores({ page: 1 });
   const { mutate } = useDeleteStore();
+  const checkSeller = useCheckSeller();
 
   const toggleCreateForm = () => {
     setShowCreateForm(!showCreateForm);
@@ -44,7 +45,7 @@ const StoresPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {checkSeller() && (
+      {checkSeller && (
         <PageHeader
           title="Dashboard de lojas"
           subtitle="Crie e gerencie suas lojas."
@@ -66,7 +67,7 @@ const StoresPage: React.FC = () => {
         />
       )}
 
-      {showCreateForm && checkSeller() && (
+      {showCreateForm && checkSeller && (
         <div className="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Criar Nova Loja
@@ -102,7 +103,7 @@ const StoresPage: React.FC = () => {
             {listStores?.map((store) => (
               <div key={store.id} className="relative">
                 <StoresCard store={store}>
-                  {checkSeller() && (
+                  {checkSeller && (
                     <div className=" flex ">
                       <button
                         className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-teal-600 hover:bg-opacity-100 transition-colors"

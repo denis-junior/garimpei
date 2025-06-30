@@ -26,7 +26,7 @@ export interface Auction {
   endDate: string;
   producerId: string;
   bids: Bid[];
-  status: 'upcoming' | 'active' | 'ended';
+  status: "upcoming" | "active" | "ended";
 }
 
 export interface Bid {
@@ -35,4 +35,9 @@ export interface Bid {
   userId: string;
   amount: number;
   timestamp: string;
+}
+
+export interface IPaginationResponse<T> {
+  items: T[];
+  lastPage: boolean;
 }

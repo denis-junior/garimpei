@@ -6,12 +6,13 @@ import ProductForm from "../../Product/components/FormProduct";
 import CardGeneralProduct from "../../Product/components/CardGeneralProduct";
 import PrimaryButton from "../../../components/PrimaryButton";
 import PageHeader from "../../../components/PageHeader";
-import { checkSeller } from "../../../utils/checkoSeller";
+import { useCheckSeller } from "@/utils/checkoSeller";
 
 const StoreDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data: store } = useGetStore(Number(id));
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const checkSeller = useCheckSeller();
 
   const toggleCreateForm = () => {
     setShowCreateForm(!showCreateForm);
@@ -28,7 +29,7 @@ const StoreDetailPage: React.FC = () => {
         subtitle={store?.description || "Crie e gerencie seus produtos."}
         action={
           <>
-            {checkSeller() && (
+            {checkSeller && (
               <PrimaryButton onClick={toggleCreateForm}>
                 {showCreateForm ? (
                   <>

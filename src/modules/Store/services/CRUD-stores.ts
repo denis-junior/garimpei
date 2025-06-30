@@ -28,8 +28,12 @@ const deleteStore = async (storeId: number) => {
   return response.data;
 };
 
-const getAllStores = async () => {
-  const response = await api.get<IStore[]>("/stores");
+const getAllStores = async (page?: number) => {
+  const response = await api.get<IStore[]>("/stores", {
+    params: {
+      page: page || 1,
+    },
+  });
   return response.data;
 };
 
@@ -57,10 +61,10 @@ export const useGetStore = (storeId: number) => {
   });
 };
 
-export const useGetAllStores = () => {
+export const useGetAllStores = ({ page }: { page?: number }) => {
   return useQuery({
     queryKey: [EEndPoints.GETSTORES],
-    queryFn: getAllStores,
+    queryFn: () => getAllStores(page),
   });
 };
 
