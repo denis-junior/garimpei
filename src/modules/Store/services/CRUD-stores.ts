@@ -28,15 +28,6 @@ const deleteStore = async (storeId: number) => {
   return response.data;
 };
 
-const getAllStores = async (page?: number) => {
-  const response = await api.get<IStore[]>("/stores", {
-    params: {
-      page: page || 1,
-    },
-  });
-  return response.data;
-};
-
 export const usePostStore = ({
   onSubmitSuccess,
 }: {
@@ -61,10 +52,24 @@ export const useGetStore = (storeId: number) => {
   });
 };
 
-export const useGetAllStores = ({ page }: { page?: number }) => {
+export const useGetAllStores = ({
+  page,
+  size,
+}: {
+  page?: number;
+  size?: number;
+}) => {
   return useQuery({
     queryKey: [EEndPoints.GETSTORES],
-    queryFn: () => getAllStores(page),
+    queryFn: async () => {
+      const response = await api.get<IStore[]>("/stores", {
+        params: {
+          page: page || 1,
+          size: size || 10,
+        },
+      });
+      return response.data;
+    },
   });
 };
 
