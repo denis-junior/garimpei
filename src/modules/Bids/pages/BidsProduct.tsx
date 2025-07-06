@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CountdownTimer from "../../../components/CountdownTimer";
 import BidForm from "../components/BidForm";
@@ -10,11 +10,55 @@ import { Buyer } from "@/modules/Product/types/product";
 
 const BidProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: product } = useGetProduct(id || "");
+  const { data: product, refetch } = useGetProduct(id || "");
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(0);
   const userString = localStorage.getItem("user");
   const currentUser = userString ? JSON.parse(userString) : null;
+
+  // SSE para receber novos lances
+  useEffect(() => {
+    if (!id) return;
+
+    console.log(`🔌 Conectando SSE para clothing ${id}`);
+    
+    // Configurar EventSource com headers específicos
+    const eventSource = new EventSource(`http://localhost:3000/bid/stream/${id}`, {
+      withCredentials: false,
+    });
+
+    eventSource.onopen = function(event) {
+      console.log('✅ SSE connection opened:', event);
+      console.log('✅ Ready state:', eventSource.readyState);
+    };
+
+    eventSource.onmessage = function(event) {
+      try {
+        const data = JSON.parse(event.data);
+        console.log('📦 Parsed SSE data:', data);
+        refetch();
+      } catch (error) {
+        console.error('❌ Error parsing SSE message:', error);
+      }
+    };
+
+    eventSource.onerror = function(error) {
+      console.error('❌ SSE error:', error);
+      console.error('❌ SSE readyState:', eventSource.readyState);
+      console.error('❌ SSE url:', eventSource.url);
+      
+      if (eventSource.readyState === EventSource.CLOSED) {
+        console.log('❌ SSE connection closed');
+      } else if (eventSource.readyState === EventSource.CONNECTING) {
+        console.log('🔄 SSE reconnecting...');
+      }
+    };
+
+    return () => {
+      console.log(`🔌 Closing SSE connection for clothing ${id}`);
+      eventSource.close();
+    };
+  }, [id, refetch]);
 
   if (!product) {
     return (
@@ -47,7 +91,6 @@ const BidProductPage: React.FC = () => {
     navigate(-1);
   };
 
-  // Helper function to get bidder display name
   const getBidderName = (buyer: Buyer) => {
     if (buyer.id === currentUser.id) {
       return "Você";
@@ -75,6 +118,19 @@ const BidProductPage: React.FC = () => {
       >
         <ChevronLeft className="w-5 h-5 mr-1" />
         Voltar
+      </button>
+
+      <button
+        onClick={() => {
+          console.log("🧪 Testando SSE para clothing:", id);
+          fetch(`http://localhost:3000/bid/test-sse/${id}`)
+            .then((response) => response.json())
+            .then((data) => console.log("✅ Teste SSE enviado:", data))
+            .catch((error) => console.error("❌ Erro no teste SSE:", error));
+        }}
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        🧪 Testar SSE para Clothing {id}
       </button>
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
