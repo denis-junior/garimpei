@@ -5,6 +5,7 @@ import { auctionHistory } from "../../../mock/data";
 import { formatPhoneNumber } from "../../../utils";
 import { useUser } from "../../../hooks/useUser";
 import { useGetSeller } from "../service/CRUD-user";
+import TabHistory from "../components/TabHistory";
 
 const SellerUserProfilePage: React.FC = () => {
   const { user: dataUser } = useUser();
@@ -53,17 +54,7 @@ const SellerUserProfilePage: React.FC = () => {
                     : "text-gray-500 hover:text-teal-500"
                 }`}
               >
-                Histórico de Leilões
-              </button>
-              <button
-                onClick={() => setActiveTab("preferences")}
-                className={`px-4 py-2 font-medium text-sm ${
-                  activeTab === "preferences"
-                    ? "text-teal-600 border-b-2 border-teal-500"
-                    : "text-gray-500 hover:text-teal-500"
-                }`}
-              >
-                Preferencias
+                Histórico de Leilões Finalizados
               </button>
             </div>
 
@@ -150,79 +141,9 @@ const SellerUserProfilePage: React.FC = () => {
                       Você ainda não participou de nenhum leilão.
                     </p>
                   ) : (
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              Item
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              Preço
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              Data
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              Status
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {auctionHistory.map((item) => (
-                            <tr key={item.id} className="hover:bg-gray-50">
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900">
-                                  {item.title}
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                  {item.role === "seller"
-                                    ? "Você vendeu"
-                                    : "Você deu um lance"}
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900">
-                                  R${item.finalPrice}
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-500">
-                                  {new Date(item.date).toLocaleDateString(
-                                    "en-GB"
-                                  )}
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <span
-                                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                    item.status === "vendido"
-                                      ? "bg-green-100 text-green-800"
-                                      : item.status === "ganhou"
-                                      ? "bg-teal-100 text-teal-800"
-                                      : "bg-gray-100 text-gray-800"
-                                  }`}
-                                >
-                                  {item.status.toUpperCase()}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                    <TabHistory></TabHistory>
                   )}
                 </div>
-              )}
-
-              {activeTab === "preferences" ? (
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                    Your Preferences
-                  </h2>
-                </div>
-              ) : (
-                <></>
               )}
             </div>
           </div>
