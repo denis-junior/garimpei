@@ -1,13 +1,12 @@
-import React from "react";
-// import { useAuction } from "../../../context/AuctionContext";
-// import { Auction } from "../../../types";
-// import AuctionCard from "../../../components/AuctionCard";
-// import FilterBar from "../../../components/FilterBar";
-// import { Search } from "lucide-react";
+import React, { useEffect } from "react";
+
 import { useGetAllProduct } from "../../Product/services/CRUD-product";
 import ProductCard from "../../Home/components/cardProduct";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import Loader from "@/components/Loader";
+import { useSSE } from "@/hooks/useSSE";
+import { IBid } from "@/modules/Bids/Types";
+import { IProduct } from "@/modules/Product/types/product";
 
 const HomeViewerPage: React.FC = () => {
   const {
@@ -22,16 +21,46 @@ const HomeViewerPage: React.FC = () => {
     isLoading: isFetchingNextPage,
     onLoadMore: () => fetchNextPage(),
   });
+  const [attBids, setAttBids] = React.useState<
+    { bid: IBid; clothingId: number } | undefined
+  >();
 
-  // useEffect(() => {
-  //   const loadProducts = async () => {
-  //     if (!hasMore && productsData?.length) return;
-  //     setProducts((prev) => [...prev, ...(productsData ?? [])]);
-  //     setHasMore(true);
-  //   };
+  const { connected } = useSSE<{ bid: IBid; clothingId: number }>(
+    "http://localhost:3000/bid/stream/all",
+    {
+      onMessage: (data) => setAttBids(data),
+      events: {
+        "custom-event": (data) => console.log("Custom Event:", data),
+      },
+      autoReconnect: true,
+      reconnectInterval: 5000,
+      parse: true,
+    }
+  );
 
-  //   loadProducts();
-  // }, [page, productsData]);
+  const [products, setProducts] = React.useState<IProduct[]>([]);
+
+  useEffect(() => {
+    const allItems: IProduct[] =
+      productsData?.pages.flatMap((page) => page.items) ?? [];
+
+    setProducts(
+      productsData
+        ? allItems.map((item) => {
+            const updatedBids =
+              attBids?.bid &&
+              !item.bids.some((b) => b.id === attBids?.bid?.id) &&
+              item.id === attBids?.clothingId
+                ? [...item.bids, attBids?.bid]
+                : item.bids;
+            return {
+              ...item,
+              bids: updatedBids,
+            };
+          })
+        : []
+    );
+  }, [productsData, attBids, connected]);
 
   // useEffect(() => {
   //   const observer = new IntersectionObserver(
@@ -51,18 +80,6 @@ const HomeViewerPage: React.FC = () => {
   //   };
   // }, [hasMore]);
 
-  // const { connected, messages } = useSSE<{ text: string; id: number }>(
-  //   "http://localhost:3000/bid/stream",
-  //   {
-  //     onMessage: (data) => console.log("Recebido:", data),
-  //     events: {
-  //       "custom-event": (data) => console.log("Custom Event:", data),
-  //     },
-  //     autoReconnect: true,
-  //     reconnectInterval: 5000,
-  //     parse: true,
-  //   }
-  // );
   // const { auctions } = useAuction();
   // const [filteredAuctions, setFilteredAuctions] = useState<Auction[]>([]);
   // const [searchTerm, setSearchTerm] = useState("");
@@ -162,7 +179,7 @@ const HomeViewerPage: React.FC = () => {
 
       {/* <FilterBar onFilterChange={handleFilterChange} /> */}
 
-      {productsData?.pages.length === 0 ? (
+      {products.length === 0 ? (
         <div className="bg-white p-8 text-center rounded-lg shadow-sm border border-gray-200">
           <h3 className="text-xl font-semibold text-gray-700 mb-2">
             Nenhum Leilão Encontrado
@@ -173,15 +190,20 @@ const HomeViewerPage: React.FC = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {productsData?.pages.map((product) => (
-            <>
-              {product.items.map((item) => (
-                <ProductCard key={item.id} product={item} />
-              ))}
+        // <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        //   {productsData?.pages.map((product) => (
+        //     <>
+        //       {product.items.map((item) => (
+        //         <ProductCard key={item.id} product={item} />
+        //       ))}
 
-              {/* <ProductCard key={product.id} product={product} /> */}
-            </>
+        //       {/* <ProductCard key={product.id} product={product} /> */}
+        //     </>
+        //   ))}
+        // </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       )}

@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ProductCard from "./CardProduct";
 import { useGetStore } from "../../Store/services/CRUD-stores";
+import { useSSE } from "@/hooks/useSSE";
+import { IBid } from "@/modules/Bids/Types";
+import { IProduct } from "../types/product";
 interface ICardGeneralProductProps {
   idStore: number;
 }
@@ -8,6 +11,44 @@ const CardGeneralProduct: React.FC<ICardGeneralProductProps> = ({
   idStore,
 }) => {
   const { data: store } = useGetStore(idStore);
+  const [attBids, setAttBids] = React.useState<
+    { bid: IBid; clothingId: number } | undefined
+  >();
+  const [products, setProducts] = React.useState<IProduct[]>([]);
+
+  const { connected } = useSSE<{ bid: IBid; clothingId: number }>(
+    "http://localhost:3000/bid/stream/all",
+    {
+      onMessage: (data) => setAttBids(data),
+      events: {
+        "custom-event": (data) => console.log("Custom Event:", data),
+      },
+      autoReconnect: true,
+      reconnectInterval: 5000,
+      parse: true,
+    }
+  );
+
+  useEffect(() => {
+    const allItems: IProduct[] = store?.clothings || [];
+    console.log(allItems);
+    setProducts(
+      store?.clothings
+        ? allItems.map((item) => {
+            const updatedBids =
+              attBids?.bid &&
+              !item?.bids?.some((b) => b.id === attBids?.bid?.id) &&
+              item.id === attBids?.clothingId
+                ? [...item.bids, attBids?.bid]
+                : item.bids;
+            return {
+              ...item,
+              bids: updatedBids,
+            };
+          })
+        : []
+    );
+  }, [store, attBids, connected]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -23,7 +64,7 @@ const CardGeneralProduct: React.FC<ICardGeneralProductProps> = ({
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {store?.clothings?.map((products) => (
+          {products?.map((products) => (
             <ProductCard key={products.id} product={products} actions />
           ))}
         </div>

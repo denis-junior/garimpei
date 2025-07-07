@@ -19,7 +19,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   compact = false,
   actions = false,
 }) => {
-  const { name, images, initial_bid, size, end_date, end_time } = product;
+  const { name, images, size, end_date, end_time } = product;
   const navigate = useNavigate();
   const checkSeller = useCheckSeller();
   const [itemDelete, setItemDelete] = useState<IProduct>();
@@ -104,7 +104,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <div>
                 <p className="text-sm text-gray-500">Lance atual</p>
                 <p className="text-lg font-bold text-teal-600">
-                  ${initial_bid}
+                  ${product.bids[product.bids.length - 1].bid}
                 </p>
               </div>
 

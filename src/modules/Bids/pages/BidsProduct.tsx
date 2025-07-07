@@ -7,58 +7,45 @@ import { useGetProduct } from "../../Product/services/CRUD-product";
 import { formatCurrencyBR } from "../../../utils/formatCurrencyBr";
 import { concatDateTimeToDate } from "../../../utils/formatDate";
 import { Buyer } from "@/modules/Product/types/product";
+import { useSSE } from "@/hooks/useSSE";
+import { IBid } from "../Types";
 
 const BidProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: product, refetch } = useGetProduct(id || "");
+  const { data: product } = useGetProduct(id || "");
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(0);
   const userString = localStorage.getItem("user");
   const currentUser = userString ? JSON.parse(userString) : null;
 
-  // SSE para receber novos lances
+  const [listBids, setListBids] = useState<IBid[]>([]);
+
+  const { connected, messages } = useSSE<{ bid: IBid; clothingId: number }>(
+    "http://localhost:3000/bid/stream/" + (id || ""),
+    {
+      events: {
+        "custom-event": (data) => console.log("Custom Event:", data),
+      },
+      autoReconnect: true,
+      reconnectInterval: 5000,
+      parse: true,
+    }
+  );
+
   useEffect(() => {
-    if (!id) return;
-
-    console.log(`🔌 Conectando SSE para clothing ${id}`);
-    
-    // Configurar EventSource com headers específicos
-    const eventSource = new EventSource(`http://localhost:3000/bid/stream/${id}`, {
-      withCredentials: false,
-    });
-
-    eventSource.onopen = function(event) {
-      console.log('✅ SSE connection opened:', event);
-      console.log('✅ Ready state:', eventSource.readyState);
-    };
-
-    eventSource.onmessage = function(event) {
-      try {
-        const data = JSON.parse(event.data);
-        console.log('📦 Parsed SSE data:', data);
-        refetch();
-      } catch (error) {
-        console.error('❌ Error parsing SSE message:', error);
+    if (product?.bids) {
+      if (messages?.length) {
+        setListBids([
+          ...messages.map((m) => m.bid).sort((a, b) => b.bid - a.bid),
+          ...product.bids.filter((bid) =>
+            messages.some((m) => m.bid.id !== bid.id)
+          ),
+        ]);
+      } else {
+        setListBids([...product.bids]);
       }
-    };
-
-    eventSource.onerror = function(error) {
-      console.error('❌ SSE error:', error);
-      console.error('❌ SSE readyState:', eventSource.readyState);
-      console.error('❌ SSE url:', eventSource.url);
-      
-      if (eventSource.readyState === EventSource.CLOSED) {
-        console.log('❌ SSE connection closed');
-      } else if (eventSource.readyState === EventSource.CONNECTING) {
-        console.log('🔄 SSE reconnecting...');
-      }
-    };
-
-    return () => {
-      console.log(`🔌 Closing SSE connection for clothing ${id}`);
-      eventSource.close();
-    };
-  }, [id, refetch]);
+    }
+  }, [id, product, connected, messages]);
 
   if (!product) {
     return (
@@ -92,10 +79,10 @@ const BidProductPage: React.FC = () => {
   };
 
   const getBidderName = (buyer: Buyer) => {
-    if (buyer.id === currentUser.id) {
+    if (buyer?.id === currentUser?.id) {
       return "Você";
     }
-    const name = buyer.name;
+    const name = buyer?.name;
     if (name.length <= 4) {
       return (
         name.slice(0, 1) +
@@ -118,19 +105,6 @@ const BidProductPage: React.FC = () => {
       >
         <ChevronLeft className="w-5 h-5 mr-1" />
         Voltar
-      </button>
-
-      <button
-        onClick={() => {
-          console.log("🧪 Testando SSE para clothing:", id);
-          fetch(`http://localhost:3000/bid/test-sse/${id}`)
-            .then((response) => response.json())
-            .then((data) => console.log("✅ Teste SSE enviado:", data))
-            .catch((error) => console.error("❌ Erro no teste SSE:", error));
-        }}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        🧪 Testar SSE para Clothing {id}
       </button>
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -249,8 +223,8 @@ const BidProductPage: React.FC = () => {
               ) : (
                 <div className="bg-white border border-gray-200 rounded-lg">
                   <ul className="divide-y divide-gray-200">
-                    {product?.bids.map((bid) => (
-                      <li key={bid.id} className="p-3 hover:bg-gray-50">
+                    {listBids.map((bid, index) => (
+                      <li key={index} className="p-3 hover:bg-gray-50">
                         <div className="flex justify-between items-center">
                           <div className="flex items-center">
                             <User className="h-4 w-4 text-gray-500 mr-2" />
