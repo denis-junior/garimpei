@@ -11,8 +11,8 @@ const DashboardSeller: React.FC = () => {
           Dashboard das suas vendas
         </h1>
         <p className="text-gray-600">
-          Navegue pela nossa seleção criteriosa seleção de roupas vintage e de
-          grife disponíveis para leilão.
+          Acompanhe o desempenho das suas vendas, lances e produtos em tempo
+          real.
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

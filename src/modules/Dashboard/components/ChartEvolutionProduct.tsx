@@ -39,7 +39,7 @@ const ChartEvolutionProduct: React.FC = () => {
   return (
     <CardGraphic
       title="Evolução dos Lances por Produto"
-      subtitle="Navegue pela nossa seleção criteriosa seleção de roupas vintage e de grife disponíveis para leilão."
+      subtitle="Compare o desempenho de lances entre produtos específicos."
       action={
         <div className="flex gap-4">
           <Select value={idProduct} onValueChange={setIdProduct}>

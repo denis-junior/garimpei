@@ -1,8 +1,9 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { StoreFormData, schema } from "../schema/store.schema";
 import { usePostStore } from "../services/CRUD-stores";
+import InputMask from "react-input-mask";
 
 interface IStoreFormProps {
   onSubmitSuccess?: () => void;
@@ -11,10 +12,14 @@ interface IStoreFormProps {
 const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<StoreFormData>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      instagram: "@",
+    },
   });
 
   const { mutate, isPending } = usePostStore({ onSubmitSuccess });
@@ -79,18 +84,21 @@ const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
         >
           Contato
         </label>
-        <input
-          id="contact"
-          type="text"
-          {...register("contact")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
-            errors.contact ? "border-red-500" : "border-gray-300"
-          }`}
-          placeholder="(xx) xxxxx-xxxx"
+        <Controller
+          name="contact"
+          control={control}
+          render={({ field }) => (
+            <InputMask mask="(99) 99999-9999" {...field}>
+              {(inputProps) => (
+                <input
+                  {...inputProps}
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  placeholder="(00) 00000-0000"
+                />
+              )}
+            </InputMask>
+          )}
         />
-        {errors.contact && (
-          <p className="mt-1 text-sm text-red-600">{errors.contact.message}</p>
-        )}
       </div>
 
       <div>
@@ -100,14 +108,20 @@ const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
         >
           Instagram
         </label>
-        <input
-          id="instagram"
-          type="text"
-          {...register("instagram")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
-            errors.instagram ? "border-red-500" : "border-gray-300"
-          }`}
-          placeholder="@seu_usuario"
+        <Controller
+          name="instagram"
+          control={control}
+          render={({ field: { value, onChange, ...rest } }) => (
+            <input
+              {...rest}
+              value={
+                value.startsWith("@") ? value : "@" + value.replace(/\s/g, "")
+              }
+              onChange={(e) => onChange(e.target.value.replace(/\s/g, ""))}
+              className="w-full px-3 py-2 border rounded-md shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+              placeholder="@seuusuario"
+            />
+          )}
         />
         {errors.instagram && (
           <p className="mt-1 text-sm text-red-600">

@@ -31,7 +31,6 @@ const CardGeneralProduct: React.FC<ICardGeneralProductProps> = ({
 
   useEffect(() => {
     const allItems: IProduct[] = store?.clothings || [];
-    console.log(allItems);
     setProducts(
       store?.clothings
         ? allItems.map((item) => {

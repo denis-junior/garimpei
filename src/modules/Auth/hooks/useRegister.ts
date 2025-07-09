@@ -26,5 +26,10 @@ export const useRegisterBuyer = () => {
 export const useRegisterSeller = () => {
   return useMutation({
     mutationFn: (data: FormDataRegister) => registerUserSeller({ ...data }),
+    onSuccess: (data) => {
+      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("authToken", data.token);
+      window.location.href = "/";
+    },
   });
 };

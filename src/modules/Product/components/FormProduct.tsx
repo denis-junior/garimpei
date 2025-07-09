@@ -29,6 +29,15 @@ const ProductForm: React.FC<IProductFormProps> = ({
   const { mutate, isPending } = usePostProductWithImage({ onSubmitSuccess });
 
   const onSubmit = (data: ProductFormData) => {
+    if (data.image && data.image.length > 0) {
+      for (const file of Array.from(data.image)) {
+        const ext = file.name.split(".").pop()?.toLowerCase();
+        if (!["jpg", "jpeg", "png"].includes(ext || "")) {
+          alert("Apenas arquivos JPG, JPEG ou PNG são permitidos.");
+          return;
+        }
+      }
+    }
     const formData = new FormData();
 
     formData.append("name", data.name);
@@ -232,7 +241,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
           id="image"
           type="file"
           multiple
-          accept="image/*"
+          accept=".jpg,.jpeg,.png,image/jpeg,image/png"
           {...register("image")}
           className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
             errors.image ? "border-red-500" : "border-gray-300"

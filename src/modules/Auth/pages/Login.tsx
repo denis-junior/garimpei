@@ -6,7 +6,7 @@ const LoginPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm">
         <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">
-          Criar Conta
+          Entre em sua conta
         </h2>
         <FormLogin />
       </div>

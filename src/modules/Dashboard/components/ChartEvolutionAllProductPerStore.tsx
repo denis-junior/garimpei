@@ -35,7 +35,7 @@ const ChartEvolutionAllProductPerStore: React.FC = () => {
   return (
     <CardGraphic
       title="Evolução dos Lances por Produto"
-      subtitle="Navegue pela nossa seleção criteriosa seleção de roupas vintage e de grife disponíveis para leilão."
+      subtitle="Evolução dos lances em todos os produtos da sua loja ao longo do tempo."
       action={
         <Select value={idStore} onValueChange={setIdStore}>
           <SelectTrigger className="w-[180px]">

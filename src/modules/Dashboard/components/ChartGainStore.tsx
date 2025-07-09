@@ -35,7 +35,7 @@ const ChartGainStore: React.FC = () => {
     <>
       <CardGraphic
         title="Receita Total por Mês"
-        subtitle=""
+        subtitle="Veja a distribuição da receita total por loja"
         action={
           <Select value={idStore} onValueChange={setIdStore}>
             <SelectTrigger className="w-[180px]">
@@ -96,7 +96,7 @@ const ChartGainStore: React.FC = () => {
       </CardGraphic>
       <CardGraphic
         title="Receita Total por Mês"
-        subtitle=""
+        subtitle="Veja a distribuição da receita total por loja"
         action={
           <Select value={idStore} onValueChange={setIdStore}>
             <SelectTrigger className="w-[180px]">

@@ -5,8 +5,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormDataRegister, RegisterSchema } from "../schema/Register.schema";
 import { useRegisterSeller } from "../hooks/useRegister";
 import { SubmitHandler } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const RegisterSellerPage: React.FC = () => {
+  const navigate = useNavigate();
   const {
     handleSubmit,
     control,
@@ -23,6 +25,7 @@ const RegisterSellerPage: React.FC = () => {
       email: "",
     },
   });
+
   const { mutate } = useRegisterSeller();
 
   const onSubmit: SubmitHandler<FormDataRegister> = (data) => {
@@ -35,7 +38,6 @@ const RegisterSellerPage: React.FC = () => {
         <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">
           Criar Conta
         </h2>
-
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-gray-700 text-sm mb-1">Nome</label>
@@ -195,9 +197,12 @@ const RegisterSellerPage: React.FC = () => {
 
         <p className="text-xs text-gray-600 mt-4 text-center">
           Já tem uma conta?{" "}
-          <a href="#" className="text-teal-600 hover:underline">
+          <p
+            onClick={() => navigate("/auth/login")}
+            className="text-teal-600 hover:underline"
+          >
             Entrar
-          </a>
+          </p>
         </p>
       </div>
     </div>

@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetProduct } from "../services/CRUD-product";
 import PageHeader from "../../../components/PageHeader";
+import { concatDateTimeToDate, formatDate } from "@/utils/formatDate";
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -53,11 +54,22 @@ const ProductDetail: React.FC = () => {
                 <p>
                   <strong>Comprador:</strong> {bid.buyer.name}
                 </p>
-                <p>
-                  <strong>Instagram:</strong> @{bid.buyer.instagram}
-                </p>
+                <a
+                  href={`https://instagram.com/${bid.buyer.instagram.replace(
+                    /@/,
+                    ""
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className=" cursor-pointer"
+                >
+                  <strong>Instagram:</strong> {bid.buyer.instagram}
+                </a>
                 <p className="text-sm text-gray-500">
-                  <strong>Data:</strong> {new Date(bid.date).toLocaleString()}
+                  <strong>Data:</strong>{" "}
+                  {formatDate(
+                    concatDateTimeToDate(String(bid.date), bid.time)
+                  ).toLocaleString()}
                 </p>
               </li>
             ))}

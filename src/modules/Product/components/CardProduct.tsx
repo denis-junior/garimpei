@@ -104,7 +104,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <div>
                 <p className="text-sm text-gray-500">Lance atual</p>
                 <p className="text-lg font-bold text-teal-600">
-                  ${product.bids[product.bids.length - 1].bid}
+                  $
+                  {product.bids[product.bids.length - 1]?.bid ??
+                    product.initial_bid}
                 </p>
               </div>
 

@@ -9,6 +9,7 @@ import { concatDateTimeToDate } from "../../../utils/formatDate";
 import { Buyer } from "@/modules/Product/types/product";
 import { useSSE } from "@/hooks/useSSE";
 import { IBid } from "../Types";
+import { useCheckSeller } from "@/utils/checkoSeller";
 
 const BidProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,8 @@ const BidProductPage: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const userString = localStorage.getItem("user");
   const currentUser = userString ? JSON.parse(userString) : null;
+
+  const checkoSeller = useCheckSeller();
 
   const [listBids, setListBids] = useState<IBid[]>([]);
 
@@ -79,6 +82,7 @@ const BidProductPage: React.FC = () => {
   };
 
   const getBidderName = (buyer: Buyer) => {
+    if (checkoSeller) return buyer?.name || "Anônimo";
     if (buyer?.id === currentUser?.id) {
       return "Você";
     }

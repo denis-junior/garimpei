@@ -47,7 +47,7 @@ const StoresPage: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       {checkSeller && (
         <PageHeader
-          title="Dashboard de lojas"
+          title="Gerenciamento de suas lojas"
           subtitle="Crie e gerencie suas lojas."
           action={
             <PrimaryButton onClick={toggleCreateForm}>
@@ -86,17 +86,21 @@ const StoresPage: React.FC = () => {
             <h3 className="text-xl font-semibold text-gray-700 mb-2">
               Nenhuma loja encontrada
             </h3>
-            <p className="text-gray-500 mb-4">
-              Você ainda não criou nenhuma loja. Clique no botão acima para
-              começar.
-            </p>
-            <button
-              onClick={toggleCreateForm}
-              className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Crie sua primeira loja
-            </button>
+            {checkSeller && (
+              <p className="text-gray-500 mb-4">
+                Você ainda não criou nenhuma loja. Clique no botão acima para
+                começar.
+              </p>
+            )}
+            {checkSeller && (
+              <button
+                onClick={toggleCreateForm}
+                className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Crie sua primeira loja
+              </button>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

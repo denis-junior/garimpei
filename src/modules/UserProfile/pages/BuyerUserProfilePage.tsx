@@ -161,7 +161,7 @@ const BuyerUserProfilePage: React.FC = () => {
               {activeTab === "preferences" && (
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                    Leilões Vencidos
+                    Leilões Ganhos
                   </h2>
 
                   <div className="space-y-6">
