@@ -49,10 +49,10 @@ const HomeViewerPage: React.FC = () => {
         ? allItems.map((item) => {
             const updatedBids =
               attBids?.bid &&
-              !item.bids.some((b) => b.id === attBids?.bid?.id) &&
+              !item?.bids.some((b) => b.id === attBids?.bid?.id) &&
               item.id === attBids?.clothingId
                 ? [...item.bids, attBids?.bid]
-                : item.bids;
+                : item?.bids;
             return {
               ...item,
               bids: updatedBids,

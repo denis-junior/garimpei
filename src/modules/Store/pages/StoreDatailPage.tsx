@@ -51,7 +51,7 @@ const StoreDetailPage: React.FC = () => {
       {showCreateForm && (
         <div className="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Criar Nova Loja
+            Criar Novo Produto
           </h2>
           <ProductForm
             onSubmitSuccess={handleCreateSuccess}
