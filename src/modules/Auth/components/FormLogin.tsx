@@ -56,7 +56,7 @@ const FormLogin: React.FC<IPropsFormLogin> = ({ onLogin }) => {
 
       <button
         type="submit"
-        className="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700 transition"
+        className="w-full bg-primary text-white py-2 rounded hover:bg-primary-800 transition"
         disabled={isPending}
       >
         {isPending ? "Entrando..." : "Entrar"}

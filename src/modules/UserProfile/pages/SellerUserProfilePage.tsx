@@ -5,7 +5,7 @@ import { auctionHistory } from "../../../mock/data";
 import { formatPhoneNumber } from "../../../utils";
 import { useUser } from "../../../hooks/useUser";
 import { useGetSeller } from "../service/CRUD-user";
-import TabHistory from "../components/TabHistory";
+import TabHistory from "../../Dashboard/components/TabHistory";
 
 const SellerUserProfilePage: React.FC = () => {
   const { user: dataUser } = useUser();
@@ -27,7 +27,7 @@ const SellerUserProfilePage: React.FC = () => {
               {!isEditing && (
                 <button
                   onClick={toggleEdit}
-                  className="mt-4 sm:mt-0 flex items-center px-4 py-2 bg-teal-50 text-teal-700 rounded-md hover:bg-teal-100 transition-colors"
+                  className="mt-4 sm:mt-0 flex items-center px-4 py-2 bg-primary-50 text-primary-700 rounded-md hover:bg-primary-100 transition-colors"
                 >
                   <Edit className="w-4 h-4 mr-2" />
                   Editar Perfil
@@ -40,8 +40,8 @@ const SellerUserProfilePage: React.FC = () => {
                 onClick={() => setActiveTab("info")}
                 className={`px-4 py-2 font-medium text-sm ${
                   activeTab === "info"
-                    ? "text-teal-600 border-b-2 border-teal-500"
-                    : "text-gray-500 hover:text-teal-500"
+                    ? "text-primary border-b-2 border-primary"
+                    : "text-gray-500 hover:text-primary"
                 }`}
               >
                 Informação Pessoal
@@ -50,8 +50,8 @@ const SellerUserProfilePage: React.FC = () => {
                 onClick={() => setActiveTab("history")}
                 className={`px-4 py-2 font-medium text-sm ${
                   activeTab === "history"
-                    ? "text-teal-600 border-b-2 border-teal-500"
-                    : "text-gray-500 hover:text-teal-500"
+                    ? "text-primary border-b-2 border-primary"
+                    : "text-gray-500 hover:text-primary"
                 }`}
               >
                 Histórico de Leilões Finalizados
@@ -114,13 +114,13 @@ const SellerUserProfilePage: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="flex items-center p-4 bg-teal-50 rounded-lg">
-                          <Clock className="h-8 w-8 text-teal-600" />
+                        <div className="flex items-center p-4 bg-primary-50 rounded-lg">
+                          <Clock className="h-8 w-8 text-primary" />
                           <div className="ml-4">
-                            <p className="text-sm font-medium text-teal-800">
+                            <p className="text-sm font-medium text-primary-800">
                               Lances Dados
                             </p>
-                            <p className="text-2xl font-bold text-teal-600">
+                            <p className="text-2xl font-bold text-primary">
                               {0}
                             </p>
                           </div>

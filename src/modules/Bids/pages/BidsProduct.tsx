@@ -63,7 +63,7 @@ const BidProductPage: React.FC = () => {
           </p>
           <button
             onClick={() => navigate("/")}
-            className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
+            className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-800 transition-colors"
           >
             <ChevronLeft className="w-4 h-4 inline mr-2" />
             Back to Auctions
@@ -87,17 +87,18 @@ const BidProductPage: React.FC = () => {
       return "Você";
     }
     const name = buyer?.name;
-    if (name.length <= 4) {
+    if (!name) return "Anônimo";
+    if (name?.length <= 4) {
       return (
-        name.slice(0, 1) +
+        name?.slice(0, 1) +
         "*".repeat(Math.max(0, name.length - 2)) +
-        name.slice(-1)
+        name?.slice(-1)
       );
     }
     return (
-      name.slice(0, 2) +
+      name?.slice(0, 2) +
       "*".repeat(Math.max(0, name.length - 4)) +
-      name.slice(-2)
+      name?.slice(-2)
     );
   };
 
@@ -105,7 +106,7 @@ const BidProductPage: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <button
         onClick={handleBackClick}
-        className="flex items-center text-gray-600 hover:text-teal-600 mb-6 transition-colors"
+        className="flex items-center text-gray-600 hover:text-primary mb-6 transition-colors"
       >
         <ChevronLeft className="w-5 h-5 mr-1" />
         Voltar
@@ -135,7 +136,7 @@ const BidProductPage: React.FC = () => {
               </div>
             </div>
 
-            {product.images.length > 1 && (
+            {product.images?.length > 1 && (
               <div className="flex space-x-2 overflow-x-auto">
                 {product.images.map((image, index) => (
                   <div
@@ -143,7 +144,7 @@ const BidProductPage: React.FC = () => {
                     onClick={() => handleImageClick(index)}
                     className={`cursor-pointer flex-shrink-0 w-20 h-20 border-2 rounded-md overflow-hidden ${
                       selectedImage === index
-                        ? "border-teal-500"
+                        ? "border-primary"
                         : "border-transparent"
                     }`}
                   >
@@ -191,7 +192,7 @@ const BidProductPage: React.FC = () => {
                 <div className="text-sm font-medium text-gray-800">
                   Lance atual
                 </div>
-                <div className="text-2xl font-bold text-teal-600">
+                <div className="text-2xl font-bold text-primary">
                   R$
                   {product.bids?.[0]?.bid || product.initial_bid}
                 </div>
@@ -220,7 +221,7 @@ const BidProductPage: React.FC = () => {
                 Histórico de Lances
               </h2>
 
-              {product.bids.length === 0 ? (
+              {product.bids?.length === 0 ? (
                 <p className="text-gray-500">
                   Nenhum lance ainda, seja o primeiro!
                 </p>
@@ -238,7 +239,7 @@ const BidProductPage: React.FC = () => {
                           </div>
 
                           <div className="flex items-center">
-                            <span className="font-semibold text-teal-600 mr-3">
+                            <span className="font-semibold text-primary mr-3">
                               {formatCurrencyBR(Number(bid.bid))}
                             </span>
                             <span className="text-xs text-gray-500">

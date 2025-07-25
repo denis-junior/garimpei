@@ -47,7 +47,7 @@ const RegisterSellerPage: React.FC = () => {
               render={({ field }) => (
                 <input
                   {...field}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Seu nome"
                 />
               )}
@@ -65,7 +65,7 @@ const RegisterSellerPage: React.FC = () => {
               render={({ field }) => (
                 <input
                   {...field}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Email"
                 />
               )}
@@ -85,7 +85,7 @@ const RegisterSellerPage: React.FC = () => {
                   {(inputProps) => (
                     <input
                       {...inputProps}
-                      className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       placeholder="000.000.000-00"
                     />
                   )}
@@ -107,7 +107,7 @@ const RegisterSellerPage: React.FC = () => {
                   {(inputProps) => (
                     <input
                       {...inputProps}
-                      className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       placeholder="(00) 00000-0000"
                     />
                   )}
@@ -135,7 +135,7 @@ const RegisterSellerPage: React.FC = () => {
                       : "@" + value.replace(/\s/g, "")
                   }
                   onChange={(e) => onChange(e.target.value.replace(/\s/g, ""))}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="@seuusuario"
                 />
               )}
@@ -154,7 +154,7 @@ const RegisterSellerPage: React.FC = () => {
                 <input
                   {...field}
                   type="password"
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Crie uma senha"
                 />
               )}
@@ -175,7 +175,7 @@ const RegisterSellerPage: React.FC = () => {
                 <input
                   {...field}
                   type="password"
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Repita a senha"
                 />
               )}
@@ -189,7 +189,7 @@ const RegisterSellerPage: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors text-sm"
+            className="w-full py-2 px-4 bg-primary text-white rounded-md hover:bg-primary-800 transition-colors text-sm"
           >
             Registrar
           </button>
@@ -199,7 +199,7 @@ const RegisterSellerPage: React.FC = () => {
           Já tem uma conta?{" "}
           <p
             onClick={() => navigate("/auth/login")}
-            className="text-teal-600 hover:underline"
+            className="text-primary hover:underline"
           >
             Entrar
           </p>

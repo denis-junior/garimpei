@@ -44,7 +44,7 @@ const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
           id="name"
           type="text"
           {...register("name")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.name ? "border-red-500" : "border-gray-300"
           }`}
           placeholder="Digite o nome"
@@ -65,7 +65,7 @@ const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
           id="description"
           rows={4}
           {...register("description")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.description ? "border-red-500" : "border-gray-300"
           }`}
           placeholder="Descreva seu item ou serviço"
@@ -92,7 +92,7 @@ const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
               {(inputProps) => (
                 <input
                   {...inputProps}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="(00) 00000-0000"
                 />
               )}
@@ -118,7 +118,7 @@ const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
                 value.startsWith("@") ? value : "@" + value.replace(/\s/g, "")
               }
               onChange={(e) => onChange(e.target.value.replace(/\s/g, ""))}
-              className="w-full px-3 py-2 border rounded-md shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="w-full px-3 py-2 border rounded-md shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="@seuusuario"
             />
           )}
@@ -141,7 +141,7 @@ const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
           id="address"
           type="text"
           {...register("address")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.address ? "border-red-500" : "border-gray-300"
           }`}
           placeholder="Rua, número, bairro, cidade"
@@ -155,7 +155,7 @@ const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
         <button
           type="submit"
           disabled={isSubmitting || isPending}
-          className="w-full py-3 px-4 bg-teal-600 text-white font-medium rounded-md shadow hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-colors disabled:opacity-50"
+          className="w-full py-3 px-4 bg-primary text-white font-medium rounded-md shadow hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors disabled:opacity-50"
         >
           {isPending ? "Enviando..." : "Enviar"}
         </button>

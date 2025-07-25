@@ -71,7 +71,7 @@ const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
         className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
           isSubmitting
             ? "bg-gray-400 cursor-not-allowed"
-            : "bg-teal-600 hover:bg-teal-700 focus:ring-teal-500"
+            : "bg-primary hover:bg-primary-800 focus:ring-primary"
         }`}
       >
         {isSubmitting ? "Fazendo Lance..." : "Fazer Lance"}

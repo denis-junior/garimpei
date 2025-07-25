@@ -46,7 +46,7 @@ const RegisterBuyerPage: React.FC = () => {
               render={({ field }) => (
                 <input
                   {...field}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Seu nome"
                 />
               )}
@@ -64,7 +64,7 @@ const RegisterBuyerPage: React.FC = () => {
               render={({ field }) => (
                 <input
                   {...field}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Email"
                 />
               )}
@@ -84,7 +84,7 @@ const RegisterBuyerPage: React.FC = () => {
                   {(inputProps) => (
                     <input
                       {...inputProps}
-                      className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       placeholder="000.000.000-00"
                     />
                   )}
@@ -106,7 +106,7 @@ const RegisterBuyerPage: React.FC = () => {
                   {(inputProps) => (
                     <input
                       {...inputProps}
-                      className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       placeholder="(00) 00000-0000"
                     />
                   )}
@@ -134,7 +134,7 @@ const RegisterBuyerPage: React.FC = () => {
                       : "@" + value.replace(/\s/g, "")
                   }
                   onChange={(e) => onChange(e.target.value.replace(/\s/g, ""))}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="@seuusuario"
                 />
               )}
@@ -153,7 +153,7 @@ const RegisterBuyerPage: React.FC = () => {
                 <input
                   {...field}
                   type="password"
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Crie uma senha"
                 />
               )}
@@ -174,7 +174,7 @@ const RegisterBuyerPage: React.FC = () => {
                 <input
                   {...field}
                   type="password"
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Repita a senha"
                 />
               )}
@@ -189,7 +189,7 @@ const RegisterBuyerPage: React.FC = () => {
           <button
             type="submit"
             onClick={() => console.log(getValues())}
-            className="w-full py-2 px-4 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors text-sm"
+            className="w-full py-2 px-4 bg-primary text-white rounded-md hover:bg-primary-800 transition-colors text-sm"
           >
             Registrar
           </button>
@@ -197,7 +197,7 @@ const RegisterBuyerPage: React.FC = () => {
 
         <p className="text-xs text-gray-600 mt-4 text-center">
           Já tem uma conta?{" "}
-          <a href="#" className="text-teal-600 hover:underline">
+          <a href="#" className="text-primary hover:underline">
             Entrar
           </a>
         </p>

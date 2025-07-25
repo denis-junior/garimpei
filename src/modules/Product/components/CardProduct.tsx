@@ -96,14 +96,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         <div className="p-4 flex  justify-between items-center">
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 group-hover:text-teal-600 transition-colors">
+            <h3 className="text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors">
               {name}
             </h3>
 
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-sm text-gray-500">Lance atual</p>
-                <p className="text-lg font-bold text-teal-600">
+                <p className="text-lg font-bold text-primary">
                   $
                   {product.bids[product.bids.length - 1]?.bid ??
                     product.initial_bid}
@@ -125,7 +125,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {actions && (
           <button
             onClick={navigateToDetails}
-            className="w-full py-4 bg-teal-600 text-white"
+            className="w-full py-4 bg-primary text-white"
           >
             ir para detalhes do produto
           </button>

@@ -52,7 +52,7 @@ const SellerUserInfoForm: React.FC<SellerUserInfoFormProps> = ({
           type="text"
           id="name"
           {...register("name")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.name ? "border-red-500" : "border-gray-300"
           }`}
         />
@@ -72,7 +72,7 @@ const SellerUserInfoForm: React.FC<SellerUserInfoFormProps> = ({
           type="email"
           id="email"
           {...register("email")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.email ? "border-red-500" : "border-gray-300"
           }`}
         />
@@ -93,7 +93,7 @@ const SellerUserInfoForm: React.FC<SellerUserInfoFormProps> = ({
           id="number"
           placeholder="(XX) XXXXX-XXXX"
           {...register("contact")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.contact ? "border-red-500" : "border-gray-300"
           }`}
         />
@@ -113,7 +113,7 @@ const SellerUserInfoForm: React.FC<SellerUserInfoFormProps> = ({
           id="instagram"
           placeholder="meu_usuario"
           {...register("instagram")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.instagram ? "border-red-500" : "border-gray-300"
           }`}
         />
@@ -137,7 +137,7 @@ const SellerUserInfoForm: React.FC<SellerUserInfoFormProps> = ({
 
         <button
           type="submit"
-          className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+          className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
         >
           Save Changes
         </button>

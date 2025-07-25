@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ShoppingBag } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import Logo from "../assets/logo.png";
 import { useUser } from "../hooks/useUser";
 import {
   Popover,
@@ -25,13 +26,10 @@ const Header: React.FC = () => {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center ">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <ShoppingBag className="h-8 w-8 text-teal-500" />
-              <span className="ml-2 text-xl font-bold text-gray-800">
-                Garimpei
-              </span>
+              <img src={Logo} alt="Garimpei" className="h-20" />
             </Link>
           </div>
 
@@ -46,8 +44,8 @@ const Header: React.FC = () => {
                   to={item.path}
                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200 ${
                     location.pathname === item.path
-                      ? "text-teal-600 border-b-2 border-teal-500"
-                      : "text-gray-600 hover:text-teal-500"
+                      ? "text-primary border-b-2 border-primary"
+                      : "text-gray-600 hover:text-primary"
                   }`}
                 >
                   {item.icon}
@@ -63,8 +61,8 @@ const Header: React.FC = () => {
                 <div className="hidden md:flex items-center cursor-pointer">
                   <div className="flex items-center space-x-2">
                     <div className="flex-shrink-0">
-                      <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
-                        <span className="text-sm font-medium text-teal-800">
+                      <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
+                        <span className="text-sm font-medium text-primary-800">
                           {user?.name.charAt(0)}
                         </span>
                       </div>
@@ -90,13 +88,13 @@ const Header: React.FC = () => {
             <div className="hidden md:flex space-x-4">
               <Link
                 to="/auth/login"
-                className="hidden md:inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-teal-500 hover:bg-gray-50 rounded-md transition-colors duration-200"
+                className="hidden md:inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary hover:bg-gray-50 rounded-md transition-colors duration-200"
               >
                 Entrar
               </Link>
               <Link
                 to="/auth/register/buyer"
-                className="hidden md:inline-flex items-center px-3 py-2 text-sm font-medium text-teal-600 bg-teal-100 hover:bg-teal-200 rounded-md transition-colors duration-200"
+                className="hidden md:inline-flex items-center px-3 py-2 text-sm font-medium text-primary bg-primary-100 hover:bg-primary-200 rounded-md transition-colors duration-200"
               >
                 Registrar
               </Link>
@@ -107,7 +105,7 @@ const Header: React.FC = () => {
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-teal-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (
@@ -137,8 +135,8 @@ const Header: React.FC = () => {
                 onClick={closeMenu}
                 className={`flex items-center px-3 py-2 rounded-md text-base font-medium ${
                   location.pathname === item.path
-                    ? "bg-teal-50 text-teal-600"
-                    : "text-gray-700 hover:bg-gray-50 hover:text-teal-500"
+                    ? "bg-primary-50 text-primary"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-primary"
                 }`}
               >
                 {item.icon}
@@ -150,8 +148,8 @@ const Header: React.FC = () => {
             <div className="pt-4 pb-2 border-t border-gray-200">
               <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
-                    <span className="text-sm font-medium text-teal-800">
+                  <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
+                    <span className="text-sm font-medium text-primary-800">
                       {user?.name.charAt(0)}
                     </span>
                   </div>
@@ -170,14 +168,14 @@ const Header: React.FC = () => {
             <div className="flex items-center justify-center px-4 py-2">
               <Link
                 to="/auth/login"
-                className="text-sm font-medium text-gray-700 hover:text-teal-500"
+                className="text-sm font-medium text-gray-700 hover:text-primary"
               >
                 Entrar
               </Link>
               <span className="mx-2">|</span>
               <Link
                 to="/auth/register/buyer"
-                className="text-sm font-medium text-teal-600 hover:text-teal-500"
+                className="text-sm font-medium text-primary hover:text-primary"
               >
                 Registrar
               </Link>

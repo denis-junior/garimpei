@@ -95,7 +95,7 @@ const StoresPage: React.FC = () => {
             {checkSeller && (
               <button
                 onClick={toggleCreateForm}
-                className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
+                className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-800 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Crie sua primeira loja
@@ -110,7 +110,7 @@ const StoresPage: React.FC = () => {
                   {checkSeller && (
                     <div className=" flex ">
                       <button
-                        className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-teal-600 hover:bg-opacity-100 transition-colors"
+                        className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-primary hover:bg-opacity-100 transition-colors"
                         title="Edit auction"
                       >
                         <Edit className="w-4 h-4" />

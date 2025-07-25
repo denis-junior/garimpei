@@ -19,7 +19,7 @@ const StoresCard: React.FC<StoresCardProps> = ({ store, children }) => {
     <div className="group flex flex-col bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="flex justify-between items-center">
         <div className="p-4">
-          <h3 className="text-lg font-semibold text-gray-800 group-hover:text-teal-600 transition-colors">
+          <h3 className="text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors">
             {store.name}
           </h3>
         </div>
@@ -33,7 +33,7 @@ const StoresCard: React.FC<StoresCardProps> = ({ store, children }) => {
       </div>
       <button
         onClick={handleClick}
-        className="w-full py-4 bg-teal-600 text-white"
+        className="w-full py-4 bg-primary text-white"
       >
         ir para loja
       </button>

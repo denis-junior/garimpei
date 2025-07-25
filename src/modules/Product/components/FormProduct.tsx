@@ -73,7 +73,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
           id="name"
           type="text"
           {...register("name")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.name ? "border-red-500" : "border-gray-300"
           }`}
           placeholder="Digite o nome"
@@ -94,7 +94,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
           id="description"
           rows={4}
           {...register("description")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.description ? "border-red-500" : "border-gray-300"
           }`}
           placeholder="Descreva o produto"
@@ -137,7 +137,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
           id="initial_date"
           type="date"
           {...register("initial_date")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.initial_date ? "border-red-500" : "border-gray-300"
           }`}
         />
@@ -159,7 +159,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
           id="initial_time"
           type="time"
           {...register("initial_time")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.initial_time ? "border-red-500" : "border-gray-300"
           }`}
         />
@@ -181,7 +181,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
           id="end_date"
           type="date"
           {...register("end_date")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.end_date ? "border-red-500" : "border-gray-300"
           }`}
         />
@@ -200,7 +200,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
           id="end_time"
           type="time"
           {...register("end_time")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.end_time ? "border-red-500" : "border-gray-300"
           }`}
         />
@@ -220,7 +220,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
           id="size"
           type="text"
           {...register("size")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.size ? "border-red-500" : "border-gray-300"
           }`}
           placeholder="Ex: M, G, GG, etc."
@@ -243,7 +243,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
           multiple
           accept=".jpg,.jpeg,.png,image/jpeg,image/png"
           {...register("image")}
-          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 ${
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary ${
             errors.image ? "border-red-500" : "border-gray-300"
           }`}
         />
@@ -258,7 +258,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
         <button
           type="submit"
           disabled={isSubmitting || isPending}
-          className="w-full py-3 px-4 bg-teal-600 text-white font-medium rounded-md shadow hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-colors disabled:opacity-50"
+          className="w-full py-3 px-4 bg-primary text-white font-medium rounded-md shadow hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors disabled:opacity-50"
         >
           {isPending ? "Enviando..." : "Enviar"}
         </button>

@@ -43,14 +43,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       </div>
 
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800 group-hover:text-teal-600 transition-colors">
+        <h3 className="text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors">
           {product.name}
         </h3>
 
         <div className="flex justify-between items-start">
           <div>
             <p className="text-sm text-gray-500">Lance atual</p>
-            <p className="text-lg font-bold text-teal-600">
+            <p className="text-lg font-bold text-primary">
               $
               {product?.bids?.[product?.bids?.length - 1]?.bid ??
                 product.initial_bid}
