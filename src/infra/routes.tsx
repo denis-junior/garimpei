@@ -9,6 +9,7 @@ import { AuthRoutes } from "../modules/Auth/routes";
 import { BidsRoutes } from "../modules/Bids/routes";
 import HomeViewerPage from "../modules/Home/page/HomeViewerPage";
 import { DashboardRoutes } from "@/modules/Dashboard/routes";
+import MercadoPago from "@/modules/MercadoPago/page/MercadoPago";
 
 const AppRoutes = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const AppRoutes = createBrowserRouter([
       {
         path: "/dashboard",
         children: DashboardRoutes,
+      },
+      {
+        path: "/mercadoPago",
+        element: <MercadoPago/>,
       },
     ],
   },
