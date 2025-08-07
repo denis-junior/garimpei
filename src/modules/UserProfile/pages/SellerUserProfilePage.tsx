@@ -5,7 +5,7 @@ import { auctionHistory } from "../../../mock/data";
 import { formatPhoneNumber } from "../../../utils";
 import { useUser } from "../../../hooks/useUser";
 import { useGetSeller } from "../service/CRUD-user";
-import TabHistory from "../../Dashboard/components/TabHistory";
+import TabHistory from "../../Dashboard/components/CompletedAuctions";
 
 const SellerUserProfilePage: React.FC = () => {
   const { user: dataUser } = useUser();

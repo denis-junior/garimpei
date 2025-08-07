@@ -1,3 +1,6 @@
+import { EStatus } from "@/enum";
+import { IProduct } from "@/modules/Product/types/product";
+
 export interface IResponseDashboardProductStore {
   clothingId: number;
   clothingName: string;
@@ -23,4 +26,19 @@ export interface IResponseDashboardNoBids {
   percentageNoBids: number;
   sumInitialNoBids: number;
   finishedNoBids: number;
+}
+
+export interface IResponseManage {
+  items: IProduct[];
+}
+
+export interface IFilterManage {
+  textquery?: string;
+  status?: EStatus;
+  size?: number;
+  initialBid?: number;
+  maxBid?: number;
+  initialDate?: string;
+  endDate?: string;
+  storeId?: number;
 }

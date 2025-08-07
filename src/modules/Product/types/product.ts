@@ -1,3 +1,4 @@
+import { EStatus } from "@/enum";
 import { IBid } from "../../Bids/Types";
 import { IStore } from "../../Store/types/store";
 
@@ -14,6 +15,11 @@ export interface IProduct {
   end_time: string;
   bids: IBid[];
   images: IImage[];
+  current_winner_bid_id?: number;
+  auction_attempt?: number;
+  auctioned_at?: string;
+  payment_warning_sent_at?: string;
+  status: EStatus;
 }
 
 export interface Buyer {

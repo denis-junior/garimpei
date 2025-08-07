@@ -8,7 +8,6 @@ import {
   TableRow,
   Table,
 } from "@/components/ui/table";
-import { useGetFinishedWithBids } from "../../UserProfile/service/History";
 import { concatDateTimeToDate, formatDate } from "@/utils/formatDate";
 import { formatCurrencyBR } from "@/utils/formatCurrencyBr";
 import {
@@ -30,18 +29,95 @@ import {
   TimelineTitle,
 } from "@/components/ui/timeline";
 import { cn } from "@/lib/utils";
-
-const TabHistory: React.FC = () => {
+import { useGetClothingManage } from "../services";
+import { EStatus } from "@/enum";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { IFilterManage } from "../types";
+import { constantStatus } from "@/core/status";
+import { Input } from "@/components/ui/input";
+const AuctionHistory: React.FC = () => {
   const [isUsersBids, setIsUsersBids] = React.useState(false);
   const [item, setItem] = React.useState<IProduct>();
-  const { data } = useGetFinishedWithBids();
-
+  const [filter, setFilter] = React.useState<IFilterManage>({});
+  const { data: clothingData } = useGetClothingManage({ ...filter });
   const handleModalOpen = (item: IProduct) => {
     setIsUsersBids(true);
     setItem(item);
   };
+
   return (
-    <div className="container bg-background rounded-md mx-auto px-4 py-8">
+    <div className="container bg-background rounded-md mx-auto px-4 py-8 pt-4">
+      <div className="flex justify-center gap-2 bg-primary-25 py-4">
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="status">Data Inicial</Label>
+          <Input
+            type="date"
+            value={filter.initialDate || ""}
+            onChange={(e) =>
+              setFilter((prev) => ({
+                ...prev,
+                initialDate: e.target.value || undefined,
+              }))
+            }
+            className={`w-[180px] px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary border-gray-300`}
+            placeholder="Selecione a data inicial"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="status">Data Final</Label>
+          <Input
+            type="date"
+            value={filter.endDate || ""}
+            onChange={(e) =>
+              setFilter((prev) => ({
+                ...prev,
+                endDate: e.target.value || undefined,
+              }))
+            }
+            className={`w-[180px] px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary border-gray-300`}
+            placeholder="Selecione a data final"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="status">Status</Label>
+          <Select
+            onValueChange={(value) =>
+              setFilter((prev) => {
+                return {
+                  ...prev,
+                  status: value === "all" ? undefined : (value as EStatus),
+                };
+              })
+            }
+            value={filter.status || "all"}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Selecione um status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Status</SelectLabel>
+                <SelectItem value="all">Todos</SelectItem>
+                {constantStatus.map((status) => (
+                  <SelectItem key={status.value} value={status.value}>
+                    {status.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
@@ -50,16 +126,13 @@ const TabHistory: React.FC = () => {
             <TableHead>Lance Final</TableHead>
             <TableHead>Data Inicial</TableHead>
             <TableHead>Data Final</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.map((item) => (
-            <TableRow
-              className="cursor-pointer"
-              key={item.id}
-              onClick={() => handleModalOpen(item)}
-            >
+          {clothingData?.items?.map((item) => (
+            <TableRow className="cursor-pointer" key={item.id}>
               <TableCell className="font-medium">{item.name}</TableCell>
               <TableCell>{item.store.name}</TableCell>
               <TableCell>$ {formatCurrencyBR(item.bids[0].bid)}</TableCell>
@@ -77,6 +150,13 @@ const TabHistory: React.FC = () => {
                 )}
               </TableCell>
               <TableCell>
+                {constantStatus.find((status) => status.value === item.status)
+                  ?.label ||
+                  item.status ||
+                  "Indefinido"}
+              </TableCell>
+
+              <TableCell>
                 <button
                   className="mt-4 sm:mt-0 flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-700 transition-colors"
                   onClick={(e) => {
@@ -91,6 +171,7 @@ const TabHistory: React.FC = () => {
           ))}
         </TableBody>
       </Table>
+
       <Dialog open={isUsersBids} onOpenChange={setIsUsersBids}>
         <DialogContent className="max-h-screen overflow-y-auto">
           <DialogHeader>
@@ -159,4 +240,4 @@ const TabHistory: React.FC = () => {
   );
 };
 
-export default TabHistory;
+export default AuctionHistory;

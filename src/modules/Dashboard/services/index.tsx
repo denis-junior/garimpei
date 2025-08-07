@@ -1,18 +1,27 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../../../infra/axiosconfig";
 import {
+  IFilterManage,
   IResponseDashboardBidsProduct,
   IResponseDashboardGain,
   IResponseDashboardNoBids,
   IResponseDashboardProductStore,
+  IResponseManage,
 } from "../types";
 
+export enum EEndPointsDashboard {
+  MANAGE = "clothing/manage",
+  EVOLUTION = "dashboard/evolution",
+  BIDS = "dashboard/bids-clothing",
+  GAIN = "dashboard/gain",
+  NO_BIDS = "dashboard/no-bids-stats",
+}
 export const useGetAllProductStores = (storeId: number) => {
   return useQuery({
-    queryKey: ["evolution", storeId],
+    queryKey: [EEndPointsDashboard.EVOLUTION, storeId],
     queryFn: async () => {
       const response = await api.get<IResponseDashboardProductStore[]>(
-        `/dashboard/evolution/${storeId}`
+        `${EEndPointsDashboard.EVOLUTION}/${storeId}`
       );
       return response.data.map((e) => {
         return {
@@ -29,10 +38,10 @@ export const useGetAllProductStores = (storeId: number) => {
 
 export const useGetBidsProduct = (productId: number) => {
   return useQuery({
-    queryKey: ["bids-clothing", productId],
+    queryKey: [EEndPointsDashboard.BIDS, productId],
     queryFn: async () => {
       const response = await api.get<IResponseDashboardBidsProduct[]>(
-        `/dashboard/bids-clothing/${productId}`
+        `${EEndPointsDashboard.BIDS}/${productId}`
       );
       return response.data;
     },
@@ -42,10 +51,10 @@ export const useGetBidsProduct = (productId: number) => {
 };
 export const useGetGainStore = (storeId: number) => {
   return useQuery({
-    queryKey: ["dashboard-gain", storeId],
+    queryKey: [EEndPointsDashboard.GAIN, storeId],
     queryFn: async () => {
       const response = await api.get<IResponseDashboardGain[]>(
-        `/dashboard/gain/${storeId}`
+        `${EEndPointsDashboard.GAIN}/${storeId}`
       );
       return response.data;
     },
@@ -56,13 +65,58 @@ export const useGetGainStore = (storeId: number) => {
 
 export const useGetNoBidsStats = (storeId: number) => {
   return useQuery({
-    queryKey: ["dashboard-no-bids", storeId],
+    queryKey: [EEndPointsDashboard.NO_BIDS, storeId],
     queryFn: async () => {
       const response = await api.get<IResponseDashboardNoBids>(
-        `/dashboard/no-bids-stats/${storeId}`
+        `${EEndPointsDashboard.NO_BIDS}/${storeId}`
       );
       return response.data;
     },
     refetchInterval: 10000,
+  });
+};
+
+export const useGetClothingManage = (filters: IFilterManage) => {
+  return useQuery({
+    queryKey: [EEndPointsDashboard.MANAGE, ...Object.values(filters)],
+    queryFn: async () => {
+      const response = await api.get<IResponseManage>(
+        EEndPointsDashboard.MANAGE,
+        {
+          params: filters,
+        }
+      );
+      return response.data;
+    },
+  });
+};
+
+export const usePostMarkPaid = (onSubmitSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const response = await api.post(`clothing/${id}/mark-paid`);
+      return response.data;
+    },
+    onSuccess: () => {
+      if (onSubmitSuccess) onSubmitSuccess();
+      queryClient.invalidateQueries({ queryKey: [EEndPointsDashboard.MANAGE] });
+    },
+  });
+};
+
+export const usePostForceNextBidder = (onSubmitSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const response = await api.post(`clothing/${id}/force-next-bidder`);
+      return response.data;
+    },
+    onSuccess: () => {
+      if (onSubmitSuccess) onSubmitSuccess();
+      queryClient.invalidateQueries({ queryKey: [EEndPointsDashboard.MANAGE] });
+    },
   });
 };

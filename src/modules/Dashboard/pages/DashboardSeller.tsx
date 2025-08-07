@@ -3,8 +3,9 @@ import ChartEvolutionAllProductPerStore from "../components/ChartEvolutionAllPro
 import ChartEvolutionProduct from "../components/ChartEvolutionProduct";
 import ChartGainStore from "../components/ChartGainStore";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import TabHistory from "../components/TabHistory";
-const tabs = ["Metricas", "Leilões Finalizados"];
+import CompletedAuctions from "../components/CompletedAuctions";
+import AuctionHistory from "../components/AuctionHistory";
+const tabs = ["Metricas", "Leilões Finalizados", "Histórico de Leilões"];
 const DashboardSeller: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
@@ -18,7 +19,7 @@ const DashboardSeller: React.FC = () => {
         </p>
       </div>
       <Tabs defaultValue="Metricas">
-        <TabsList className="flex justify-center gap-2 bg-primary-50 py-7">
+        <TabsList className="flex justify-center gap-2 bg-primary-25 py-7">
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab}
@@ -42,7 +43,10 @@ const DashboardSeller: React.FC = () => {
           </div>
         </TabsContent>
         <TabsContent value="Leilões Finalizados">
-          <TabHistory />
+          <CompletedAuctions />
+        </TabsContent>
+        <TabsContent value="Histórico de Leilões">
+          <AuctionHistory />
         </TabsContent>
       </Tabs>
     </div>

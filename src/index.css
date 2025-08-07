@@ -31,6 +31,7 @@
     --radius: 0.5rem;
     
     /* Custom primary color variations */
+    --primary-25: 110 85% 98%;
     --primary-50: 110 65% 95%;
     --primary-100: 110 65% 89%;
     --primary-200: 110 65% 79%;
