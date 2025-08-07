@@ -47,14 +47,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import PrimaryButton from "@/components/PrimaryButton";
-// import { useGetFinishedWithBids } from "@/modules/UserProfile/service/History";
 
 const CompletedAuctions: React.FC = () => {
   const [isUsersBids, setIsUsersBids] = React.useState(false);
+  const [isWinnerBids, setIsWinnerBids] = React.useState(false);
   const [item, setItem] = React.useState<IProduct>();
   const { mutate: markPaid } = usePostMarkPaid();
   const { mutate: forceNextBidder } = usePostForceNextBidder();
-  // const { data } = useGetFinishedWithBids();
   const { data: clothingData } = useGetClothingManage({
     status: EStatus.waiting_payment,
   });
@@ -62,6 +61,12 @@ const CompletedAuctions: React.FC = () => {
     setIsUsersBids(true);
     setItem(item);
   };
+  const handleWinnerModalOpen = (item: IProduct) => {
+    setIsWinnerBids(true);
+    setItem(item);
+  };
+
+  const winner = item?.bids.find((e) => e.id === item?.current_winner_bid_id);
   return (
     <div className="container bg-background rounded-md mx-auto px-4 py-8">
       <Table>
@@ -151,7 +156,7 @@ const CompletedAuctions: React.FC = () => {
                   className="mt-4 sm:mt-0 flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-700 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleModalOpen(item);
+                    handleWinnerModalOpen(item);
                   }}
                 >
                   Atual vencedor
@@ -172,6 +177,60 @@ const CompletedAuctions: React.FC = () => {
           ))}
         </TableBody>
       </Table>
+
+      <Dialog open={isWinnerBids} onOpenChange={setIsWinnerBids}>
+        <DialogContent className="max-h-screen overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="mb-4">Atual ganhador</DialogTitle>
+            <DialogDescription>
+              {winner && (
+                <>
+                  <div className="w-full flex flex-col items-center mb-4 gap-1">
+                    <div>
+                      {winner?.date
+                        ? formatDate(
+                            concatDateTimeToDate(
+                              String(winner?.date),
+                              winner?.time
+                            )
+                          )
+                        : "sem data"}
+                    </div>
+                    <div>{winner.buyer.name}</div>
+                    <div className="group-data-completed/timeline-item:bg-primary group-data-completed/timeline-item:text-primary-foreground flex size-8 items-center justify-center group-data-completed/timeline-item:border-none group-data-[orientation=vertical]/timeline:-left-7">
+                      <div
+                        className={cn(
+                          " flex items-center justify-center rounded-full text-lg w-full h-full",
+                          "bg-green-800 text-white"
+                        )}
+                      >
+                        {1}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full flex flex-col items-center mb-4 gap-1">
+                    <a
+                      href={`https://www.instagram.com/${winner.buyer.instagram}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {" "}
+                      {winner.buyer.instagram}{" "}
+                    </a>{" "}
+                    -{" "}
+                    <a href={`tel:${winner.buyer.contact}`}>
+                      {winner.buyer.contact}
+                    </a>
+                  </div>
+                  <div className="mb-4 text-center text-sm font-bold">
+                    Valor dado: R$ {formatCurrencyBR(winner.bid)}
+                  </div>
+                </>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={isUsersBids} onOpenChange={setIsUsersBids}>
         <DialogContent className="max-h-screen overflow-y-auto">

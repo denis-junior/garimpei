@@ -12,12 +12,13 @@ interface BidFormProps {
 }
 
 const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
-  const { mutateAsync } = usePostBid();
   const { user, setIsLoginSheet } = useUser();
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
+    getValues,
   } = useForm<BidFormData>({
     resolver: yupResolver(bidSchema),
     defaultValues: {
@@ -25,6 +26,12 @@ const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
       bid: Number(currentBid) + 1,
     },
   });
+
+  function incrementBid() {
+    return setValue("bid", Number(getValues("bid")) + 1);
+  }
+
+  const { mutateAsync } = usePostBid(incrementBid);
 
   const onSubmit = (data: BidFormData) => {
     if (!user) return setIsLoginSheet(true);
