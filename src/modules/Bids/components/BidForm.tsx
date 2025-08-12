@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MoneyInput from "../../../components/MoneyInput";
 import { usePostBid } from "../services/CRUD-bids";
 import { Controller, useForm } from "react-hook-form";
@@ -17,21 +17,26 @@ const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setValue,
-    getValues,
+    reset,
   } = useForm<BidFormData>({
     resolver: yupResolver(bidSchema),
-    defaultValues: {
-      clothing: productId,
-      bid: Number(currentBid) + 1,
-    },
   });
 
   function incrementBid() {
-    return setValue("bid", Number(getValues("bid")) + 1);
+    return reset({
+      clothing: productId,
+      bid: Number(currentBid) + 1,
+    });
   }
 
   const { mutateAsync } = usePostBid(incrementBid);
+
+  useEffect(() => {
+    reset({
+      clothing: productId,
+      bid: Number(currentBid) + 1,
+    });
+  }, [currentBid, productId, reset]);
 
   const onSubmit = (data: BidFormData) => {
     if (!user) return setIsLoginSheet(true);

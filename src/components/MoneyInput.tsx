@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface MoneyInputProps {
   value?: number;
@@ -21,6 +21,11 @@ const MoneyInput: React.FC<MoneyInputProps> = ({
   label,
 }) => {
   const [internalValue, setInternalValue] = useState(value);
+
+  // Sincronizar estado interno com valor externo
+  useEffect(() => {
+    setInternalValue(value);
+  }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, "");

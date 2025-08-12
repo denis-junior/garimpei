@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CountdownTimer from "../../../components/CountdownTimer";
 import BidForm from "../components/BidForm";
@@ -10,6 +10,7 @@ import { Buyer } from "@/modules/Product/types/product";
 import { useSSE } from "@/hooks/useSSE";
 import { IBid } from "../Types";
 import { useCheckSeller } from "@/utils/checkoSeller";
+import { toast } from "react-toastify";
 
 const BidProductPage: React.FC = () => {
   const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -23,9 +24,10 @@ const BidProductPage: React.FC = () => {
   const checkoSeller = useCheckSeller();
 
   const [listBids, setListBids] = useState<IBid[]>([]);
+  const previousMessagesLength = useRef(0);
 
   const { messages } = useSSE<{ bid: IBid; clothingId: number }>(
-    `${VITE_API_BASE_URL}/bid/stream/${id || ""}`,
+    `${VITE_API_BASE_URL}bid/stream/${id || ""}`,
     {
       events: {
         "custom-event": (data) => console.log("Custom Event:", data),
@@ -39,11 +41,59 @@ const BidProductPage: React.FC = () => {
   useEffect(() => {
     if (!product?.bids) return;
 
+    const getBidderNameForToast = (buyer: Buyer) => {
+      if (checkoSeller) return buyer?.name || "Anônimo";
+      if (buyer?.id === currentUser?.id) {
+        return "Você";
+      }
+      const name = buyer?.name;
+      if (!name) return "Anônimo";
+      if (name?.length <= 4) {
+        return (
+          name?.slice(0, 1) +
+          "*".repeat(Math.max(0, name.length - 2)) +
+          name?.slice(-1)
+        );
+      }
+      return (
+        name?.slice(0, 2) +
+        "*".repeat(Math.max(0, name.length - 4)) +
+        name?.slice(-2)
+      );
+    };
+
     let allBids: IBid[] = [];
 
     if (messages && messages.length > 0) {
       // Extrair novos lances do SSE
       const newBids = messages.map((m) => m.bid);
+
+      // Verificar se há novos lances para mostrar toast
+      if (messages.length > previousMessagesLength.current) {
+        const latestMessage = messages[messages.length - 1];
+        const latestBid = latestMessage.bid;
+
+        // Verificar se o lance não é do usuário atual
+        if (latestBid.buyer.id !== currentUser?.id) {
+          const bidderName = getBidderNameForToast(latestBid.buyer);
+          toast.success(
+            `Novo lance! ${bidderName} ofereceu ${formatCurrencyBR(
+              Number(latestBid.bid)
+            )}`,
+            {
+              position: "top-center",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            }
+          );
+        }
+
+        // Atualizar a referência do comprimento das mensagens
+        previousMessagesLength.current = messages.length;
+      }
 
       // Filtrar lances originais para remover duplicatas
       const originalBidsFiltered = product.bids.filter(
@@ -61,7 +111,7 @@ const BidProductPage: React.FC = () => {
     allBids.sort((a, b) => Number(b.bid) - Number(a.bid));
 
     setListBids(allBids);
-  }, [product, messages]);
+  }, [product, messages, currentUser?.id, checkoSeller]);
 
   if (!product) {
     return (
