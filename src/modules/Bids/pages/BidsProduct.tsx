@@ -12,6 +12,7 @@ import { IBid } from "../Types";
 import { useCheckSeller } from "@/utils/checkoSeller";
 
 const BidProductPage: React.FC = () => {
+  const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const { id } = useParams<{ id: string }>();
   const { data: product } = useGetProduct(id || "");
   const navigate = useNavigate();
@@ -23,8 +24,8 @@ const BidProductPage: React.FC = () => {
 
   const [listBids, setListBids] = useState<IBid[]>([]);
 
-  const { connected, messages } = useSSE<{ bid: IBid; clothingId: number }>(
-    "http://localhost:3000/bid/stream/" + (id || ""),
+  const { messages } = useSSE<{ bid: IBid; clothingId: number }>(
+    `${VITE_API_BASE_URL}/bid/stream/${id || ""}`,
     {
       events: {
         "custom-event": (data) => console.log("Custom Event:", data),
@@ -36,19 +37,31 @@ const BidProductPage: React.FC = () => {
   );
 
   useEffect(() => {
-    if (product?.bids) {
-      if (messages?.length) {
-        setListBids([
-          ...messages.map((m) => m.bid).sort((a, b) => b.bid - a.bid),
-          ...product.bids.filter((bid) =>
-            messages.some((m) => m.bid.id !== bid.id)
-          ),
-        ]);
-      } else {
-        setListBids([...product.bids]);
-      }
+    if (!product?.bids) return;
+
+    let allBids: IBid[] = [];
+
+    if (messages && messages.length > 0) {
+      // Extrair novos lances do SSE
+      const newBids = messages.map((m) => m.bid);
+
+      // Filtrar lances originais para remover duplicatas
+      const originalBidsFiltered = product.bids.filter(
+        (originalBid) => !newBids.some((newBid) => newBid.id === originalBid.id)
+      );
+
+      // Combinar todos os lances
+      allBids = [...newBids, ...originalBidsFiltered];
+    } else {
+      // Se não há mensagens SSE, usar apenas os lances originais
+      allBids = [...product.bids];
     }
-  }, [id, product, connected, messages]);
+
+    // Ordenar por valor do lance (maior para menor)
+    allBids.sort((a, b) => Number(b.bid) - Number(a.bid));
+
+    setListBids(allBids);
+  }, [product, messages]);
 
   if (!product) {
     return (
@@ -194,7 +207,7 @@ const BidProductPage: React.FC = () => {
                 </div>
                 <div className="text-2xl font-bold text-primary">
                   R$
-                  {product.bids?.[0]?.bid || product.initial_bid}
+                  {listBids?.[0]?.bid || product.initial_bid}
                 </div>
               </div>
             </div>
@@ -212,7 +225,7 @@ const BidProductPage: React.FC = () => {
               </h2>
               <BidForm
                 productId={product.id}
-                currentBid={product.bids?.[0]?.bid || product.initial_bid}
+                currentBid={listBids?.[0]?.bid || product.initial_bid}
               />
             </div>
 
@@ -221,7 +234,7 @@ const BidProductPage: React.FC = () => {
                 Histórico de Lances
               </h2>
 
-              {product.bids?.length === 0 ? (
+              {listBids?.length === 0 ? (
                 <p className="text-gray-500">
                   Nenhum lance ainda, seja o primeiro!
                 </p>

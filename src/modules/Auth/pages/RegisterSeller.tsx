@@ -1,209 +1,101 @@
-import React from "react";
-import InputMask from "react-input-mask";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { FormDataRegister, RegisterSchema } from "../schema/Register.schema";
+import React, { useState } from "react";
+import FormRegister from "../components/FormRegister";
+import { FormDataRegister } from "../schema/Register.schema";
 import { useRegisterSeller } from "../hooks/useRegister";
-import { SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Gem, Store } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 const RegisterSellerPage: React.FC = () => {
   const navigate = useNavigate();
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<FormDataRegister>({
-    resolver: yupResolver(RegisterSchema),
-    defaultValues: {
-      name: "",
-      cpf: "",
-      contact: "",
-      instagram: "@",
-      password: "",
-      confirmPassword: "",
-      email: "",
-    },
-  });
+  const [logoError, setLogoError] = useState(false);
+  const { mutate, isPending, isError, error } = useRegisterSeller();
 
-  const { mutate } = useRegisterSeller();
-
-  const onSubmit: SubmitHandler<FormDataRegister> = (data) => {
+  const onSubmit = (data: FormDataRegister) => {
     mutate(data);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm">
-        <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">
-          Criar Conta
-        </h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-gray-700 text-sm mb-1">Nome</label>
-            <Controller
-              name="name"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Seu nome"
-                />
-              )}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-primary-100 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="w-full max-w-lg animate-in fade-in-0 duration-500">
+        {/* Logo */}
+        <div className="text-center mb-6 sm:mb-8 animate-in slide-in-from-top-4 duration-700">
+          {!logoError ? (
+            <img
+              src={logoImg}
+              alt="Garimpei"
+              className="h-12 sm:h-16 w-auto mx-auto mb-3 sm:mb-4 transition-transform hover:scale-105 duration-300"
+              onError={() => setLogoError(true)}
             />
-            {errors.name && (
-              <p className="text-red-600 text-xs">{errors.name.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm mb-1">email</label>
-            <Controller
-              name="email"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Email"
-                />
-              )}
-            />
-            {errors.name && (
-              <p className="text-red-600 text-xs">{errors.name.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm mb-1">CPF</label>
-            <Controller
-              name="cpf"
-              control={control}
-              render={({ field }) => (
-                <InputMask mask="999.999.999-99" {...field}>
-                  {(inputProps) => (
-                    <input
-                      {...inputProps}
-                      className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="000.000.000-00"
-                    />
-                  )}
-                </InputMask>
-              )}
-            />
-            {errors.cpf && (
-              <p className="text-red-600 text-xs">{errors.cpf.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm mb-1">Telefone</label>
-            <Controller
-              name="contact"
-              control={control}
-              render={({ field }) => (
-                <InputMask mask="(99) 99999-9999" {...field}>
-                  {(inputProps) => (
-                    <input
-                      {...inputProps}
-                      className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="(00) 00000-0000"
-                    />
-                  )}
-                </InputMask>
-              )}
-            />
-            {errors.contact && (
-              <p className="text-red-600 text-xs">{errors.contact.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm mb-1">
-              Instagram
-            </label>
-            <Controller
-              name="instagram"
-              control={control}
-              render={({ field: { value, onChange, ...rest } }) => (
-                <input
-                  {...rest}
-                  value={
-                    value.startsWith("@")
-                      ? value
-                      : "@" + value.replace(/\s/g, "")
-                  }
-                  onChange={(e) => onChange(e.target.value.replace(/\s/g, ""))}
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="@seuusuario"
-                />
-              )}
-            />
-            {errors.instagram && (
-              <p className="text-red-600 text-xs">{errors.instagram.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm mb-1">Senha</label>
-            <Controller
-              name="password"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="password"
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Crie uma senha"
-                />
-              )}
-            />
-            {errors.password && (
-              <p className="text-red-600 text-xs">{errors.password.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm mb-1">
-              Repetir Senha
-            </label>
-            <Controller
-              name="confirmPassword"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="password"
-                  className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Repita a senha"
-                />
-              )}
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-600 text-xs">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-primary text-white rounded-md hover:bg-primary-800 transition-colors text-sm"
-          >
-            Registrar
-          </button>
-        </form>
-
-        <p className="text-xs text-gray-600 mt-4 text-center">
-          Já tem uma conta?{" "}
-          <p
-            onClick={() => navigate("/auth/login")}
-            className="text-primary hover:underline"
-          >
-            Entrar
+          ) : (
+            <div className="flex justify-center mb-3 sm:mb-4">
+              <div className="bg-primary rounded-full p-2.5 sm:p-3 transition-transform hover:scale-105 duration-300 shadow-lg">
+                <Gem className="h-8 sm:h-10 w-8 sm:w-10 text-white" />
+              </div>
+            </div>
+          )}
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+            Bem-vindo ao Garimpei
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-2">
+            Sua plataforma de leilões online
           </p>
-        </p>
+        </div>
+
+        {/* Register Card */}
+        <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm animate-in slide-in-from-bottom-4 duration-700 delay-150 mx-2 sm:mx-0">
+          <CardHeader className="space-y-1 pb-4 px-4 sm:px-6">
+            <div className="flex items-center justify-center mb-2">
+              <div className="bg-primary-100 rounded-full p-2 mr-3">
+                <Store className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl sm:text-2xl font-semibold text-gray-900">
+                Registro de Vendedor
+              </CardTitle>
+            </div>
+            <CardDescription className="text-center text-gray-600 text-sm sm:text-base">
+              Crie sua conta para vender em leilões
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-4 sm:px-6">
+            <FormRegister
+              onRegister={onSubmit}
+              isPending={isPending}
+              isError={isError}
+              error={error}
+              userType="seller"
+            />
+          </CardContent>
+        </Card>
+
+        {/* Footer Links */}
+        <div className="mt-4 sm:mt-6 text-center space-y-2 animate-in slide-in-from-bottom-4 duration-700 delay-300 px-2 sm:px-0">
+          <p className="text-xs sm:text-sm text-gray-600">
+            Já tem uma conta?{" "}
+            <span
+              onClick={() => navigate("/auth/login")}
+              className="text-primary font-medium hover:text-primary-700 transition-colors hover:underline cursor-pointer"
+            >
+              Entrar
+            </span>
+          </p>
+          <p className="text-xs text-gray-500">
+            Quer comprar?{" "}
+            <a
+              href="/auth/register/buyer"
+              className="text-primary hover:text-primary-700 transition-colors hover:underline"
+            >
+              Cadastre-se como comprador
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
