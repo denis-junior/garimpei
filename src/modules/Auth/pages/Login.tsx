@@ -56,7 +56,7 @@ const LoginPage: React.FC = () => {
               </div>
             )}
             <CardTitle className="text-xl sm:text-2xl font-semibold text-center text-gray-900">
-              Entre em sua conta
+              Acesse sua conta
             </CardTitle>
             <CardDescription className="text-center text-gray-600 text-sm sm:text-base">
               Digite suas credenciais para acessar sua conta
