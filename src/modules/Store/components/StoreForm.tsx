@@ -2,14 +2,21 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { StoreFormData, schema } from "../schema/store.schema";
-import { usePostStore } from "../services/CRUD-stores";
+import { usePostStore, useUpdateStore } from "../services/CRUD-stores";
+import { IStore } from "../types/store";
 import InputMask from "react-input-mask";
 
 interface IStoreFormProps {
   onSubmitSuccess?: () => void;
+  initialData?: IStore;
+  isEditMode?: boolean;
 }
 
-const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
+const StoreForm: React.FC<IStoreFormProps> = ({
+  onSubmitSuccess,
+  initialData,
+  isEditMode = false,
+}) => {
   const {
     register,
     control,
@@ -18,14 +25,34 @@ const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
   } = useForm<StoreFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
-      instagram: "@",
+      name: initialData?.name || "",
+      description: initialData?.description || "",
+      contact: initialData?.contact || "",
+      instagram: initialData?.instagram || "@",
+      address: initialData?.address || "",
     },
   });
 
-  const { mutate, isPending } = usePostStore({ onSubmitSuccess });
+  const { mutate: createStore, isPending: isCreating } = usePostStore({
+    onSubmitSuccess,
+  });
+  const { mutate: updateStore, isPending: isUpdating } = useUpdateStore();
+
+  const isPending = isCreating || isUpdating;
 
   const onSubmit = (data: StoreFormData) => {
-    mutate(data);
+    if (isEditMode && initialData) {
+      updateStore(
+        { id: initialData.id.toString(), data },
+        {
+          onSuccess: () => {
+            if (onSubmitSuccess) onSubmitSuccess();
+          },
+        }
+      );
+    } else {
+      createStore(data);
+    }
   };
 
   return (
@@ -157,7 +184,13 @@ const StoreForm: React.FC<IStoreFormProps> = ({ onSubmitSuccess }) => {
           disabled={isSubmitting || isPending}
           className="w-full py-3 px-4 bg-primary text-white font-medium rounded-md shadow hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors disabled:opacity-50"
         >
-          {isPending ? "Enviando..." : "Enviar"}
+          {isPending
+            ? isEditMode
+              ? "Atualizando..."
+              : "Enviando..."
+            : isEditMode
+            ? "Atualizar Loja"
+            : "Criar Loja"}
         </button>
       </div>
     </form>

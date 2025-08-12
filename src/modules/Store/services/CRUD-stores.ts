@@ -19,7 +19,7 @@ const getStore = async (storeId: number) => {
 };
 
 const updateStore = async (storeId: string, store: StoreFormData) => {
-  const response = await api.put<IStore>(`/stores/${storeId}`, store);
+  const response = await api.patch<IStore>(`/stores/${storeId}`, store);
   return response.data;
 };
 

@@ -11,17 +11,40 @@ import { useCheckSeller } from "../../../utils/checkoSeller";
 
 const StoresPage: React.FC = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editingStore, setEditingStore] = useState<IStore | null>(null);
   const [itemDelete, setItemDelete] = useState<IStore>();
   const { data: listStores } = useGetAllStores({ page: 1 });
   const { mutate } = useDeleteStore();
   const checkSeller = useCheckSeller();
 
   const toggleCreateForm = () => {
-    setShowCreateForm(!showCreateForm);
+    if (showEditForm) {
+      setShowEditForm(false);
+      setEditingStore(null);
+    } else {
+      setShowCreateForm(!showCreateForm);
+    }
+  };
+
+  const toggleEditForm = (store?: IStore) => {
+    if (store) {
+      setEditingStore(store);
+      setShowEditForm(true);
+      setShowCreateForm(false);
+    } else {
+      setShowEditForm(false);
+      setEditingStore(null);
+    }
   };
 
   const handleCreateSuccess = () => {
     setShowCreateForm(false);
+  };
+
+  const handleEditSuccess = () => {
+    setShowEditForm(false);
+    setEditingStore(null);
   };
 
   const confirmDelete = (
@@ -51,7 +74,7 @@ const StoresPage: React.FC = () => {
           subtitle="Crie e gerencie suas lojas."
           action={
             <PrimaryButton onClick={toggleCreateForm}>
-              {showCreateForm ? (
+              {showCreateForm || showEditForm ? (
                 <>
                   <X className="w-5 h-5 mr-2" />
                   Cancelar
@@ -73,6 +96,27 @@ const StoresPage: React.FC = () => {
             Criar Nova Loja
           </h2>
           <StoreForm onSubmitSuccess={handleCreateSuccess} />
+        </div>
+      )}
+
+      {showEditForm && editingStore && checkSeller && (
+        <div className="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Editar Loja: {editingStore.name}
+            </h2>
+            <button
+              onClick={() => toggleEditForm()}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <StoreForm
+            initialData={editingStore}
+            isEditMode={true}
+            onSubmitSuccess={handleEditSuccess}
+          />
         </div>
       )}
 
@@ -110,8 +154,12 @@ const StoresPage: React.FC = () => {
                   {checkSeller && (
                     <div className=" flex ">
                       <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleEditForm(store);
+                        }}
                         className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-primary hover:bg-opacity-100 transition-colors"
-                        title="Edit auction"
+                        title="Edit store"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
@@ -119,7 +167,7 @@ const StoresPage: React.FC = () => {
                       <button
                         onClick={(e) => confirmDelete(e, store)}
                         className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-red-600 hover:bg-opacity-100 transition-colors"
-                        title="Delete auction"
+                        title="Delete store"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
