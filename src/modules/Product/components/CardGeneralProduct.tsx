@@ -10,6 +10,7 @@ interface ICardGeneralProductProps {
 const CardGeneralProduct: React.FC<ICardGeneralProductProps> = ({
   idStore,
 }) => {
+  const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const { data: store } = useGetStore(idStore);
   const [attBids, setAttBids] = React.useState<
     { bid: IBid; clothingId: number } | undefined
@@ -17,7 +18,7 @@ const CardGeneralProduct: React.FC<ICardGeneralProductProps> = ({
   const [products, setProducts] = React.useState<IProduct[]>([]);
 
   const { connected } = useSSE<{ bid: IBid; clothingId: number }>(
-    "http://localhost:3000/bid/stream/all",
+    `${VITE_API_BASE_URL}bid/stream/all`,
     {
       onMessage: (data) => setAttBids(data),
       events: {

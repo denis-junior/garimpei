@@ -9,6 +9,8 @@ import { IBid } from "@/modules/Bids/Types";
 import { IProduct } from "@/modules/Product/types/product";
 
 const HomeViewerPage: React.FC = () => {
+  const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const {
     data: productsData,
     fetchNextPage,
@@ -26,7 +28,7 @@ const HomeViewerPage: React.FC = () => {
   >();
 
   const { connected } = useSSE<{ bid: IBid; clothingId: number }>(
-    "http://localhost:3000/bid/stream/all",
+    `${VITE_API_BASE_URL}bid/stream/all`,
     {
       onMessage: (data) => setAttBids(data),
       events: {
