@@ -85,14 +85,11 @@ const ProductDetail: React.FC = () => {
                 alt={product.name}
                 className="w-full h-64 md:h-96 object-cover object-center"
               />
-              <div className="absolute top-4 right-4">
-                <Badge
-                  variant="secondary"
-                  className="bg-black bg-opacity-70 text-white"
-                >
+              <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
+                <span className="flex items-center">
                   <Tag className="h-3 w-3 mr-1" />
                   {product.size}
-                </Badge>
+                </span>
               </div>
             </div>
           </Card>
