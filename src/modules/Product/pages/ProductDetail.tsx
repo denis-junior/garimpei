@@ -1,81 +1,277 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useGetProduct } from "../services/CRUD-product";
 import PageHeader from "../../../components/PageHeader";
 import { concatDateTimeToDate, formatDate } from "@/utils/formatDate";
+import { formatCurrencyBR } from "@/utils/formatCurrencyBr";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  Calendar,
+  Clock,
+  DollarSign,
+  Users,
+  Instagram,
+  Store,
+  Tag,
+  TrendingUp,
+} from "lucide-react";
+import Loader from "@/components/Loader";
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { data: product, isLoading, isError } = useGetProduct(id || "");
 
   if (isLoading) {
-    return <div className="container mx-auto px-4 py-8">Carregando...</div>;
+    return (
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-64">
+        <Loader />
+      </div>
+    );
   }
 
   if (isError || !product) {
     return (
-      <div className="container mx-auto px-4 py-8">Produto não encontrado.</div>
+      <div className="container mx-auto px-4 py-8">
+        <Card className="p-8 text-center">
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+            Produto não encontrado
+          </h3>
+          <p className="text-gray-500 mb-4">
+            O produto que você está procurando não existe ou foi removido.
+          </p>
+          <Button onClick={() => navigate(-1)} variant="outline">
+            Voltar
+          </Button>
+        </Card>
+      </div>
     );
   }
 
+  const currentBid =
+    product.bids[product.bids.length - 1]?.bid || product.initial_bid;
+  const isAuctionActive = new Date(product.end_date) > new Date();
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <PageHeader title={product.name} subtitle={product.description} />
+      <PageHeader
+        title={product.name}
+        subtitle={product.description}
+        action={
+          product.store && (
+            <Button
+              variant="outline"
+              onClick={() => navigate(`/store/${product.store?.id}`)}
+              className="flex items-center gap-2"
+            >
+              <Store className="h-4 w-4" />
+              Ver Loja
+            </Button>
+          )
+        }
+      />
 
-      <div className="mt-6">
-        <h2 className="text-lg font-semibold mb-4">Detalhes</h2>
-        <p>
-          <strong>Lance Inicial:</strong> R$ {product.initial_bid}
-        </p>
-        <p>
-          <strong>Data de Início:</strong>{" "}
-          {new Date(product.initial_date).toLocaleDateString()}
-        </p>
-        <p>
-          <strong>Data de Encerramento:</strong>{" "}
-          {new Date(product.end_date).toLocaleDateString()}
-        </p>
-        <p>
-          <strong>Tamanho:</strong> {product.size}
-        </p>
-      </div>
-
-      <div className="mt-8">
-        <h2 className="text-lg font-semibold mb-4">Lances</h2>
-        {product.bids.length === 0 ? (
-          <p>Nenhum lance até o momento.</p>
-        ) : (
-          <ul className="space-y-4">
-            {product.bids.map((bid) => (
-              <li key={bid.id} className="p-4 border rounded-lg shadow">
-                <p>
-                  <strong>Valor:</strong> R$ {bid.bid}
-                </p>
-                <p>
-                  <strong>Comprador:</strong> {bid.buyer.name}
-                </p>
-                <a
-                  href={`https://instagram.com/${bid.buyer.instagram.replace(
-                    /@/,
-                    ""
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className=" cursor-pointer"
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        {/* Imagem do Produto */}
+        <div className="lg:col-span-2">
+          <Card className="overflow-hidden">
+            <div className="relative">
+              <img
+                src={
+                  product.images?.[0]?.url ||
+                  "https://th.bing.com/th/id/OIP.rm4o2LZV2iOu83ECOsG-pwHaEm?rs=1&pid=ImgDetMain"
+                }
+                alt={product.name}
+                className="w-full h-64 md:h-96 object-cover object-center"
+              />
+              <div className="absolute top-4 right-4">
+                <Badge
+                  variant="secondary"
+                  className="bg-black bg-opacity-70 text-white"
                 >
-                  <strong>Instagram:</strong> {bid.buyer.instagram}
-                </a>
-                <p className="text-sm text-gray-500">
-                  <strong>Data:</strong>{" "}
-                  {formatDate(
-                    concatDateTimeToDate(String(bid.date), bid.time)
-                  ).toLocaleString()}
-                </p>
-              </li>
-            ))}
-          </ul>
-        )}
+                  <Tag className="h-3 w-3 mr-1" />
+                  {product.size}
+                </Badge>
+              </div>
+              {isAuctionActive && (
+                <div className="absolute top-4 left-4">
+                  <Badge className="bg-green-500 text-white">
+                    <Clock className="h-3 w-3 mr-1" />
+                    Ativo
+                  </Badge>
+                </div>
+              )}
+            </div>
+          </Card>
+        </div>
+
+        {/* Informações do Leilão */}
+        <div className="space-y-6">
+          {/* Lance Atual */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <TrendingUp className="h-5 w-5 text-primary" />
+                Lance Atual
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-primary mb-2">
+                {formatCurrencyBR(Number(currentBid))}
+              </div>
+              <p className="text-sm text-gray-500">
+                Lance inicial: {formatCurrencyBR(Number(product.initial_bid))}
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Detalhes do Leilão */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Detalhes do Leilão</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Calendar className="h-4 w-4 text-gray-500" />
+                <div>
+                  <p className="text-sm font-medium">Data de Início</p>
+                  <p className="text-sm text-gray-600">
+                    {new Date(product.initial_date).toLocaleDateString("pt-BR")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Clock className="h-4 w-4 text-gray-500" />
+                <div>
+                  <p className="text-sm font-medium">Data de Encerramento</p>
+                  <p className="text-sm text-gray-600">
+                    {new Date(product.end_date).toLocaleDateString("pt-BR")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Users className="h-4 w-4 text-gray-500" />
+                <div>
+                  <p className="text-sm font-medium">Total de Lances</p>
+                  <p className="text-sm text-gray-600">{product.bids.length}</p>
+                </div>
+              </div>
+
+              {product.store && (
+                <div className="flex items-center gap-3">
+                  <Store className="h-4 w-4 text-gray-500" />
+                  <div>
+                    <p className="text-sm font-medium">Loja</p>
+                    <p className="text-sm text-gray-600">
+                      {product.store.name}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Ação de Lance */}
+          {isAuctionActive && (
+            <Button
+              className="w-full py-6 text-lg font-semibold"
+              onClick={() => navigate(`/bids/${product.id}`)}
+            >
+              <DollarSign className="h-5 w-5 mr-2" />
+              Fazer Lance
+            </Button>
+          )}
+        </div>
       </div>
+
+      {/* Histórico de Lances */}
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Histórico de Lances ({product.bids.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {product.bids.length === 0 ? (
+            <div className="text-center py-8">
+              <Users className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                Nenhum lance até o momento
+              </h3>
+              <p className="text-gray-500">
+                Seja o primeiro a fazer um lance neste leilão!
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {product.bids
+                .sort((a, b) => Number(b.bid) - Number(a.bid))
+                .map((bid, index) => (
+                  <div
+                    key={bid.id}
+                    className="flex items-center justify-between p-4 rounded-lg border bg-gray-50 hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <Avatar className="h-10 w-10">
+                          <AvatarFallback className="bg-primary text-white">
+                            {bid.buyer.name.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        {index === 0 && (
+                          <Badge className="absolute -top-2 -right-2 text-xs px-1 py-0">
+                            Maior
+                          </Badge>
+                        )}
+                      </div>
+
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-gray-800">
+                            {bid.buyer.name}
+                          </p>
+                          {bid.buyer.instagram && (
+                            <a
+                              href={`https://instagram.com/${bid.buyer.instagram.replace(
+                                /@/,
+                                ""
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors"
+                            >
+                              <Instagram className="h-3 w-3" />
+                              <span className="text-xs">
+                                {bid.buyer.instagram}
+                              </span>
+                            </a>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-500">
+                          {formatDate(
+                            concatDateTimeToDate(String(bid.date), bid.time)
+                          ).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-primary">
+                        {formatCurrencyBR(Number(bid.bid))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
