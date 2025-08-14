@@ -70,7 +70,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 <button
                   onClick={(e) => confirmDelete(e, product)}
                   className="p-2 bg-white bg-opacity-80 rounded-full text-gray-700 hover:text-red-600 hover:bg-opacity-100 transition-colors"
-                  title="Delete auction"
+                  title="Deletar"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

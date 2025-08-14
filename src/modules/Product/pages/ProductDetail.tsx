@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import {
   Calendar,
   Clock,
-  DollarSign,
   Users,
   Instagram,
   Store,
@@ -53,7 +52,6 @@ const ProductDetail: React.FC = () => {
 
   const currentBid =
     product.bids[product.bids.length - 1]?.bid || product.initial_bid;
-  const isAuctionActive = new Date(product.end_date) > new Date();
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -96,14 +94,6 @@ const ProductDetail: React.FC = () => {
                   {product.size}
                 </Badge>
               </div>
-              {isAuctionActive && (
-                <div className="absolute top-4 left-4">
-                  <Badge className="bg-green-500 text-white">
-                    <Clock className="h-3 w-3 mr-1" />
-                    Ativo
-                  </Badge>
-                </div>
-              )}
             </div>
           </Card>
         </div>
@@ -185,17 +175,6 @@ const ProductDetail: React.FC = () => {
               )}
             </CardContent>
           </Card>
-
-          {/* Ação de Lance */}
-          {isAuctionActive && (
-            <Button
-              className="w-full py-6 text-lg font-semibold"
-              onClick={() => navigate(`/bids/${product.id}`)}
-            >
-              <DollarSign className="h-5 w-5 mr-2" />
-              Fazer Lance
-            </Button>
-          )}
         </div>
       </div>
 
