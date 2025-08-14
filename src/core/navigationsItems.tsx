@@ -1,5 +1,5 @@
 import { useUser } from "@/hooks/useUser";
-import { ShoppingBag, Tag, User, PieChart } from "lucide-react";
+import { ShoppingBag, Tag, User, LineChart } from "lucide-react";
 
 export enum UserType {
   BUYER = "buyer",
@@ -25,7 +25,7 @@ export const useNavigationsItems = () => {
     {
       name: "Dashboard",
       path: `/dashboard/${user?.seller ? "seller" : "buyer"}`,
-      icon: <PieChart className="w-5 h-5" />,
+      icon: <LineChart className="w-5 h-5" />,
       type: UserType.SELLER,
       offToken: false,
     },
