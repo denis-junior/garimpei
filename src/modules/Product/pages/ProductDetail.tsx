@@ -139,7 +139,12 @@ const ProductDetail: React.FC = () => {
                 <div>
                   <p className="text-sm font-medium">Data de Início</p>
                   <p className="text-sm text-gray-600">
-                    {new Date(product.initial_date).toLocaleDateString("pt-BR")}
+                    {formatDate(
+                      concatDateTimeToDate(
+                        String(product.initial_date),
+                        product.initial_time
+                      )
+                    )}
                   </p>
                 </div>
               </div>
@@ -149,7 +154,12 @@ const ProductDetail: React.FC = () => {
                 <div>
                   <p className="text-sm font-medium">Data de Encerramento</p>
                   <p className="text-sm text-gray-600">
-                    {new Date(product.end_date).toLocaleDateString("pt-BR")}
+                    {formatDate(
+                      concatDateTimeToDate(
+                        String(product.end_date),
+                        product.end_time
+                      )
+                    )}
                   </p>
                 </div>
               </div>
