@@ -1,12 +1,12 @@
 import { useUser } from "@/hooks/useUser";
 import api from "../../../infra/axiosconfig";
 import { FormDataLogin } from "../schema/Login.schema";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
 export const useLogin = ({ onLogin }: { onLogin?: () => void }) => {
   const { setUser } = useUser();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return useMutation({
     mutationFn: async (data: FormDataLogin) => {
@@ -21,7 +21,8 @@ export const useLogin = ({ onLogin }: { onLogin?: () => void }) => {
       if (onLogin) {
         return onLogin();
       }
-      navigate("/");
+      window.location.href = "/";
+      // navigate("/");
     },
     onError: (error) => console.log(error),
   });
