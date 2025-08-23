@@ -18,20 +18,20 @@ const Footer: React.FC = () => {
             </p>
             <div className="flex space-x-4">
               <a
-                href="#"
-                className="text-gray-300 hover:text-teal-400 transition-colors"
+                href="https://www.instagram.com/garimpeiapp/"
+                className="text-gray-300 hover:text-primary transition-colors"
               >
                 <Instagram className="h-5 w-5" />
               </a>
               <a
-                href="#"
-                className="text-gray-300 hover:text-teal-400 transition-colors"
+                href="https://www.instagram.com/garimpeiapp/"
+                className="text-gray-300 hover:text-primary transition-colors"
               >
                 <Twitter className="h-5 w-5" />
               </a>
               <a
-                href="#"
-                className="text-gray-300 hover:text-teal-400 transition-colors"
+                href="https://www.instagram.com/garimpeiapp/"
+                className="text-gray-300 hover:text-primary transition-colors"
               >
                 <Facebook className="h-5 w-5" />
               </a>
@@ -43,16 +43,16 @@ const Footer: React.FC = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="/"
-                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                  to="https://www.instagram.com/garimpeiapp/"
+                  className="text-gray-300 hover:text-primary transition-colors"
                 >
                   FAQ
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/"
-                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                  to="https://www.instagram.com/garimpeiapp/"
+                  className="text-gray-300 hover:text-primary transition-colors"
                 >
                   Entre em Contato
                 </Link>
@@ -60,7 +60,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/"
-                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                  className="text-gray-300 hover:text-primary transition-colors"
                 >
                   Termos e Condições
                 </Link>
@@ -68,7 +68,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/"
-                  className="text-gray-300 hover:text-teal-400 transition-colors"
+                  className="text-gray-300 hover:text-primary transition-colors"
                 >
                   Política de Privacidade
                 </Link>

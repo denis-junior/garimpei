@@ -11,11 +11,12 @@ import { useSSE } from "@/hooks/useSSE";
 import { IBid } from "../Types";
 import { useCheckSeller } from "@/utils/checkoSeller";
 import { toast } from "react-toastify";
+import Loader from "@/components/Loader";
 
 const BidProductPage: React.FC = () => {
   const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const { id } = useParams<{ id: string }>();
-  const { data: product } = useGetProduct(id || "");
+  const { data: product, isLoading } = useGetProduct(id || "");
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(0);
   const userString = localStorage.getItem("user");
@@ -114,6 +115,18 @@ const BidProductPage: React.FC = () => {
   }, [product, messages, currentUser?.id, checkoSeller]);
 
   if (!product) {
+    if (isLoading)
+      return (
+        <div className="container mx-auto px-4 py-8 text-center">
+          <div className="bg-yellow-50 p-6 rounded-lg">
+            <Loader />;
+            <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+              Carregando...
+            </h2>
+          </div>
+        </div>
+      );
+
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <div className="bg-yellow-50 p-6 rounded-lg">
@@ -180,7 +193,6 @@ const BidProductPage: React.FC = () => {
           {/* Image gallery */}
           <div>
             <div className="relative aspect-w-1 aspect-h-1 mb-3 rounded-lg overflow-hidden">
-              {/* Imagem de fundo com blur */}
               <div
                 className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105"
                 style={{
@@ -188,10 +200,8 @@ const BidProductPage: React.FC = () => {
                 }}
               />
 
-              {/* Overlay escuro para melhor contraste */}
               <div className="absolute inset-0 bg-black bg-opacity-20" />
 
-              {/* Imagem principal com object-contain */}
               <img
                 src={product.images[selectedImage].url}
                 alt={product.images[selectedImage].url || "product Item"}
