@@ -76,14 +76,25 @@ const ProductDetail: React.FC = () => {
         {/* Imagem do Produto */}
         <div className="lg:col-span-2">
           <Card className="overflow-hidden">
-            <div className="relative">
+            <div className="relative ">
+              <div
+                className="absolute  h-44 sm:h-96 inset-0 bg-cover bg-center filter blur-sm scale-105"
+                style={{
+                  backgroundImage: `url(${
+                    product?.images?.[0]?.url ??
+                    "https://th.bing.com/th/id/R.0065d42f4349d2ffdcce16e22e7e9c4a?rik=h5yH%2fslzdTnATQ&riu=http%3a%2f%2fwww.wixeq.com%2fwp-content%2fuploads%2f2017%2f12%2fsem-imagem.jpg&ehk=d32D9mtcYvZSbd1xnS2Qv6kSPoqLi98uqHWp%2fPTZnt8%3d&risl=&pid=ImgRaw&r=0"
+                  })`,
+                }}
+              />
+
+              <div className="absolute inset-0 bg-black bg-opacity-40" />
               <img
                 src={
                   product.images?.[0]?.url ||
                   "https://th.bing.com/th/id/OIP.rm4o2LZV2iOu83ECOsG-pwHaEm?rs=1&pid=ImgDetMain"
                 }
                 alt={product.name}
-                className="w-full h-64 md:h-96 object-cover object-center"
+                className="relative w-full h-48 sm:h-96 object-contain object-center "
               />
               <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
                 <span className="flex items-center">

@@ -179,14 +179,26 @@ const BidProductPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
           {/* Image gallery */}
           <div>
-            <div className="relative aspect-w-1 aspect-h-1 mb-3">
+            <div className="relative aspect-w-1 aspect-h-1 mb-3 rounded-lg overflow-hidden">
+              {/* Imagem de fundo com blur */}
+              <div
+                className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105"
+                style={{
+                  backgroundImage: `url(${product.images[selectedImage].url})`,
+                }}
+              />
+
+              {/* Overlay escuro para melhor contraste */}
+              <div className="absolute inset-0 bg-black bg-opacity-20" />
+
+              {/* Imagem principal com object-contain */}
               <img
                 src={product.images[selectedImage].url}
                 alt={product.images[selectedImage].url || "product Item"}
-                className="w-full h-96 object-cover object-center rounded-lg"
+                className="relative w-full h-96 object-contain object-center z-10"
               />
 
-              <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-3 py-2 m-4 rounded-md">
+              <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-3 py-2 m-4 rounded-md z-20">
                 <div className="flex items-center space-x-1">
                   <Clock className="h-4 w-4" />
                   <CountdownTimer

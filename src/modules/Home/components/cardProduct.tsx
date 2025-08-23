@@ -16,16 +16,28 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       className="group block bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
     >
       <div className="relative">
+        <div
+          className="absolute  h-44 sm:h-60 inset-0 bg-cover bg-center filter blur-sm scale-105"
+          style={{
+            backgroundImage: `url(${
+              product?.images?.[0]?.url ??
+              "https://th.bing.com/th/id/R.0065d42f4349d2ffdcce16e22e7e9c4a?rik=h5yH%2fslzdTnATQ&riu=http%3a%2f%2fwww.wixeq.com%2fwp-content%2fuploads%2f2017%2f12%2fsem-imagem.jpg&ehk=d32D9mtcYvZSbd1xnS2Qv6kSPoqLi98uqHWp%2fPTZnt8%3d&risl=&pid=ImgRaw&r=0"
+            })`,
+          }}
+        />
+
+        <div className="absolute inset-0 bg-black bg-opacity-40" />
+
         <img
           src={
             product?.images?.[0]?.url ??
             "https://th.bing.com/th/id/R.0065d42f4349d2ffdcce16e22e7e9c4a?rik=h5yH%2fslzdTnATQ&riu=http%3a%2f%2fwww.wixeq.com%2fwp-content%2fuploads%2f2017%2f12%2fsem-imagem.jpg&ehk=d32D9mtcYvZSbd1xnS2Qv6kSPoqLi98uqHWp%2fPTZnt8%3d&risl=&pid=ImgRaw&r=0"
           }
           alt={product.name}
-          className="w-full h-48 sm:h-64 object-cover object-center"
+          className="relative w-full h-48 sm:h-64 object-contain object-center "
         />
 
-        <div className="absolute top-0 left-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
+        <div className="z-20 absolute top-0 left-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
           <span className="flex items-center">
             <Store className="h-3 w-3 mr-1" />
             {product.store?.name}

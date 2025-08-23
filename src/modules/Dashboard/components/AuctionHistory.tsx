@@ -135,7 +135,9 @@ const AuctionHistory: React.FC = () => {
             <TableRow className="cursor-pointer" key={item.id}>
               <TableCell className="font-medium">{item.name}</TableCell>
               <TableCell>{item.store.name}</TableCell>
-              <TableCell>$ {formatCurrencyBR(item.bids[0].bid)}</TableCell>
+              <TableCell>
+                $ {formatCurrencyBR(item.bids[0]?.bid || 0)}
+              </TableCell>
               <TableCell>
                 {formatDate(
                   concatDateTimeToDate(
@@ -179,7 +181,7 @@ const AuctionHistory: React.FC = () => {
             <DialogDescription>
               <Timeline defaultValue={3}>
                 {item?.bids
-                  .sort((a, b) => b.bid - a.bid)
+                  .sort((a, b) => b?.bid - a?.bid)
                   .map((item, index) => (
                     <TimelineItem
                       key={item.id}
@@ -227,7 +229,7 @@ const AuctionHistory: React.FC = () => {
                         </a>
                       </TimelineContent>
                       <TimelineContent className="mb-4 text-sm font-bold">
-                        Valor dado: R$ {formatCurrencyBR(item.bid)}
+                        Valor dado: R$ {formatCurrencyBR(item?.bid || 0)}
                       </TimelineContent>
                     </TimelineItem>
                   ))}
