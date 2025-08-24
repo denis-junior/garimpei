@@ -146,8 +146,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Delete confirmation modal */}
       {itemDelete && (
         <ConfirmationModal
-          title="Excluir Loja"
-          message="Tem certeza que deseja excluir esta loja? Esta ação não pode ser desfeita."
+          title="Excluir esse item"
+          message="Tem certeza que deseja excluir este item? Esta ação não pode ser desfeita."
           onCancel={cancelDelete}
           onConfirm={handleDelete}
           confirmText="Excluir"

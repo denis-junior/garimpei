@@ -63,9 +63,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <div>
             <p className="text-sm text-gray-500">Lance atual</p>
             <p className="text-lg font-bold text-primary">
-              $
-              {product?.bids?.[product?.bids?.length - 1]?.bid ??
-                product.initial_bid}
+              ${product?.bids?.[0]?.bid ?? product.initial_bid}
             </p>
           </div>
 

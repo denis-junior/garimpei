@@ -26,7 +26,9 @@ const updateProduct = async (productId: string, product: ProductFormData) => {
 };
 
 const deleteProduct = async (productId: number) => {
-  const response = await api.delete<IProduct>(`clothing/${productId}`);
+  const response = await api.delete<IProduct>(
+    `clothing/${productId}/disable-clothing`
+  );
   return response.data;
 };
 
