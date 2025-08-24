@@ -20,7 +20,12 @@ const RegisterSellerPage: React.FC = () => {
   const { mutate, isPending, isError, error } = useRegisterSeller();
 
   const onSubmit = (data: FormDataRegister) => {
-    mutate(data);
+    const dataRemoveFormat = {
+      ...data,
+      contact: data.contact.replace(/[\(\)\s\-]/g, ""),
+      cpf: data.cpf.replace(/[\.\-]/g, ""),
+    };
+    mutate(dataRemoveFormat);
   };
 
   return (

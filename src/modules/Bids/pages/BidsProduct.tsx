@@ -177,11 +177,7 @@ const BidProductPage: React.FC = () => {
         name?.slice(-1)
       );
     }
-    return (
-      name?.slice(0, 2) +
-      "*".repeat(Math.max(0, name.length - 4)) +
-      name?.slice(-2)
-    );
+    return name?.slice(0, 2) + "***" + name?.slice(-2);
   };
 
   return (
