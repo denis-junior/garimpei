@@ -20,6 +20,7 @@ const RegisterBuyerPage: React.FC = () => {
   const onSubmit = (data: FormDataRegister) => {
     const dataRemoveFormat = {
       ...data,
+      email: data.email.toLowerCase(),
       contact: data.contact.replace(/[\(\)\s\-]/g, ""),
       cpf: data.cpf.replace(/[\.\-]/g, ""),
     };
