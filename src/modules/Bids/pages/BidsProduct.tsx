@@ -12,6 +12,7 @@ import { IBid } from "../Types";
 import { useCheckSeller } from "@/utils/checkoSeller";
 import { toast } from "react-toastify";
 import Loader from "@/components/Loader";
+import ImageModal from "@/components/ImageModal";
 
 const BidProductPage: React.FC = () => {
   const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -19,6 +20,7 @@ const BidProductPage: React.FC = () => {
   const { data: product, isLoading } = useGetProduct(id || "");
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const userString = localStorage.getItem("user");
   const currentUser = userString ? JSON.parse(userString) : null;
 
@@ -153,6 +155,10 @@ const BidProductPage: React.FC = () => {
     setSelectedImage(index);
   };
 
+  const handleMainImageClick = () => {
+    setIsImageModalOpen(true);
+  };
+
   const handleBackClick = () => {
     navigate(-1);
   };
@@ -179,172 +185,184 @@ const BidProductPage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <button
-        onClick={handleBackClick}
-        className="flex items-center text-gray-600 hover:text-primary mb-6 transition-colors"
-      >
-        <ChevronLeft className="w-5 h-5 mr-1" />
-        Voltar
-      </button>
+    <>
+      <div className="container mx-auto px-4 py-8">
+        <button
+          onClick={handleBackClick}
+          className="flex items-center text-gray-600 hover:text-primary mb-6 transition-colors"
+        >
+          <ChevronLeft className="w-5 h-5 mr-1" />
+          Voltar
+        </button>
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
-          {/* Image gallery */}
-          <div>
-            <div className="relative aspect-w-1 aspect-h-1 mb-3 rounded-lg overflow-hidden">
-              <div
-                className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105"
-                style={{
-                  backgroundImage: `url(${product.images[selectedImage].url})`,
-                }}
-              />
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
+            {/* Image gallery */}
+            <div>
+              <div className="relative aspect-w-1 aspect-h-1 mb-3 rounded-lg overflow-hidden">
+                <div
+                  className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105"
+                  style={{
+                    backgroundImage: `url(${product.images[selectedImage].url})`,
+                  }}
+                />
 
-              <div className="absolute inset-0 bg-black bg-opacity-20" />
+                <div className="absolute inset-0 bg-black bg-opacity-20" />
 
-              <img
-                src={product.images[selectedImage].url}
-                alt={product.images[selectedImage].url || "product Item"}
-                className="relative w-full h-96 object-contain object-center z-10"
-              />
+                <img
+                  src={product.images[selectedImage].url}
+                  alt={product.images[selectedImage].url || "product Item"}
+                  className="relative w-full h-96 object-contain object-center z-10 cursor-pointer transition-transform hover:scale-105"
+                  onClick={handleMainImageClick}
+                />
 
-              <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-3 py-2 m-4 rounded-md z-20">
-                <div className="flex items-center space-x-1">
-                  <Clock className="h-4 w-4" />
-                  <CountdownTimer
-                    endDate={concatDateTimeToDate(
-                      String(product.end_date),
-                      product.end_time
-                    )}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {product.images?.length > 1 && (
-              <div className="flex space-x-2 overflow-x-auto">
-                {product.images.map((image, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleImageClick(index)}
-                    className={`cursor-pointer flex-shrink-0 w-20 h-20 border-2 rounded-md overflow-hidden ${
-                      selectedImage === index
-                        ? "border-primary"
-                        : "border-transparent"
-                    }`}
-                  >
-                    <img
-                      src={image.url}
-                      alt={`${image.url} - view ${index + 1}`}
-                      className="w-full h-full object-cover object-center"
+                <div className="absolute top-0 right-0 bg-black bg-opacity-70 text-white px-3 py-2 m-4 rounded-md z-20">
+                  <div className="flex items-center space-x-1">
+                    <Clock className="h-4 w-4" />
+                    <CountdownTimer
+                      endDate={concatDateTimeToDate(
+                        String(product.end_date),
+                        product.end_time
+                      )}
                     />
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Auction details */}
-          <div>
-            <div className="flex justify-between items-start">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                  {product.name}
-                </h1>
-
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                    Tamanho: {product.size}
-                  </span>
                 </div>
               </div>
-              <div
-                className="flex items-center justify-center gap-2 cursor-pointer"
-                onClick={() => navigate(`/store/${product.store?.id}`)}
-              >
-                <h2 className="text-sm font-semibold text-gray-800 ">Loja :</h2>
-                <p className="text-gray-600">{product.store?.name}</p>
-              </div>
-            </div>
 
-            <div className="border-t border-b border-gray-200 py-4 mb-4">
-              <div className="flex justify-between items-center mb-2">
-                <div className="text-sm text-gray-500">Preço Inicial</div>
-                <div className="font-medium">R${product.initial_bid}</div>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <div className="text-sm font-medium text-gray-800">
-                  Lance atual
-                </div>
-                <div className="text-2xl font-bold text-primary">
-                  R$
-                  {listBids?.[0]?.bid || product.initial_bid}
-                </div>
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                Descrição
-              </h2>
-              <p className="text-gray-600">{product.description}</p>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg mb-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">
-                Faça seu lance
-              </h2>
-              <BidForm
-                productId={product.id}
-                currentBid={listBids?.[0]?.bid || product.initial_bid}
-              />
-            </div>
-
-            <div>
-              <h2 className="text-lg font-semibold text-gray-800 mb-3">
-                Histórico de Lances
-              </h2>
-
-              {listBids?.length === 0 ? (
-                <p className="text-gray-500">
-                  Nenhum lance ainda, seja o primeiro!
-                </p>
-              ) : (
-                <div className="bg-white border border-gray-200 rounded-lg">
-                  <ul className="divide-y divide-gray-200">
-                    {listBids.map((bid, index) => (
-                      <li key={index} className="p-3 hover:bg-gray-50">
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center">
-                            <User className="h-4 w-4 text-gray-500 mr-2" />
-                            <span className="text-gray-800 font-medium">
-                              {getBidderName(bid.buyer)}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center">
-                            <span className="font-semibold text-primary mr-3">
-                              {formatCurrencyBR(Number(bid.bid))}
-                            </span>
-                            <span className="text-xs text-gray-500">
-                              {concatDateTimeToDate(
-                                String(bid.date),
-                                String(bid.time)
-                              ).toLocaleString()}
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+              {product.images?.length > 1 && (
+                <div className="flex space-x-2 overflow-x-auto">
+                  {product.images.map((image, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleImageClick(index)}
+                      className={`cursor-pointer flex-shrink-0 w-20 h-20 border-2 rounded-md overflow-hidden transition-all hover:scale-105 ${
+                        selectedImage === index
+                          ? "border-primary"
+                          : "border-transparent"
+                      }`}
+                    >
+                      <img
+                        src={image.url}
+                        alt={`${image.url} - view ${index + 1}`}
+                        className="w-full h-full object-cover object-center"
+                      />
+                    </div>
+                  ))}
                 </div>
               )}
+            </div>
+
+            {/* Auction details */}
+            <div>
+              <div className="flex justify-between items-start">
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-800 mb-2">
+                    {product.name}
+                  </h1>
+
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                      Tamanho: {product.size}
+                    </span>
+                  </div>
+                </div>
+                <div
+                  className="flex items-center justify-center gap-2 cursor-pointer"
+                  onClick={() => navigate(`/store/${product.store?.id}`)}
+                >
+                  <h2 className="text-sm font-semibold text-gray-800 ">
+                    Loja :
+                  </h2>
+                  <p className="text-gray-600">{product.store?.name}</p>
+                </div>
+              </div>
+
+              <div className="border-t border-b border-gray-200 py-4 mb-4">
+                <div className="flex justify-between items-center mb-2">
+                  <div className="text-sm text-gray-500">Preço Inicial</div>
+                  <div className="font-medium">R${product.initial_bid}</div>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <div className="text-sm font-medium text-gray-800">
+                    Lance atual
+                  </div>
+                  <div className="text-2xl font-bold text-primary">
+                    R$
+                    {listBids?.[0]?.bid || product.initial_bid}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-2">
+                  Descrição
+                </h2>
+                <p className="text-gray-600">{product.description}</p>
+              </div>
+
+              <div className="bg-gray-50 p-4 rounded-lg mb-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                  Faça seu lance
+                </h2>
+                <BidForm
+                  productId={product.id}
+                  currentBid={listBids?.[0]?.bid || product.initial_bid}
+                />
+              </div>
+
+              <div>
+                <h2 className="text-lg font-semibold text-gray-800 mb-3">
+                  Histórico de Lances
+                </h2>
+
+                {listBids?.length === 0 ? (
+                  <p className="text-gray-500">
+                    Nenhum lance ainda, seja o primeiro!
+                  </p>
+                ) : (
+                  <div className="bg-white border border-gray-200 rounded-lg">
+                    <ul className="divide-y divide-gray-200">
+                      {listBids.map((bid, index) => (
+                        <li key={index} className="p-3 hover:bg-gray-50">
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center">
+                              <User className="h-4 w-4 text-gray-500 mr-2" />
+                              <span className="text-gray-800 font-medium">
+                                {getBidderName(bid.buyer)}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center">
+                              <span className="font-semibold text-primary mr-3">
+                                {formatCurrencyBR(Number(bid.bid))}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                {concatDateTimeToDate(
+                                  String(bid.date),
+                                  String(bid.time)
+                                ).toLocaleString()}
+                              </span>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <ImageModal
+        isOpen={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        imageUrl={product.images[selectedImage].url}
+        altText={product.name}
+      />
+    </>
   );
 };
 
