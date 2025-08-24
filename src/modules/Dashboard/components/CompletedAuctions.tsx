@@ -210,7 +210,10 @@ const CompletedAuctions: React.FC = () => {
                   </div>
                   <div className="w-full flex flex-col items-center mb-4 gap-1">
                     <a
-                      href={`https://www.instagram.com/${winner.buyer.instagram}/`}
+                      href={`https://instagram.com/${winner.buyer.instagram.replace(
+                        /@/,
+                        ""
+                      )}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -274,7 +277,10 @@ const CompletedAuctions: React.FC = () => {
                       </TimelineHeader>
                       <TimelineContent>
                         <a
-                          href={`https://www.instagram.com/${item.buyer.instagram}/`}
+                          href={`https://instagram.com/${item.buyer.instagram.replace(
+                            /@/,
+                            ""
+                          )}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >

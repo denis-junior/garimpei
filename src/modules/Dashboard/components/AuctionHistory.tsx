@@ -216,7 +216,10 @@ const AuctionHistory: React.FC = () => {
                       </TimelineHeader>
                       <TimelineContent>
                         <a
-                          href={`https://www.instagram.com/${item.buyer.instagram}/`}
+                          href={`https://instagram.com/${item.buyer.instagram.replace(
+                            /@/,
+                            ""
+                          )}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
