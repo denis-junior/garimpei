@@ -1,3 +1,4 @@
+import { MapPin } from "lucide-react";
 import React from "react";
 
 interface PageHeaderProps {
@@ -18,7 +19,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       <div>
         <h1 className="text-3xl font-bold text-gray-800 mb-2">{title}</h1>
         <p className="text-gray-600">{subtitle}</p>
-        {address && <p className="text-gray-600 text-sm">{address}</p>}
+        {address && (
+          <p className="text-gray-600 text-sm flex items-center gap-1">
+            <MapPin size={20} />
+            {address}
+          </p>
+        )}
       </div>
       {action && <div className="mt-4 md:mt-0">{action}</div>}
     </div>
