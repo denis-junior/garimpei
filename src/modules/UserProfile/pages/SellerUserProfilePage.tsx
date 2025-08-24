@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Edit, ClipboardList, Clock } from "lucide-react";
+import { Edit } from "lucide-react";
 import UserInfoForm from "../components/BuyerUserInfoForm";
 import { auctionHistory } from "../../../mock/data";
 import { formatPhoneNumber } from "../../../utils";
@@ -95,37 +95,6 @@ const SellerUserProfilePage: React.FC = () => {
                       <p className="mt-1 text-lg text-gray-800">
                         {user?.instagram}
                       </p>
-                    </div>
-
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500">
-                        Resumo da Conta
-                      </h3>
-                      <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="flex items-center p-4 bg-purple-50 rounded-lg">
-                          <ClipboardList className="h-8 w-8 text-purple-600" />
-                          <div className="ml-4">
-                            <p className="text-sm font-medium text-purple-800">
-                              Leilões Criados
-                            </p>
-                            <p className="text-2xl font-bold text-purple-600">
-                              {0}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center p-4 bg-primary-50 rounded-lg">
-                          <Clock className="h-8 w-8 text-primary" />
-                          <div className="ml-4">
-                            <p className="text-sm font-medium text-primary-800">
-                              Lances Dados
-                            </p>
-                            <p className="text-2xl font-bold text-primary">
-                              {0}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 ))}

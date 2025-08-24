@@ -27,7 +27,7 @@ const StoresCard: React.FC<StoresCardProps> = ({ store, children }) => {
         {children}
       </div>
       <div className="p-4 border-t border-gray-200">
-        <p className="text-gray-600 text-sm line-clamp-2 px-4">
+        <p className="text-gray-600 text-sm px-4 overflow-hidden text-ellipsis whitespace-nowrap">
           {store.description || "Sem descrição disponível."}
         </p>
       </div>
