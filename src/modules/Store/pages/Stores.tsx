@@ -140,7 +140,7 @@ const StoresPage: React.FC = () => {
               type="text"
               value={searchFilter}
               onChange={handleSearch}
-              placeholder="Pesquisar por itens de vestuário..."
+              placeholder="Pesquisar pelo nome ou descrição de uma loja"
               className="w-full p-4 pl-12 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary"
             />
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
