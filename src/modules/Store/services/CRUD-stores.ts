@@ -55,17 +55,20 @@ export const useGetStore = (storeId: number) => {
 export const useGetAllStores = ({
   page,
   size,
+  searchFilter,
 }: {
   page?: number;
   size?: number;
+  searchFilter?: string;
 }) => {
   return useQuery({
-    queryKey: [EEndPoints.GETSTORES],
+    queryKey: [EEndPoints.GETSTORES, searchFilter],
     queryFn: async () => {
       const response = await api.get<IStore[]>("/stores", {
         params: {
           page: page || 1,
-          size: size || 10,
+          size: size || 20,
+          name: searchFilter,
         },
       });
       return response.data;

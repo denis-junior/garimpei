@@ -73,9 +73,9 @@ export const useGetProduct = (storeId: string) => {
   });
 };
 
-export const useGetAllProduct = () => {
+export const useGetAllProduct = (searchFilter?: string) => {
   return useInfiniteQuery({
-    queryKey: [EEndPointsProduct.GETPRODUCT],
+    queryKey: [EEndPointsProduct.GETPRODUCT, searchFilter],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) => {
       const response = await api.get<IPaginationResponse<IProduct>>(
