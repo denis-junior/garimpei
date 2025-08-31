@@ -15,7 +15,7 @@ const MercadoPago: React.FC = () => {
   const [paymentData, setPaymentData] = useState<any>(null);
 
   useEffect(() => {
-    initMercadoPago("TEST-0042d386-6689-4d42-a6fa-64140c5fe061");
+    initMercadoPago("APP_USR-7fcc197c-c5b3-42da-a0cd-6e30a9369914");
     setIsLoading(false);
   }, []);
 
@@ -213,9 +213,7 @@ const MercadoPago: React.FC = () => {
             >
               R$ 10,00
             </p>
-            <small style={{ color: "#6c757d" }}>
-              Taxa da plataforma: 5%
-            </small>
+            <small style={{ color: "#6c757d" }}>Taxa da plataforma: 5%</small>
           </div>
         </div>
 
