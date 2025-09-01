@@ -63,7 +63,7 @@ const Header: React.FC = () => {
                     <div className="flex-shrink-0">
                       <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
                         <span className="text-sm font-medium text-primary-800">
-                          {user?.name.charAt(0)}
+                          {user?.name?.charAt(0)}
                         </span>
                       </div>
                     </div>
@@ -150,7 +150,7 @@ const Header: React.FC = () => {
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
                     <span className="text-sm font-medium text-primary-800">
-                      {user?.name.charAt(0)}
+                      {user?.name?.charAt(0)}
                     </span>
                   </div>
                 </div>

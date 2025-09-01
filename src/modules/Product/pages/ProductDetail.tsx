@@ -218,7 +218,7 @@ const ProductDetail: React.FC = () => {
                       <div className="relative">
                         <Avatar className="h-10 w-10">
                           <AvatarFallback className="bg-primary text-white">
-                            {bid.buyer.name.charAt(0).toUpperCase()}
+                            {bid.buyer.name?.charAt(0).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
                         {index === 0 && (
