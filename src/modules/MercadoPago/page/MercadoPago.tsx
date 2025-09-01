@@ -23,6 +23,7 @@ const MercadoPago: React.FC = () => {
     amount: 10.0, // Valor do produto
   };
 
+  
   const customization = {
     paymentMethods: {
       ticket: "all",
@@ -32,7 +33,6 @@ const MercadoPago: React.FC = () => {
       mercadoPago: ["all"],
     },
   };
-
   const onSubmit = async ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     selectedPaymentMethod,
