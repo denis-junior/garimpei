@@ -16,7 +16,7 @@ const MercadoPago: React.FC = () => {
   const [vendedorInfo, setVendedorInfo] = useState<any>(null);
   
   // ✅ ID REAL DO VENDEDOR (deve vir de props ou context)
-  const vendedorId = "7"; // Trocar por ID real
+  const vendedorId = "3"; // Trocar por ID real
 
   useEffect(() => {
     initMercadoPago("APP_USR-7fcc197c-c5b3-42da-a0cd-6e30a9369914");
@@ -94,10 +94,7 @@ const MercadoPago: React.FC = () => {
     },
   };
 
-  const onSubmit = async ({
-    selectedPaymentMethod,
-    formData,
-  }: PaymentFormData): Promise<void> => {
+  const onSubmit = async (formData: PaymentFormData): Promise<void> => {
     try {
       setIsLoading(true);
       setError("");
@@ -118,17 +115,24 @@ const MercadoPago: React.FC = () => {
       console.log("Enviando pagamento com split:", paymentRequestData);
 
       // ✅ ENDPOINT DE SPLIT
-      const response = await fetch(
-        "http://localhost:3000/mercadopago/processar-pagamento-split",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(paymentRequestData),
-        }
-      );
+      const response = await fetch("http://localhost:3000/mercadopago/processar-pagamento-split", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(paymentRequestData),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
+        
+        // ✅ VERIFICAR SE É ERRO DE TOKEN
+        if (errorData.message?.includes('Token expirado') || 
+            errorData.message?.includes('reconectar')) {
+          alert('Token do vendedor expirado. É necessário reconectar a conta do Mercado Pago.');
+          // Redirecionar para reconexão
+          window.location.href = `/conectar-vendedor/${vendedorId}`;
+          return;
+        }
+        
         throw new Error(errorData.message || `Erro HTTP: ${response.status}`);
       }
 
