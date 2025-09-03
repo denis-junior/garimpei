@@ -83,15 +83,7 @@ const MercadoPago: React.FC = () => {
 
       // ✅ ENDPOINT DE SPLIT
       const response = await processPayment(paymentRequestData);
-      console.log(response);
-      // const response = await fetch(
-      //   "http://localhost:3000/mercadopago/processar-pagamento-split",
-      //   {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify(paymentRequestData),
-      //   }
-      // );
+
       setPaymentData(response);
       // ✅ VERIFICAR RESPOSTA DO SPLIT
       if (response.success && response.response?.status === "approved") {
