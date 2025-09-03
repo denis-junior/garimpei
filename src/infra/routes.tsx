@@ -40,8 +40,8 @@ const AppRoutes = createBrowserRouter([
         children: DashboardRoutes,
       },
       {
-        path: "/mercadoPago",
-        element: <MercadoPago/>,
+        path: "/mercadoPago/:id",
+        element: <MercadoPago />,
       },
     ],
   },

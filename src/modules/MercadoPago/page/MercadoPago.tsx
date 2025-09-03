@@ -1,92 +1,37 @@
+import { useGetProduct } from "@/modules/Product/services/CRUD-product";
 import { initMercadoPago, Payment } from "@mercadopago/sdk-react";
 import { useEffect, useState } from "react";
-
-interface PaymentFormData {
-  selectedPaymentMethod: string;
-  formData: any;
-}
+import { useParams } from "react-router-dom";
+import { useGetStatusSeller, usePostProcessPayment } from "../services";
+import { IBrickError } from "@mercadopago/sdk-react/esm/bricks/util/types/common";
+import { IPaymentFormData } from "@mercadopago/sdk-react/esm/bricks/payment/type";
+import { useUser } from "@/hooks/useUser";
+import { processPaymentResponse } from "../types";
 
 const MercadoPago: React.FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { id } = useParams<{ id: string }>();
+  const { data: product } = useGetProduct(id as string);
+  const { data: statusConectSeller, isPending: isLoadingStatus } =
+    useGetStatusSeller(product?.store?.seller?.id);
+  const { user } = useUser();
+
+  const { mutateAsync: processPayment } = usePostProcessPayment();
+
+  console.log(product, "product");
+
   const [error, setError] = useState<string>("");
   const [paymentStatus, setPaymentStatus] = useState<string>("");
-  const [paymentData, setPaymentData] = useState<any>(null);
-  // ✅ ESTADOS PARA VENDEDOR
-  const [vendedorConectado, setVendedorConectado] = useState<boolean>(false);
-  const [vendedorInfo, setVendedorInfo] = useState<any>(null);
-
-  // ✅ ID REAL DO VENDEDOR (deve vir de props ou context)
-  const vendedorId = "3"; // Trocar por ID real
+  const [paymentData, setPaymentData] = useState<processPaymentResponse | null>(
+    null
+  );
 
   useEffect(() => {
-    initMercadoPago("APP_USR-7fcc197c-c5b3-42da-a0cd-6e30a9369914");
-    verificarStatusVendedor();
+    initMercadoPago(import.meta.env.VITE_API_TOKEN_MERCADO_PAGO);
   }, []);
 
-  const verificarStatusVendedor = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/mercadopago/status/${vendedorId}`
-      );
-      const data = await response.json();
-
-      setVendedorConectado(data.conectado || false);
-      setVendedorInfo(data);
-
-      console.log("Status do vendedor:", data);
-    } catch (error) {
-      console.error("Erro ao verificar status:", error);
-      setError("Erro ao verificar status do vendedor");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const conectarVendedor = async () => {
-    try {
-      // 1. Buscar link de conexão
-      const response = await fetch(
-        `http://localhost:3000/mercadopago/conectar/${vendedorId}`
-      );
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error(data.message);
-      }
-
-      // 2. Abrir popup
-      const popup = window.open(
-        data.link_conexao,
-        "mercadopago-auth",
-        "width=500,height=600,scrollbars=yes,resizable=yes"
-      );
-
-      // 3. Escutar resposta do callback
-      const handleMessage = (event: MessageEvent) => {
-        if (event.data.success) {
-          console.log("✅ Conta conectada!");
-          setVendedorConectado(true);
-          popup?.close();
-          // Recarregar status
-          verificarStatusVendedor();
-        } else {
-          console.error("❌ Erro:", event.data.message);
-          alert(`Erro ao conectar: ${event.data.message}`);
-        }
-        window.removeEventListener("message", handleMessage);
-      };
-
-      window.addEventListener("message", handleMessage);
-    } catch (error) {
-      console.error("Erro ao conectar:", error);
-      alert(
-        `Erro: ${error instanceof Error ? error.message : "Erro desconhecido"}`
-      );
-    }
-  };
-
+  const amount = 5.0; // Number(product?.bids?.[0]?.bid);
   const initialization = {
-    amount: 5.0,
+    amount: amount,
   };
 
   const customization = {
@@ -98,22 +43,19 @@ const MercadoPago: React.FC = () => {
       mercadoPago: ["all"],
     },
     visual: {
-        hideFormTitle: false,
-      },
+      hideFormTitle: false,
+    },
   };
 
   const onSubmit = async ({
     selectedPaymentMethod,
     formData,
-  }: PaymentFormData): Promise<void> => {
+  }: IPaymentFormData): Promise<void> => {
     try {
-      setIsLoading(true);
+      if (!product) {
+        throw new Error("Produto não encontrado");
+      }
       setError("");
-
-      // ✅ DEBUG: Verificar se token está sendo enviado
-      console.log("🔍 Debug formData:", formData);
-      console.log("🔍 Debug selectedPaymentMethod:", selectedPaymentMethod);
-      console.log("🔍 Debug token:", formData.token);
 
       // ✅ VALIDAR SE TOKEN EXISTE
       if (!formData.token) {
@@ -124,63 +66,41 @@ const MercadoPago: React.FC = () => {
 
       // ✅ USAR SPLIT AUTOMÁTICO
       const paymentRequestData = {
-        valor: 5.0,
+        valor: amount,
         token: formData.token,
-        descricao: "Camiseta Nike - Loja do Icaro",
-        email_comprador: "compradorHAHA@test.com",
+        descricao: product?.name || "Produto sem descrição",
+        email_comprador: user?.email || "",
         installments: formData.installments || 1,
         // ✅ ADICIONAR payment_method_id também
         payment_method_id: formData.payment_method_id || selectedPaymentMethod,
         // ✅ DADOS DO SPLIT
-        vendedor_id: vendedorId,
-        comissao: 0.5, // R$ 0,50 de comissão
-        produto_id: "produto-123",
+        vendedor_id: product?.store?.seller?.id.toString(),
+        comissao: Number((amount * 0.1).toFixed(2)), // valor arrecadado para plataforma
+        produto_id: product?.id.toString(),
       };
 
       console.log("Enviando pagamento com split:", paymentRequestData);
 
       // ✅ ENDPOINT DE SPLIT
-      const response = await fetch(
-        "http://localhost:3000/mercadopago/processar-pagamento-split",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(paymentRequestData),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-
-        // ✅ VERIFICAR SE É ERRO DE TOKEN
-        if (
-          errorData.message?.includes("Token expirado") ||
-          errorData.message?.includes("reconectar")
-        ) {
-          alert(
-            "Token do vendedor expirado. É necessário reconectar a conta do Mercado Pago."
-          );
-          // Redirecionar para reconexão
-          window.location.href = `/conectar-vendedor/${vendedorId}`;
-          return;
-        }
-
-        throw new Error(errorData.message || `Erro HTTP: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log("Resposta do split:", result);
-
-      setPaymentData(result);
-
+      const response = await processPayment(paymentRequestData);
+      console.log(response);
+      // const response = await fetch(
+      //   "http://localhost:3000/mercadopago/processar-pagamento-split",
+      //   {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify(paymentRequestData),
+      //   }
+      // );
+      setPaymentData(response);
       // ✅ VERIFICAR RESPOSTA DO SPLIT
-      if (result.success && result.response?.status === "approved") {
+      if (response.success && response.response?.status === "approved") {
         setPaymentStatus("approved");
-      } else if (result.success && result.response?.status === "pending") {
+      } else if (response.success && response.response?.status === "pending") {
         setPaymentStatus("pending");
       } else {
         setPaymentStatus("rejected");
-        setError(result.response?.status_detail || "Pagamento rejeitado");
+        setError(response.response?.status_detail || "Pagamento rejeitado");
       }
     } catch (error) {
       console.error("Erro ao processar pagamento:", error);
@@ -189,20 +109,19 @@ const MercadoPago: React.FC = () => {
       } else {
         setError("Erro ao processar pagamento: erro desconhecido");
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const onError = async (error: any): Promise<void> => {
+  const onError = async (error: IBrickError): Promise<void> => {
     console.error("❌ Erro detalhado no brick:", error);
     console.error("❌ Tipo do erro:", typeof error);
-    console.error("❌ Stack do erro:", error.stack);
-    setError(`Erro no sistema de pagamento: ${error.message || JSON.stringify(error)}`);
+    setError(
+      `Erro no sistema de pagamento: ${error.message || JSON.stringify(error)}`
+    );
   };
 
   const onReady = async (): Promise<void> => {
-    console.log("Brick pronto");
+    console.log("Brick pronto carregado metodos de pagamento");
   };
 
   const resetPayment = () => {
@@ -212,55 +131,67 @@ const MercadoPago: React.FC = () => {
   };
 
   // ✅ TELA PARA CONECTAR VENDEDOR
-  if (!vendedorConectado && !isLoading) {
+  if (!statusConectSeller?.conectado) {
     return (
       <div className="mercado-pago-container">
         <div
           style={{
-            padding: "20px",
+            maxWidth: "500px",
+            margin: "40px auto",
+            padding: "32px",
             textAlign: "center",
-            backgroundColor: "#fff3cd",
-            borderRadius: "8px",
+            background: "linear-gradient(135deg, #f8fafc 60%, #ffeaa7 100%)",
+            borderRadius: "16px",
             border: "1px solid #ffeaa7",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
           }}
         >
-          <h2>🔗 Conectar Conta do Mercado Pago</h2>
-          <p>
-            Para processar pagamentos com split automático, o vendedor precisa
-            conectar sua conta do Mercado Pago.
+          <img
+            src="https://http2.mlstatic.com/frontend-assets/mercadopago/home/mp-logo.svg"
+            alt="Mercado Pago"
+            style={{ width: "80px", marginBottom: "18px" }}
+          />
+          <h2 style={{ color: "#009EE3", marginBottom: "10px" }}>
+            Método de pagamento não ativo
+          </h2>
+          <p style={{ color: "#856404", marginBottom: "18px" }}>
+            O vendedor ainda não ativou o Mercado Pago para receber pagamentos.
           </p>
-
-          <div style={{ margin: "20px 0" }}>
-            <p>
-              <strong>Vendedor ID:</strong> {vendedorId}
-            </p>
-            <p>
-              <strong>Status:</strong> Não conectado
-            </p>
-          </div>
-
-          <button
-            onClick={conectarVendedor}
+          <div
             style={{
-              padding: "15px 30px",
-              backgroundColor: "#009EE3",
-              color: "white",
-              border: "none",
+              background: "#fffbe6",
+              border: "1px solid #ffeaa7",
               borderRadius: "8px",
-              fontSize: "16px",
-              cursor: "pointer",
-              fontWeight: "bold",
+              padding: "16px",
+              marginBottom: "18px",
+              fontSize: "15px",
             }}
           >
-            🔗 Conectar Mercado Pago
-          </button>
-
+            <p>
+              <strong>Vendedor ID:</strong> {product?.store?.seller?.id}
+            </p>
+            <p>
+              <strong>Status:</strong>{" "}
+              <span style={{ color: "#d35400", fontWeight: "bold" }}>
+                Não conectado
+              </span>
+            </p>
+          </div>
           <div
-            style={{ marginTop: "15px", fontSize: "14px", color: "#856404" }}
+            style={{
+              marginTop: "10px",
+              fontSize: "14px",
+              color: "#856404",
+              background: "#fffbe6",
+              borderRadius: "8px",
+              padding: "10px",
+            }}
           >
-            <p>✅ Split automático entre vendedor e plataforma</p>
-            <p>✅ Vendedor recebe direto na conta</p>
-            <p>✅ Plataforma recebe comissão automaticamente</p>
+            <p>⚠️ Sem o método ativo, não é possível finalizar a compra.</p>
+            <p>
+              O vendedor precisa conectar sua conta para ativar pagamentos e
+              split automático.
+            </p>
           </div>
         </div>
       </div>
@@ -289,7 +220,7 @@ const MercadoPago: React.FC = () => {
               {paymentData?.external_reference}
             </p>
             <p>
-              <strong>Produto:</strong> Camiseta Nike - Loja do Icaro
+              <strong>Produto:</strong> {product?.name}
             </p>
             <p>
               <strong>Valor Total:</strong> R${" "}
@@ -312,7 +243,7 @@ const MercadoPago: React.FC = () => {
               </p>
               <p>
                 <strong>🏢 Comissão da plataforma:</strong> R${" "}
-                {paymentData?.comissao_plataforma?.toFixed(2)}
+                {Number((amount * 0.1).toFixed(2))}
               </p>
               <p style={{ fontSize: "12px", color: "#666" }}>
                 ✅ Valores automaticamente divididos via Mercado Pago
@@ -341,7 +272,7 @@ const MercadoPago: React.FC = () => {
   }
 
   // ✅ LOADING
-  if (isLoading) {
+  if (isLoadingStatus) {
     return (
       <div className="mercado-pago-loading">
         <p>Carregando sistema de pagamento...</p>
@@ -387,21 +318,27 @@ const MercadoPago: React.FC = () => {
               border: "1px solid #dee2e6",
             }}
           >
-            <h3>Camiseta Nike</h3>
+            <h3>{product?.name}</h3>
             <p>
-              <strong>Vendedor:</strong> Loja do Icaro
+              <strong>Vendedor:</strong> {product?.store?.name}
             </p>
             <p>
-              <strong>Descrição:</strong> Camiseta esportiva de alta qualidade
+              <strong>Descrição:</strong> {product?.description}
             </p>
             <p
               style={{ fontSize: "24px", fontWeight: "bold", color: "#007bff" }}
             >
-              R$ 5,00
+              R$ {Number(amount).toFixed(2)}
             </p>
             <div style={{ fontSize: "12px", color: "#6c757d" }}>
-              <p>💰 Vendedor recebe: R$ 4,50</p>
-              <p>🏢 Comissão plataforma: R$ 0,50 (10%)</p>
+              <p>
+                💰 Vendedor recebe: R${" "}
+                {Number(amount) - Number((amount * 0.1).toFixed(2))}
+              </p>
+              <p>
+                🏢 Comissão plataforma: {Number((amount * 0.1).toFixed(2))}{" "}
+                (10%)
+              </p>
             </div>
           </div>
         </div>

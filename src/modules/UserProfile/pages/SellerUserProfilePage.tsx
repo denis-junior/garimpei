@@ -6,6 +6,11 @@ import { formatPhoneNumber } from "../../../utils";
 import { useUser } from "../../../hooks/useUser";
 import { useGetSeller } from "../service/CRUD-user";
 import TabHistory from "../../Dashboard/components/CompletedAuctions";
+import {
+  useGetConectSeller,
+  useGetStatusSeller,
+} from "@/modules/MercadoPago/services";
+import { toast } from "react-toastify";
 
 const SellerUserProfilePage: React.FC = () => {
   const { user: dataUser } = useUser();
@@ -13,8 +18,42 @@ const SellerUserProfilePage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState("info");
 
+  const {
+    data: statusData,
+    refetch,
+    isPending,
+  } = useGetStatusSeller(user?.id || 0);
+  const { mutateAsync: connect } = useGetConectSeller();
+
   const toggleEdit = () => {
     setIsEditing(!isEditing);
+  };
+
+  const handleConnect = async () => {
+    const response = await connect(user?.id || 0);
+    if (response.success) {
+      const popup = window.open(
+        response.link_conexao,
+        "mercadopago-auth",
+        "width=500,height=600,scrollbars=yes,resizable=yes"
+      );
+
+      const handleMessage = (event: MessageEvent) => {
+        if (event.data.success) {
+          console.log("✅ Conta conectada!");
+          popup?.close();
+          refetch();
+        } else {
+          console.error("❌ Erro:", event.data.message);
+          alert(`Erro ao conectar: ${event.data.message}`);
+        }
+        window.removeEventListener("message", handleMessage);
+      };
+
+      window.addEventListener("message", handleMessage);
+      return;
+    }
+    toast.error("Erro ao iniciar conexão com Mercado Pago");
   };
 
   return (
@@ -24,6 +63,21 @@ const SellerUserProfilePage: React.FC = () => {
           <div className="p-6 sm:p-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
               <h1 className="text-2xl font-bold text-gray-800">Meu Perfil</h1>
+
+              <button
+                onClick={() => handleConnect()}
+                disabled={statusData?.conectado}
+                className="super-button mt-4 sm:mt-0 bg-slate-500"
+              >
+                <span>
+                  {isPending
+                    ? "Carregando..."
+                    : statusData?.conectado
+                    ? "Conectado"
+                    : "conectar com o mercado pago"}
+                </span>
+              </button>
+
               {!isEditing && (
                 <button
                   onClick={toggleEdit}

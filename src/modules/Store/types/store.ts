@@ -1,3 +1,4 @@
+import { IUser } from "@/types/User";
 import { IProduct } from "../../Product/types/product";
 
 export interface IStore {
@@ -8,4 +9,5 @@ export interface IStore {
   address: string;
   id: number;
   clothings: IProduct[];
+  seller: IUser;
 }

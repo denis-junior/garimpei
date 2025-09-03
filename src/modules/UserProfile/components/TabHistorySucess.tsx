@@ -30,8 +30,10 @@ import {
   TimelineTitle,
 } from "@/components/ui/timeline";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 const TabHistorySucess: React.FC = () => {
+  const navigate = useNavigate();
   const [isUsersBids, setIsUsersBids] = React.useState(false);
   const [item, setItem] = React.useState<IProduct>();
   const { data } = useSindAuctionsWonByBuyer();
@@ -75,6 +77,14 @@ const TabHistorySucess: React.FC = () => {
               </TableCell>
               <TableCell>{item.store.address}</TableCell>
               <TableCell>$ {formatCurrencyBR(item.bids[0].bid)}</TableCell>
+              <TableCell>
+                <button
+                  onClick={() => navigate(`/mercadoPago/${item.id}`)}
+                  className="mt-4 sm:mt-0 flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-700 transition-colors"
+                >
+                  Pagar
+                </button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
