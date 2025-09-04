@@ -34,6 +34,8 @@ export interface processPaymentResponse {
   comissao_plataforma: number;
   valor_vendedor: number;
   response: ResponseProcess;
+  qr_code?: string;
+  qr_code_base64?: string;
 }
 
 export interface ResponseProcess {
@@ -87,4 +89,19 @@ export interface ResponseProcess {
   accounts_info: null;
   release_info: null;
   tags: null;
+}
+
+export interface PixRequestData {
+  valor: number;
+  descricao: string;
+  email_comprador: string;
+  vendedor_id: string;
+  comissao: number;
+}
+
+export interface StatusPixResponseData {
+  payment_id: string;
+  status_banco: string;
+  status_mp: string;
+  success: boolean;
 }
