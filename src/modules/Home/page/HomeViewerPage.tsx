@@ -157,7 +157,7 @@ const HomeViewerPage: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Encontre peças de moda exclusivas
+          Encontre peças de moda exclusivas AAAAAAAAAAAAAAAAAAAAAAAA EU VOU GOSAR
         </h1>
         <p className="text-gray-600">
           Navegue pela nossa seleção criteriosa seleção de roupas vintage e de
