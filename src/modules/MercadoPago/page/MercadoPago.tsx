@@ -32,7 +32,7 @@ const MercadoPago: React.FC = () => {
 
   const [error, setError] = useState<string>("");
 
-  const amount = 5.0;
+  const amount = 1.0;
   const initialization = {
     amount: amount,
   };
