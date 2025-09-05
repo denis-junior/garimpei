@@ -55,12 +55,15 @@ const ChartEvolutionAllProductPerStore: React.FC = () => {
       }
     >
       <div className="w-full overflow-x-auto">
-        <div style={{ minWidth: `${(data?.length || 1) * 120}px` }}>
+        <div
+          style={{
+            minWidth: `${(data && data?.length ? data?.length : 1) * 120}px`,
+          }}
+        >
           <ChartContainer config={chartConfig} className="max-h-[400px] w-full">
             <BarChart
               accessibilityLayer
-              // data={data || []}
-              data={[]}
+              data={data || []}
               barCategoryGap={40}
               barSize={60} // largura fixa das barras
               width={(data?.length || 1) * 120} // largura total do gráfico

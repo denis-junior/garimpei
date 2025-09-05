@@ -23,13 +23,15 @@ export const useGetAllProductStores = (storeId?: number | string) => {
       const response = await api.get<IResponseDashboardProductStore[]>(
         `${EEndPointsDashboard.EVOLUTION}/${storeId}`
       );
-      return response.data.map((e) => {
-        return {
-          ...e,
-          firstBid: e.firstBid ?? 0,
-          lastBid: e.lastBid ?? 0,
-        };
-      });
+      return (
+        response?.data?.map((e) => {
+          return {
+            ...e,
+            firstBid: e.firstBid ?? 0,
+            lastBid: e.lastBid ?? 0,
+          };
+        }) ?? []
+      );
     },
     enabled: !!storeId,
     refetchInterval: 10000,
