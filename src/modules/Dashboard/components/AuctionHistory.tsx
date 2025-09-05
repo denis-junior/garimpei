@@ -136,7 +136,7 @@ const AuctionHistory: React.FC = () => {
               <TableCell className="font-medium">{item.name}</TableCell>
               <TableCell>{item.store.name}</TableCell>
               <TableCell>
-                $ {formatCurrencyBR(item.bids[0]?.bid || 0)}
+                $ {formatCurrencyBR(item.bids?.[0]?.bid || 0)}
               </TableCell>
               <TableCell>
                 {formatDate(

@@ -27,7 +27,7 @@ const ChartGainStore: React.FC = () => {
   const { data: notBids } = useGetNoBidsStats(Number(idStore));
   useEffect(() => {
     if (listStores?.length) {
-      setIdStore(String(listStores[0].id));
+      setIdStore(String(listStores?.[0]?.id));
     }
   }, [listStores]);
 

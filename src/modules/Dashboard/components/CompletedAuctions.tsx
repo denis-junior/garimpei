@@ -85,7 +85,7 @@ const CompletedAuctions: React.FC = () => {
             <TableRow className="cursor-pointer" key={item.id}>
               <TableCell className="font-medium">{item.name}</TableCell>
               <TableCell>{item.store.name}</TableCell>
-              <TableCell>$ {formatCurrencyBR(item.bids[0].bid)}</TableCell>
+              <TableCell>$ {formatCurrencyBR(item.bids?.[0]?.bid)}</TableCell>
               <TableCell>
                 {formatDate(
                   concatDateTimeToDate(
