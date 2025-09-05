@@ -16,7 +16,7 @@ export enum EEndPointsDashboard {
   GAIN = "dashboard/gain",
   NO_BIDS = "dashboard/no-bids-stats",
 }
-export const useGetAllProductStores = (storeId: number) => {
+export const useGetAllProductStores = (storeId?: number | string) => {
   return useQuery({
     queryKey: [EEndPointsDashboard.EVOLUTION, storeId],
     queryFn: async () => {

@@ -22,13 +22,13 @@ import { useGetAllStores } from "@/modules/Store/services/CRUD-stores";
 import { chartConfig } from "@/core/setupChart";
 
 const ChartEvolutionAllProductPerStore: React.FC = () => {
-  const [idStore, setIdStore] = React.useState<string>("");
-  const { data } = useGetAllProductStores(Number(idStore));
+  const [idStore, setIdStore] = React.useState<string>();
+  const { data } = useGetAllProductStores(idStore);
   const { data: listStores } = useGetAllStores({ page: 1, size: 100 });
 
   useEffect(() => {
     if (listStores && listStores.length > 0) {
-      setIdStore(String(listStores[0].id));
+      setIdStore(String(listStores[0]?.id));
     }
   }, [listStores]);
 

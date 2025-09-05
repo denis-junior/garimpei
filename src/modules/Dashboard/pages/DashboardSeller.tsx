@@ -34,7 +34,7 @@ const DashboardSeller: React.FC = () => {
         <TabsContent value="Metricas">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="col-span-1 md:col-span-2">
-              {/* <ChartEvolutionAllProductPerStore></ChartEvolutionAllProductPerStore> */}
+              <ChartEvolutionAllProductPerStore></ChartEvolutionAllProductPerStore>
             </div>
             <div className="col-span-1 md:col-span-2">
               <ChartEvolutionProduct></ChartEvolutionProduct>
