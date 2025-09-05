@@ -32,7 +32,7 @@ const ChartEvolutionProduct: React.FC = () => {
 
   useEffect(() => {
     if (idStore && listStores?.length) {
-      setIdProduct(String(listStores[0].clothings[0]?.id));
+      setIdProduct(String(listStores[0]?.clothings[0]?.id));
     }
   }, [idStore, listStores]);
 
