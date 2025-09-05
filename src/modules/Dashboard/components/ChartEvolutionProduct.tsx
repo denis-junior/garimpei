@@ -26,13 +26,13 @@ const ChartEvolutionProduct: React.FC = () => {
   const { data: listStores } = useGetAllStores({ page: 1, size: 100 });
   useEffect(() => {
     if (listStores?.length) {
-      setIdStore(String(listStores[0]?.id));
+      setIdStore(String(listStores?.[0]?.id));
     }
   }, [listStores]);
 
   useEffect(() => {
     if (idStore && listStores?.length) {
-      setIdProduct(String(listStores[0]?.clothings[0]?.id));
+      setIdProduct(String(listStores?.[0]?.clothings?.[0]?.id));
     }
   }, [idStore, listStores]);
 
