@@ -1,8 +1,6 @@
 import CardGraphic from "@/components/CardGraphic";
 import {
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -22,13 +20,13 @@ import { useGetAllStores } from "@/modules/Store/services/CRUD-stores";
 import { chartConfig } from "@/core/setupChart";
 
 const ChartEvolutionAllProductPerStore: React.FC = () => {
-  const [idStore, setIdStore] = React.useState<string>();
-  const { data } = useGetAllProductStores(idStore);
+  const [idStore, setIdStore] = React.useState<string>("");
+  const { data } = useGetAllProductStores(Number(idStore));
   const { data: listStores } = useGetAllStores({ page: 1, size: 100 });
 
   useEffect(() => {
-    if (listStores && listStores.length > 0) {
-      setIdStore(String(listStores[0]?.id));
+    if (listStores?.length) {
+      setIdStore(String(listStores[0].id));
     }
   }, [listStores]);
 
@@ -55,24 +53,14 @@ const ChartEvolutionAllProductPerStore: React.FC = () => {
       }
     >
       <div className="w-full overflow-x-auto">
-        <div
-          style={{
-            minWidth: `${(data && data?.length ? data?.length : 1) * 120}px`,
-          }}
-        >
+        <div style={{ minWidth: `${(data?.length || 1) * 120}px` }}>
           <ChartContainer config={chartConfig} className="max-h-[400px] w-full">
             <BarChart
               accessibilityLayer
-              data={
-                data?.map((e) => ({
-                  initialBid: e?.initialBid || 0,
-                  lastBid: e?.lastBid || 0,
-                  clothingName: e?.clothingName || "",
-                })) ?? []
-              }
+              data={data || []}
+              width={(data?.length || 1) * 120}
+              barSize={60}
               barCategoryGap={40}
-              barSize={60} // largura fixa das barras
-              width={(data?.length || 1) * 120} // largura total do gráfico
               height={400}
             >
               <CartesianGrid vertical={false} />
@@ -82,21 +70,21 @@ const ChartEvolutionAllProductPerStore: React.FC = () => {
                 tickMargin={10}
                 axisLine={false}
               />
-              <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-              <ChartLegend content={ChartLegendContent} />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent indicator="dashed" />}
+              />
               <Bar
                 dataKey="initialBid"
-                name={"Valor Inicial : R$"}
-                stackId="a"
                 fill="var(--color-desktop)"
-                radius={[0, 0, 4, 4]}
+                name={"Valor Inicial : R$"}
+                radius={4}
               />
               <Bar
                 dataKey="lastBid"
-                name={"Valor Final : R$"}
-                stackId="a"
+                name={"Valor Final : R$ "}
                 fill="var(--color-mobile)"
-                radius={[4, 4, 0, 0]}
+                radius={4}
               />
             </BarChart>
           </ChartContainer>
