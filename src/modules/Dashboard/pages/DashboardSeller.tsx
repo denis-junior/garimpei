@@ -37,7 +37,7 @@ const DashboardSeller: React.FC = () => {
               {/* <ChartEvolutionAllProductPerStore></ChartEvolutionAllProductPerStore> */}
             </div>
             <div className="col-span-1 md:col-span-2">
-              {/* <ChartEvolutionProduct></ChartEvolutionProduct> */}
+              <ChartEvolutionProduct></ChartEvolutionProduct>
             </div>
             <ChartGainStore></ChartGainStore>
           </div>
