@@ -32,7 +32,7 @@ const DashboardSeller: React.FC = () => {
         </TabsList>
 
         <TabsContent value="Metricas">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="col-span-1 md:col-span-2">
               <ChartEvolutionAllProductPerStore></ChartEvolutionAllProductPerStore>
             </div>
@@ -40,7 +40,7 @@ const DashboardSeller: React.FC = () => {
               <ChartEvolutionProduct></ChartEvolutionProduct>
             </div>
             <ChartGainStore></ChartGainStore>
-          </div>
+          </div> */}
         </TabsContent>
         <TabsContent value="Leilões Finalizados">
           <CompletedAuctions />
