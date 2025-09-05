@@ -63,7 +63,9 @@ const ChartEvolutionAllProductPerStore: React.FC = () => {
           <ChartContainer config={chartConfig} className="max-h-[400px] w-full">
             <BarChart
               accessibilityLayer
-              data={data || []}
+              data={
+                data?.map((e) => ({ ...e, clothingName: e.clothingName })) || []
+              }
               barCategoryGap={40}
               barSize={60} // largura fixa das barras
               width={(data?.length || 1) * 120} // largura total do gráfico
