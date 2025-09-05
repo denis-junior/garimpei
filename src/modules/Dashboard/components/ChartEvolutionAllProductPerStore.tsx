@@ -27,8 +27,8 @@ const ChartEvolutionAllProductPerStore: React.FC = () => {
   const { data: listStores } = useGetAllStores({ page: 1, size: 100 });
 
   useEffect(() => {
-    if (listStores?.length) {
-      setIdStore(String(listStores?.[0]?.id));
+    if (listStores && listStores.length > 0) {
+      setIdStore(String(listStores[0].id));
     }
   }, [listStores]);
 
