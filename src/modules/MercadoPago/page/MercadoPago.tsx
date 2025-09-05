@@ -26,9 +26,7 @@ const MercadoPago: React.FC = () => {
   const { user } = useUser();
 
   const [paymentStatus, setPaymentStatus] = useState<string>("");
-  const [paymentData, setPaymentData] = useState<processPaymentResponse | null>(
-    null
-  );
+  const [paymentData, setPaymentData] = useState<processPaymentResponse | null>(null);
 
   const { mutateAsync: processPayment } = usePostProcessPayment();
 
