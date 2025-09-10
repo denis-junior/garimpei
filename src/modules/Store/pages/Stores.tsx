@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, X, Edit, Trash2 } from "lucide-react";
+import { Plus, X, Edit, Trash2, Search } from "lucide-react";
 import StoreForm from "../components/StoreForm";
 import { useGetAllStores, useDeleteStore } from "../services/CRUD-stores";
 import StoresCard from "../components/StoreCard";
@@ -8,13 +8,19 @@ import ConfirmationModal from "../../../components/ConfirmationModal";
 import PrimaryButton from "../../../components/PrimaryButton";
 import PageHeader from "../../../components/PageHeader";
 import { useCheckSeller } from "../../../utils/checkoSeller";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const StoresPage: React.FC = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [searchFilter, setSearchFilter] = useState("");
   const [editingStore, setEditingStore] = useState<IStore | null>(null);
   const [itemDelete, setItemDelete] = useState<IStore>();
-  const { data: listStores } = useGetAllStores({ page: 1 });
+  const debouncedSearchFilter = useDebounce(searchFilter, 500);
+  const { data: listStores } = useGetAllStores({
+    page: 1,
+    searchFilter: debouncedSearchFilter,
+  });
   const { mutate } = useDeleteStore();
   const checkSeller = useCheckSeller();
 
@@ -64,6 +70,10 @@ const StoresPage: React.FC = () => {
 
   const cancelDelete = () => {
     setItemDelete(undefined);
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchFilter(e.target.value);
   };
 
   return (
@@ -124,6 +134,20 @@ const StoresPage: React.FC = () => {
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           lojas ({listStores?.length || 0})
         </h2>
+        <div className="mb-6 relative">
+          <div className="relative">
+            <input
+              type="text"
+              value={searchFilter}
+              onChange={handleSearch}
+              placeholder="Pesquisar pelo nome ou descrição de uma loja"
+              className="w-full p-4 pl-12 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary"
+            />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-gray-400" />
+            </div>
+          </div>
+        </div>
 
         {!listStores?.length ? (
           <div className="bg-white p-8 text-center rounded-lg shadow-sm border border-gray-200">

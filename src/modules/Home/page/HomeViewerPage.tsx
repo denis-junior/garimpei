@@ -7,9 +7,11 @@ import Loader from "@/components/Loader";
 import { useSSE } from "@/hooks/useSSE";
 import { IBid } from "@/modules/Bids/Types";
 import { IProduct } from "@/modules/Product/types/product";
+// import { Search } from "lucide-react";
 
 const HomeViewerPage: React.FC = () => {
   const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  // const [searchTerm, setSearchTerm] = useState("");
 
   const {
     data: productsData,
@@ -64,91 +66,6 @@ const HomeViewerPage: React.FC = () => {
     );
   }, [productsData, attBids, connected]);
 
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       if (entries[0].isIntersecting && hasMore) {
-  //         console.log("Observer triggered, loading more products...");
-  //         setPage((prev) => prev + 1);
-  //       }
-  //     },
-  //     { threshold: 1 }
-  //   );
-
-  //   if (observerRef.current) observer.observe(observerRef.current);
-
-  //   return () => {
-  //     if (observerRef.current) observer.unobserve(observerRef.current);
-  //   };
-  // }, [hasMore]);
-
-  // const { auctions } = useAuction();
-  // const [filteredAuctions, setFilteredAuctions] = useState<Auction[]>([]);
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const [activeFilters, setActiveFilters] = useState({
-  //   size: "",
-  //   category: "",
-  //   price: "",
-  // });
-
-  // Initialize with all active auctions
-  // useEffect(() => {
-  //   setFilteredAuctions(
-  //     auctions.filter((auction) => auction.status === "active")
-  //   );
-  // }, [auctions]);
-
-  // Apply filters and search
-  // useEffect(() => {
-  //   let filtered = auctions.filter((auction) => auction.status === "active");
-
-  //   // Apply search term
-  //   if (searchTerm) {
-  //     const term = searchTerm.toLowerCase();
-  //     filtered = filtered.filter(
-  //       (auction) =>
-  //         auction.title.toLowerCase().includes(term) ||
-  //         auction.description.toLowerCase().includes(term)
-  //     );
-  //   }
-
-  //   // Apply size filter
-  //   if (activeFilters.size) {
-  //     filtered = filtered.filter(
-  //       (auction) => auction.size === activeFilters.size
-  //     );
-  //   }
-
-  //   // Apply category filter
-  //   if (activeFilters.category) {
-  //     filtered = filtered.filter(
-  //       (auction) => auction.category === activeFilters.category
-  //     );
-  //   }
-
-  //   // Apply price filter
-  //   if (activeFilters.price) {
-  //     const [min, max] = activeFilters.price.split("-").map(Number);
-  //     if (max) {
-  //       filtered = filtered.filter(
-  //         (auction) => auction.currentBid >= min && auction.currentBid <= max
-  //       );
-  //     } else {
-  //       filtered = filtered.filter((auction) => auction.currentBid >= min);
-  //     }
-  //   }
-
-  //   setFilteredAuctions(filtered);
-  // }, [auctions, searchTerm, activeFilters]);
-
-  // const handleFilterChange = (filters: Record<string, string>) => {
-  //   setActiveFilters({
-  //     size: filters.size ?? "",
-  //     category: filters.category ?? "",
-  //     price: filters.price ?? "",
-  //   });
-  // };
-
   // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   setSearchTerm(e.target.value);
   // };
@@ -179,8 +96,6 @@ const HomeViewerPage: React.FC = () => {
         </div>
       </div> */}
 
-      {/* <FilterBar onFilterChange={handleFilterChange} /> */}
-
       {products.length === 0 ? (
         <div className="bg-white p-8 text-center rounded-lg shadow-sm border border-gray-200">
           <h3 className="text-xl font-semibold text-gray-700 mb-2">
@@ -192,17 +107,6 @@ const HomeViewerPage: React.FC = () => {
           </p>
         </div>
       ) : (
-        // <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        //   {productsData?.pages.map((product) => (
-        //     <>
-        //       {product.items.map((item) => (
-        //         <ProductCard key={item.id} product={item} />
-        //       ))}
-
-        //       {/* <ProductCard key={product.id} product={product} /> */}
-        //     </>
-        //   ))}
-        // </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />

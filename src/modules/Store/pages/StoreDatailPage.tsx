@@ -27,6 +27,7 @@ const StoreDetailPage: React.FC = () => {
       <PageHeader
         title={store?.name || "Detalhes do produto"}
         subtitle={store?.description || "Crie e gerencie seus produtos."}
+        address={store?.address || ""}
         action={
           <>
             {checkSeller && (

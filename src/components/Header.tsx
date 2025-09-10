@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import Logo from "../assets/logo.png";
 import { useUser } from "../hooks/useUser";
 import {
@@ -144,6 +144,13 @@ const Header: React.FC = () => {
               </Link>
             );
           })}
+          <div
+            onClick={logOut}
+            className={`flex bg-red-200 items-center px-3 py-2 rounded-md text-base font-medium `}
+          >
+            <LogOut className="h-5 w-5" />
+            <span className="ml-3">Sair</span>
+          </div>
           {user ? (
             <div className="pt-4 pb-2 border-t border-gray-200">
               <div className="flex items-center px-4">

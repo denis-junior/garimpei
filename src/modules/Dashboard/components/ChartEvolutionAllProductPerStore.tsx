@@ -1,8 +1,6 @@
 import CardGraphic from "@/components/CardGraphic";
 import {
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -60,9 +58,9 @@ const ChartEvolutionAllProductPerStore: React.FC = () => {
             <BarChart
               accessibilityLayer
               data={data || []}
+              width={(data?.length || 1) * 120}
+              barSize={60}
               barCategoryGap={40}
-              barSize={60} // largura fixa das barras
-              width={(data?.length || 1) * 120} // largura total do gráfico
               height={400}
             >
               <CartesianGrid vertical={false} />
@@ -72,21 +70,21 @@ const ChartEvolutionAllProductPerStore: React.FC = () => {
                 tickMargin={10}
                 axisLine={false}
               />
-              <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-              <ChartLegend content={ChartLegendContent} />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent indicator="dashed" />}
+              />
               <Bar
                 dataKey="initialBid"
-                name={"Valor Inicial : R$"}
-                stackId="a"
                 fill="var(--color-desktop)"
-                radius={[0, 0, 4, 4]}
+                name={"Valor Inicial : R$"}
+                radius={4}
               />
               <Bar
                 dataKey="lastBid"
-                name={"Valor Final : R$"}
-                stackId="a"
+                name={"Valor Final : R$ "}
                 fill="var(--color-mobile)"
-                radius={[4, 4, 0, 0]}
+                radius={4}
               />
             </BarChart>
           </ChartContainer>

@@ -7,6 +7,7 @@ import { useCheckSeller } from "../../../utils/checkoSeller";
 import { concatDateTimeToDate } from "../../../utils/formatDate";
 import { useDeleteProduct } from "../services/CRUD-product";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import { EStatus } from "@/enum";
 
 interface ProductCardProps {
   product: IProduct;
@@ -76,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             className="relative w-full h-48 sm:h-64 object-contain object-center "
           />
 
-          {checkSeller && (
+          {checkSeller && product.status === EStatus.programmed && (
             <div className="absolute top-0 left-0 bg-black bg-opacity-70 text-white px-2 py-1 m-2 rounded-md text-sm">
               <div className=" flex gap-2">
                 <button
@@ -146,8 +147,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Delete confirmation modal */}
       {itemDelete && (
         <ConfirmationModal
-          title="Excluir Loja"
-          message="Tem certeza que deseja excluir esta loja? Esta ação não pode ser desfeita."
+          title="Excluir esse item"
+          message="Tem certeza que deseja excluir este item? Esta ação não pode ser desfeita."
           onCancel={cancelDelete}
           onConfirm={handleDelete}
           confirmText="Excluir"

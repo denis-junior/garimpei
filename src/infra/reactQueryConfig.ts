@@ -9,9 +9,20 @@ const queryClient = new QueryClient({
     },
     mutations: {
       onError: (error: any) => {
-        toast(error?.response?.data?.message || "An error occurred", {
-          type: "error",
-        });
+        if (
+          error?.response?.data?.errors?.length &&
+          error?.response?.data?.errors.length > 0
+        ) {
+          error.response.data.errors.forEach((err: string) => {
+            toast(err, {
+              type: "error",
+            });
+          });
+        } else {
+          toast(error?.response?.data?.message || "An error occurred", {
+            type: "error",
+          });
+        }
       },
     },
   },
