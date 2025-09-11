@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Edit } from "lucide-react";
 import UserInfoForm from "../components/BuyerUserInfoForm";
-import { auctionHistory } from "../../../mock/data";
 import { formatPhoneNumber } from "../../../utils";
 import { useUser } from "../../../hooks/useUser";
 import { useGetSeller } from "../service/CRUD-user";
-import TabHistory from "../../Dashboard/components/CompletedAuctions";
 
 const SellerUserProfilePage: React.FC = () => {
   const { user: dataUser } = useUser();
@@ -45,16 +43,6 @@ const SellerUserProfilePage: React.FC = () => {
                 }`}
               >
                 Informação Pessoal
-              </button>
-              <button
-                onClick={() => setActiveTab("history")}
-                className={`px-4 py-2 font-medium text-sm ${
-                  activeTab === "history"
-                    ? "text-primary border-b-2 border-primary"
-                    : "text-gray-500 hover:text-primary"
-                }`}
-              >
-                Histórico de Leilões Finalizados
               </button>
             </div>
 
@@ -98,22 +86,6 @@ const SellerUserProfilePage: React.FC = () => {
                     </div>
                   </div>
                 ))}
-
-              {activeTab === "history" && (
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                    Seu Histórico de Leilões
-                  </h2>
-
-                  {auctionHistory.length === 0 ? (
-                    <p className="text-gray-500">
-                      Você ainda não participou de nenhum leilão.
-                    </p>
-                  ) : (
-                    <TabHistory></TabHistory>
-                  )}
-                </div>
-              )}
             </div>
           </div>
         </div>

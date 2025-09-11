@@ -1,15 +1,6 @@
 import React from "react";
 
-import {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  Table,
-} from "@/components/ui/table";
 import { useSindAuctionsWonByBuyer } from "../service/History";
-import { concatDateTimeToDate, formatDate } from "@/utils/formatDate";
 import { formatCurrencyBR } from "@/utils/formatCurrencyBr";
 import {
   Dialog,
@@ -19,19 +10,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { IProduct } from "@/modules/Product/types/product";
-import {
-  Timeline,
-  TimelineContent,
-  TimelineDate,
-  TimelineHeader,
-  TimelineIndicator,
-  TimelineItem,
-  TimelineSeparator,
-  TimelineTitle,
-} from "@/components/ui/timeline";
-import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Eye, Store, Instagram, MapPin, CreditCard } from "lucide-react";
+import BidsTimeline from "@/components/BidsTimeline";
 
 const TabHistorySucess: React.FC = () => {
+  const navigate = useNavigate();
   const [isUsersBids, setIsUsersBids] = React.useState(false);
   const [item, setItem] = React.useState<IProduct>();
   const { data } = useSindAuctionsWonByBuyer();
@@ -43,103 +28,161 @@ const TabHistorySucess: React.FC = () => {
 
   return (
     <>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nome</TableHead>
-            <TableHead>Loja</TableHead>
-            <TableHead>Instagram</TableHead>
-            <TableHead>Endereço</TableHead>
-            <TableHead>Valor Final</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.map((item) => (
-            <TableRow
-              className="cursor-pointer"
+      <div className="space-y-4">
+        {data?.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">
+              Nenhum leilão ganho encontrado.
+            </p>
+          </div>
+        ) : (
+          data?.map((item, index) => (
+            <div
               key={item.id}
-              onClick={() => handleModalOpen(item)}
+              className="bg-white rounded-lg border border-border shadow-sm hover:shadow-md transition-shadow duration-200"
             >
-              <TableCell className="font-medium">{item.name}</TableCell>
-              <TableCell>{item.store.name}</TableCell>
+              <div className="flex">
+                {/* Imagem do Produto */}
+                <div className="w-32 h-32 items-center flex flex-shrink-0 relative overflow-hidden rounded-l-lg">
+                  {item.images && item.images.length > 0 ? (
+                    <>
+                      {/* Background blur */}
+                      <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{
+                          backgroundImage: `url(${item.images[0].url})`,
+                          filter: "blur(10px)",
+                          transform: "scale(1.1)",
+                        }}
+                      />
+                      {/* Imagem principal */}
+                      <img
+                        src={item.images[0].url}
+                        alt={item.name}
+                        className="absolute inset-0 w-full h-full object-contain z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                      />
+                    </>
+                  ) : (
+                    <div className="w-full h-full bg-muted flex items-center justify-center ">
+                      <Store className="h-8 w-8 text-muted-foreground" />
+                    </div>
+                  )}
+                </div>
 
-              <TableCell>
-                <a
-                  href={`https://www.instagram.com/${item.store.instagram}/`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {item.store.instagram}
-                </a>{" "}
-                - <a href={`tel:${item.store.contact}`}>{item.store.contact}</a>
-              </TableCell>
-              <TableCell>{item.store.address}</TableCell>
-              <TableCell>$ {formatCurrencyBR(item.bids[0].bid)}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Dialog open={isUsersBids} onOpenChange={setIsUsersBids}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="mb-4">Lances dados</DialogTitle>
-            <DialogDescription>
-              <Timeline defaultValue={3}>
-                {item?.bids.map((item, index) => (
-                  <TimelineItem
-                    key={item.id}
-                    step={item.id}
-                    className="group-data-[orientation=vertical]/timeline:ms-10"
-                  >
-                    <TimelineHeader>
-                      <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem-0.25rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                      <TimelineDate>
-                        {item?.date
-                          ? formatDate(
-                              concatDateTimeToDate(
-                                String(item?.date),
-                                item?.time
-                              )
-                            )
-                          : "sem data"}
-                      </TimelineDate>
-                      <TimelineTitle>{item.buyer.name}</TimelineTitle>
-                      <TimelineIndicator className="group-data-completed/timeline-item:bg-primary group-data-completed/timeline-item:text-primary-foreground flex size-8 items-center justify-center group-data-completed/timeline-item:border-none group-data-[orientation=vertical]/timeline:-left-7">
-                        <div
-                          className={cn(
-                            " flex items-center justify-center rounded-full text-lg w-full h-full",
-                            index === 0
-                              ? "bg-green-800 text-white"
-                              : "bg-sky-800 text-white"
-                          )}
-                        >
-                          {index + 1}
+                {/* Conteúdo do Card */}
+                <div className="flex-1 p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge variant="outline" className="text-xs">
+                          #{index + 1}
+                        </Badge>
+                        <h3 className="text-lg font-semibold text-foreground">
+                          {item.name}
+                        </h3>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2 text-sm">
+                            <Store className="h-4 w-4 text-muted-foreground" />
+                            <span className="font-medium">Loja:</span>
+                            <span className="text-foreground">
+                              {item.store.name}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-sm">
+                            <Instagram className="h-4 w-4 text-muted-foreground" />
+                            <span className="font-medium">Instagram:</span>
+                            <a
+                              href={`https://www.instagram.com/${item.store.instagram}/`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:text-primary/80 transition-colors"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              @{item.store.instagram}
+                            </a>
+                          </div>
                         </div>
-                      </TimelineIndicator>
-                    </TimelineHeader>
-                    <TimelineContent>
-                      <a
-                        href={`https://instagram.com/${item.buyer.instagram.replace(
-                          /@/,
-                          ""
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {" "}
-                        @{item.buyer.instagram}{" "}
-                      </a>{" "}
-                      -{" "}
-                      <a href={`tel:${item.buyer.contact}`}>
-                        {item.buyer.contact}
-                      </a>
-                    </TimelineContent>
-                    <TimelineContent className="mt-2 text-sm font-bold">
-                      Valor dado: R$ {formatCurrencyBR(item.bid)}
-                    </TimelineContent>
-                  </TimelineItem>
-                ))}
-              </Timeline>
+
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2 text-sm">
+                            <MapPin className="h-4 w-4 text-muted-foreground" />
+                            <span className="font-medium">Endereço:</span>
+                            <span className="text-foreground text-xs">
+                              {item.store.address}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className="font-medium">Contato:</span>
+                            <a
+                              href={`tel:${item.store.contact}`}
+                              className="text-primary hover:text-primary/80 transition-colors"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {item.store.contact}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-3">
+                      <div className="text-right">
+                        <p className="text-sm text-muted-foreground">
+                          Valor Final
+                        </p>
+                        <p className="text-2xl font-bold text-primary">
+                          R$ {formatCurrencyBR(item.bids[0].bid)}
+                        </p>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleModalOpen(item);
+                          }}
+                          className="flex items-center gap-2 px-3 py-2 text-sm border border-border rounded-md hover:bg-muted transition-colors"
+                        >
+                          <Eye className="h-4 w-4" />
+                          Histórico
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/mercadoPago/${item.id}`);
+                          }}
+                          className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+                        >
+                          <CreditCard className="h-4 w-4" />
+                          Pagar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+      <Dialog open={isUsersBids} onOpenChange={setIsUsersBids}>
+        <DialogContent className="max-h-screen overflow-y-auto max-w-4xl">
+          <DialogHeader>
+            <DialogTitle className="mb-4 flex items-center gap-2">
+              <Eye className="h-5 w-5" />
+              Histórico de Lances - {item?.name}
+            </DialogTitle>
+            <DialogDescription>
+              <BidsTimeline
+                bids={item?.bids || []}
+                showWinnerHighlight={true}
+              />
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
