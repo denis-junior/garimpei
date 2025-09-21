@@ -55,10 +55,13 @@ const AuctionHistory: React.FC = () => {
 
   return (
     <div className="container bg-background rounded-md mx-auto px-4 py-8 pt-4">
-      <div className="flex justify-center gap-2 bg-primary-25 py-4">
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="status">Data Inicial</Label>
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-4 bg-primary-25 py-4 px-4 rounded-lg">
+        <div className="flex flex-col gap-1 w-full sm:w-auto">
+          <Label htmlFor="initialDate" className="text-sm font-medium">
+            Data Inicial
+          </Label>
           <Input
+            id="initialDate"
             type="date"
             value={filter.initialDate || ""}
             onChange={(e) =>
@@ -67,13 +70,16 @@ const AuctionHistory: React.FC = () => {
                 initialDate: e.target.value || undefined,
               }))
             }
-            className={`w-[180px] px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary border-gray-300`}
+            className="w-full sm:w-[180px] px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary border-gray-300"
             placeholder="Selecione a data inicial"
           />
         </div>
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="status">Data Final</Label>
+        <div className="flex flex-col gap-1 w-full sm:w-auto">
+          <Label htmlFor="endDate" className="text-sm font-medium">
+            Data Final
+          </Label>
           <Input
+            id="endDate"
             type="date"
             value={filter.endDate || ""}
             onChange={(e) =>
@@ -82,13 +88,15 @@ const AuctionHistory: React.FC = () => {
                 endDate: e.target.value || undefined,
               }))
             }
-            className={`w-[180px] px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary border-gray-300`}
+            className="w-full sm:w-[180px] px-3 py-2 border rounded-md shadow-sm focus:ring-primary focus:border-primary border-gray-300"
             placeholder="Selecione a data final"
           />
         </div>
 
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="status">Status</Label>
+        <div className="flex flex-col gap-1 w-full sm:w-auto">
+          <Label htmlFor="status" className="text-sm font-medium">
+            Status
+          </Label>
           <Select
             onValueChange={(value) =>
               setFilter((prev) => {
@@ -100,7 +108,7 @@ const AuctionHistory: React.FC = () => {
             }
             value={filter.status || "all"}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Selecione um status" />
             </SelectTrigger>
             <SelectContent>
@@ -131,9 +139,9 @@ const AuctionHistory: React.FC = () => {
               key={item.id}
               className="bg-white rounded-lg border border-border shadow-sm hover:shadow-md transition-shadow duration-200"
             >
-              <div className="flex">
+              <div className="flex flex-col sm:flex-row">
                 {/* Imagem do Produto */}
-                <div className="w-32 items-center flex  flex-shrink-0 relative overflow-hidden rounded-l-lg">
+                <div className="w-full sm:w-32 h-48 sm:h-auto items-center flex flex-shrink-0 relative overflow-hidden rounded-t-lg sm:rounded-t-none sm:rounded-l-lg">
                   {item.images && item.images.length > 0 ? (
                     <>
                       {/* Background blur */}
@@ -149,7 +157,7 @@ const AuctionHistory: React.FC = () => {
                       <img
                         src={item.images[0].url}
                         alt={item.name}
-                        className="absolute h-32 w-32 inset-0  object-contain z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        className="absolute  inset-0  object-contain z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                       />
                     </>
                   ) : (
@@ -160,30 +168,30 @@ const AuctionHistory: React.FC = () => {
                 </div>
 
                 {/* Conteúdo do Card */}
-                <div className="flex-1 p-6">
-                  <div className="flex items-start justify-between mb-4">
+                <div className="flex-1 p-4 sm:p-6">
+                  <div className="flex flex-col">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge variant="outline" className="text-xs">
                           #{index + 1}
                         </Badge>
-                        <h3 className="text-lg font-semibold text-foreground">
+                        <h3 className="text-base sm:text-lg font-semibold text-foreground">
                           {item.name}
                         </h3>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                        <div className="space-y-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mt-3 sm:mt-4">
+                        <div className="space-y-2 sm:space-y-3">
                           <div className="flex items-center gap-2 text-sm">
-                            <Store className="h-4 w-4 text-muted-foreground" />
+                            <Store className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="font-medium">Loja:</span>
-                            <span className="text-foreground">
+                            <span className="text-foreground truncate">
                               {item.store.name}
                             </span>
                           </div>
 
                           <div className="flex items-center gap-2 text-sm">
-                            <DollarSign className="h-4 w-4 text-muted-foreground" />
+                            <DollarSign className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="font-medium">Lance Final:</span>
                             <span className="text-primary font-bold">
                               R$ {formatCurrencyBR(item.bids[0]?.bid || 0)}
@@ -191,9 +199,9 @@ const AuctionHistory: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-2 sm:space-y-3">
                           <div className="flex items-center gap-2 text-sm">
-                            <Calendar className="h-4 w-4 text-muted-foreground" />
+                            <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="font-medium">Início:</span>
                             <span className="text-foreground text-xs">
                               {formatDate(
@@ -206,7 +214,7 @@ const AuctionHistory: React.FC = () => {
                           </div>
 
                           <div className="flex items-center gap-2 text-sm">
-                            <Calendar className="h-4 w-4 text-muted-foreground" />
+                            <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="font-medium">Término:</span>
                             <span className="text-foreground text-xs">
                               {formatDate(
@@ -219,9 +227,9 @@ const AuctionHistory: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-2 sm:space-y-3">
                           <div className="flex items-center gap-2 text-sm">
-                            <Activity className="h-4 w-4 text-muted-foreground" />
+                            <Activity className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="font-medium">Status:</span>
                             <Badge
                               variant={getStatusVariant(item.status)}
@@ -257,11 +265,13 @@ const AuctionHistory: React.FC = () => {
       </div>
 
       <Dialog open={isUsersBids} onOpenChange={setIsUsersBids}>
-        <DialogContent className="max-h-screen overflow-y-auto max-w-4xl">
+        <DialogContent className="max-h-screen overflow-y-auto max-w-4xl w-[95vw] sm:w-full">
           <DialogHeader>
-            <DialogTitle className="mb-4 flex items-center gap-2">
-              <Eye className="h-5 w-5" />
-              Histórico de Lances - {item?.name}
+            <DialogTitle className="mb-4 flex items-center gap-2 text-base sm:text-lg">
+              <Eye className="h-5 w-5 flex-shrink-0" />
+              <span className="truncate">
+                Histórico de Lances - {item?.name}
+              </span>
             </DialogTitle>
             <DialogDescription>
               <BidsTimeline

@@ -76,9 +76,9 @@ const CompletedAuctions: React.FC = () => {
               key={item.id}
               className="bg-white rounded-lg border border-border shadow-sm hover:shadow-md transition-shadow duration-200"
             >
-              <div className="flex">
+              <div className="flex flex-col lg:flex-row">
                 {/* Imagem do Produto */}
-                <div className="w-32 h-32 items-center flex flex-shrink-0 relative overflow-hidden rounded-l-lg">
+                <div className="w-full lg:w-32 h-48 lg:h-32 items-center flex flex-shrink-0 relative overflow-hidden rounded-t-lg lg:rounded-t-none lg:rounded-l-lg">
                   {item.images && item.images.length > 0 ? (
                     <>
                       {/* Background blur */}
@@ -94,7 +94,7 @@ const CompletedAuctions: React.FC = () => {
                       <img
                         src={item.images[0].url}
                         alt={item.name}
-                        className="absolute h-32 w-32 inset-0  object-contain z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        className="absolute  inset-0  object-contain z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                       />
                     </>
                   ) : (
@@ -105,30 +105,30 @@ const CompletedAuctions: React.FC = () => {
                 </div>
 
                 {/* Conteúdo do Card */}
-                <div className="flex-1 p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
+                <div className="flex-1 p-4 lg:p-6">
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
+                    <div className="flex-1 mb-4 lg:mb-0">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge variant="outline" className="text-xs">
                           #{index + 1}
                         </Badge>
-                        <h3 className="text-lg font-semibold text-foreground">
+                        <h3 className="text-base lg:text-lg font-semibold text-foreground">
                           {item.name}
                         </h3>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                        <div className="space-y-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4 mt-3 lg:mt-4">
+                        <div className="space-y-2 lg:space-y-3">
                           <div className="flex items-center gap-2 text-sm">
-                            <Store className="h-4 w-4 text-muted-foreground" />
+                            <Store className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="font-medium">Loja:</span>
-                            <span className="text-foreground">
+                            <span className="text-foreground truncate">
                               {item.store.name}
                             </span>
                           </div>
 
                           <div className="flex items-center gap-2 text-sm">
-                            <DollarSign className="h-4 w-4 text-muted-foreground" />
+                            <DollarSign className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="font-medium">Lance Final:</span>
                             <span className="text-primary font-bold">
                               R$ {formatCurrencyBR(item.bids[0].bid)}
@@ -136,9 +136,9 @@ const CompletedAuctions: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-2 lg:space-y-3">
                           <div className="flex items-center gap-2 text-sm">
-                            <Calendar className="h-4 w-4 text-muted-foreground" />
+                            <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="font-medium">Início:</span>
                             <span className="text-foreground text-xs">
                               {formatDate(
@@ -151,7 +151,7 @@ const CompletedAuctions: React.FC = () => {
                           </div>
 
                           <div className="flex items-center gap-2 text-sm">
-                            <Calendar className="h-4 w-4 text-muted-foreground" />
+                            <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="font-medium">Término:</span>
                             <span className="text-foreground text-xs">
                               {formatDate(
@@ -164,7 +164,7 @@ const CompletedAuctions: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col sm:flex-row xl:flex-col gap-2">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -173,7 +173,12 @@ const CompletedAuctions: React.FC = () => {
                             className="flex items-center justify-center gap-2 px-3 py-2 text-sm border border-border rounded-md hover:bg-muted transition-colors"
                           >
                             <Crown className="h-4 w-4" />
-                            Atual Vencedor
+                            <span className="hidden sm:inline xl:inline">
+                              Atual Vencedor
+                            </span>
+                            <span className="sm:hidden xl:hidden">
+                              Vencedor
+                            </span>
                           </button>
 
                           <button
@@ -190,25 +195,28 @@ const CompletedAuctions: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-2 ml-4">
+                    <div className="flex flex-col sm:flex-row lg:flex-col gap-2 lg:ml-4">
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm">
+                          <button className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm">
                             <CheckCircle className="h-4 w-4" />
-                            Pago e Entregue
+                            <span className="hidden sm:inline">
+                              Pago e Entregue
+                            </span>
+                            <span className="sm:hidden">Entregue</span>
                           </button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
+                        <AlertDialogContent className="w-[95vw] sm:w-full max-w-md">
                           <AlertDialogHeader>
-                            <AlertDialogTitle>
+                            <AlertDialogTitle className="text-base sm:text-lg">
                               Deseja realmente marcar como entregue?
                             </AlertDialogTitle>
-                            <AlertDialogDescription>
+                            <AlertDialogDescription className="text-sm">
                               Esta ação não pode ser desfeita. Isso irá marcar o
                               leilão como concluído e pago.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
-                          <AlertDialogFooter>
+                          <AlertDialogFooter className="flex-col sm:flex-row gap-2">
                             <AlertDialogCancel>Cancelar</AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => markPaid(item.id)}
@@ -221,23 +229,26 @@ const CompletedAuctions: React.FC = () => {
 
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm">
+                          <button className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm">
                             <UserX className="h-4 w-4" />
-                            Ganhador Ausente
+                            <span className="hidden sm:inline">
+                              Ganhador Ausente
+                            </span>
+                            <span className="sm:hidden">Ausente</span>
                           </button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
+                        <AlertDialogContent className="w-[95vw] sm:w-full max-w-md">
                           <AlertDialogHeader>
-                            <AlertDialogTitle>
+                            <AlertDialogTitle className="text-base sm:text-lg">
                               Deseja realmente marcar como ganhador ausente?
                             </AlertDialogTitle>
-                            <AlertDialogDescription>
+                            <AlertDialogDescription className="text-sm">
                               O ganhador atual será considerado ausente e
                               perderá o direito ao item. O sistema selecionará
                               automaticamente o próximo da lista de lances.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
-                          <AlertDialogFooter>
+                          <AlertDialogFooter className="flex-col sm:flex-row gap-2">
                             <AlertDialogCancel>Cancelar</AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => forceNextBidder(item.id)}
@@ -257,11 +268,13 @@ const CompletedAuctions: React.FC = () => {
       </div>
 
       <Dialog open={isWinnerBids} onOpenChange={setIsWinnerBids}>
-        <DialogContent className="max-h-screen overflow-y-auto max-w-2xl">
+        <DialogContent className="max-h-screen overflow-y-auto max-w-2xl w-[95vw] sm:w-full">
           <DialogHeader>
-            <DialogTitle className="mb-4 flex items-center gap-2">
-              <Crown className="h-5 w-5 text-yellow-500" />
-              Vencedor do Leilão - {item?.name}
+            <DialogTitle className="mb-4 flex items-center gap-2 text-base sm:text-lg">
+              <Crown className="h-5 w-5 text-yellow-500 flex-shrink-0" />
+              <span className="truncate">
+                Vencedor do Leilão - {item?.name}
+              </span>
             </DialogTitle>
             <DialogDescription>
               {winner ? (
@@ -343,11 +356,13 @@ const CompletedAuctions: React.FC = () => {
       </Dialog>
 
       <Dialog open={isUsersBids} onOpenChange={setIsUsersBids}>
-        <DialogContent className="max-h-screen overflow-y-auto max-w-4xl">
+        <DialogContent className="max-h-screen overflow-y-auto max-w-4xl w-[95vw] sm:w-full">
           <DialogHeader>
-            <DialogTitle className="mb-4 flex items-center gap-2">
-              <Eye className="h-5 w-5" />
-              Histórico de Lances - {item?.name}
+            <DialogTitle className="mb-4 flex items-center gap-2 text-base sm:text-lg">
+              <Eye className="h-5 w-5 flex-shrink-0" />
+              <span className="truncate">
+                Histórico de Lances - {item?.name}
+              </span>
             </DialogTitle>
             <DialogDescription>
               <BidsTimeline

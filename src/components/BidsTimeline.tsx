@@ -26,12 +26,12 @@ const BidsTimeline: React.FC<BidsTimelineProps> = ({
   const sortedBids = bids.sort((a, b) => b.bid - a.bid);
 
   return (
-    <div className="space-y-4 max-h-96 pt-4 overflow-y-auto">
+    <div className="space-y-3 sm:space-y-4 max-h-96 pt-4 overflow-y-auto">
       {sortedBids.map((bid, index) => (
         <div
           key={bid.id}
           className={cn(
-            "relative bg-white rounded-lg border shadow-sm p-4 transition-all duration-200",
+            "relative bg-white rounded-lg border shadow-sm p-3 sm:p-4 transition-all duration-200",
             index === 0 && showWinnerHighlight
               ? "border-green-500 bg-green-50 shadow-green-100"
               : "border-border hover:shadow-md"
@@ -61,23 +61,25 @@ const BidsTimeline: React.FC<BidsTimelineProps> = ({
             </Badge>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 pt-2">
             {/* Informações do comprador */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <span className="font-semibold text-foreground">
-                  {bid.buyer.name}
-                </span>
+            <div className="space-y-2 sm:space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                  <span className="font-semibold text-foreground text-sm sm:text-base">
+                    {bid.buyer.name}
+                  </span>
+                </div>
                 {index === 0 && showWinnerHighlight && (
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-xs w-fit">
                     Vencedor
                   </Badge>
                 )}
               </div>
 
               <div className="flex items-center gap-2 text-sm">
-                <Instagram className="h-4 w-4 text-pink-500" />
+                <Instagram className="h-4 w-4 text-pink-500 flex-shrink-0" />
                 <a
                   href={`https://instagram.com/${bid.buyer.instagram.replace(
                     /@/,
@@ -85,14 +87,14 @@ const BidsTimeline: React.FC<BidsTimelineProps> = ({
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-pink-600 hover:text-pink-700 transition-colors font-medium"
+                  className="text-pink-600 hover:text-pink-700 transition-colors font-medium truncate"
                 >
                   {bid.buyer.instagram}
                 </a>
               </div>
 
               <div className="flex items-center gap-2 text-sm">
-                <Phone className="h-4 w-4 text-blue-500" />
+                <Phone className="h-4 w-4 text-blue-500 flex-shrink-0" />
                 <a
                   href={`tel:${bid.buyer.contact}`}
                   className="text-blue-600 hover:text-blue-700 transition-colors font-medium"
@@ -103,16 +105,16 @@ const BidsTimeline: React.FC<BidsTimelineProps> = ({
             </div>
 
             {/* Informações do lance */}
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-green-500" />
+                <DollarSign className="h-4 w-4 text-green-500 flex-shrink-0" />
                 <div className="flex flex-col">
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-xs sm:text-sm text-muted-foreground">
                     Valor do Lance
                   </span>
                   <span
                     className={cn(
-                      "text-lg font-bold",
+                      "text-base sm:text-lg font-bold",
                       index === 0 && showWinnerHighlight
                         ? "text-green-600"
                         : "text-primary"
@@ -123,11 +125,13 @@ const BidsTimeline: React.FC<BidsTimelineProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 text-sm">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
+              <div className="flex items-start gap-2 text-sm">
+                <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
                 <div className="flex flex-col">
-                  <span className="text-muted-foreground">Data do Lance</span>
-                  <span className="text-foreground font-medium">
+                  <span className="text-xs sm:text-sm text-muted-foreground">
+                    Data do Lance
+                  </span>
+                  <span className="text-xs sm:text-sm text-foreground font-medium leading-tight">
                     {bid?.date
                       ? formatDate(
                           concatDateTimeToDate(String(bid?.date), bid?.time)
