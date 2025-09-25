@@ -5,8 +5,7 @@ import { auctionHistory } from "../../../mock/data";
 import { formatPhoneNumber } from "../../../utils";
 import { useUser } from "../../../hooks/useUser";
 import { useGetBuyer } from "../service/CRUD-user";
-import TabHistory from "../../Dashboard/components/CompletedAuctions";
-import TabHistorySucess from "../components/TabHistorySucess";
+import BuyerHistoryAuction from "../components/BuyerHistoryAuction";
 
 const BuyerUserProfilePage: React.FC = () => {
   const { user: dataUser } = useUser();
@@ -66,7 +65,7 @@ const BuyerUserProfilePage: React.FC = () => {
                     : "text-gray-500 hover:text-primary"
                 }`}
               >
-                Leilões Vencidos
+                Leilões Ganhos
               </button>
             </div>
 
@@ -122,7 +121,7 @@ const BuyerUserProfilePage: React.FC = () => {
                       Você ainda não participou de nenhum leilão.
                     </p>
                   ) : (
-                    <TabHistory></TabHistory>
+                    <BuyerHistoryAuction />
                   )}
                 </div>
               )}
@@ -139,7 +138,7 @@ const BuyerUserProfilePage: React.FC = () => {
                         Nenhum leilão vencido encontrado.
                       </p>
                     ) : (
-                      <TabHistorySucess />
+                      <BuyerHistoryAuction isWinner />
                     )}
                   </div>
                 </div>

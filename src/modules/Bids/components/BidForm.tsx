@@ -25,7 +25,7 @@ const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
   function incrementBid() {
     return reset({
       clothing: productId,
-      bid: Number(currentBid) + 1,
+      bid: Number(currentBid) + 5,
     });
   }
 
@@ -34,7 +34,7 @@ const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
   useEffect(() => {
     reset({
       clothing: productId,
-      bid: Number(currentBid) + 1,
+      bid: Number(currentBid) + 5,
     });
   }, [currentBid, productId, reset]);
 
@@ -73,7 +73,7 @@ const BidForm: React.FC<BidFormProps> = ({ productId, currentBid }) => {
           <p className="mt-2 text-sm text-red-600">{errors.bid.message}</p>
         )}
         <p className="mt-2 text-sm text-gray-500">
-          Lance mínimo: R${(Number(currentBid) + 1).toFixed(2)}
+          Lance mínimo: R${(Number(currentBid) + 5).toFixed(2)}
         </p>
       </div>
 
